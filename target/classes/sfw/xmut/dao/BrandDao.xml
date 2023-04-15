@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.BrandDao">
+    <select id="findBrandById" parameterType="int" resultType="Brand">
+        select *
+        from brand
+        where brand_id = #{brandId}
+    </select>
+
+    <select id="findBrandList" parameterType="Map" resultType="Brand">
+        select *
+        from brand
+        where 1=1
+        <if test="keyWord != null">
+            and brand_name like #{keyWord}
+        </if>
+    </select>
+
+    <!-- 品牌更新操作 -->
+    <update id="edit" parameterType="Brand">
+        update brand
+        set brand_name = #{brandName}
+        where brand_id = #{brandId}
+    </update>
+
+    <insert id="add" parameterType="Brand" useGeneratedKeys="true" keyProperty="brandId">
+        INSERT into brand(brand_id,brand_name) values(null,#{brandName})
+    </insert>
+
+    <!-- 删除品牌 -->
+    <delete id="delete" parameterType="int">
+        delete from brand where brand_id =${brandId}
+    </delete>
+</mapper>

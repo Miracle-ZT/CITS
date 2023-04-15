@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.MovieDao">
+    <select id="findMovieById" parameterType="int" resultMap="MovieWithTypeResult">
+        SELECT
+            m.*,t.*
+        FROM
+            movie m,
+            type t,
+            type_item ti
+        WHERE
+            m.movie_id = #{id}
+          AND m.movie_id = ti.movie_id
+          AND t.type_id = ti.type_id
+    </select>
+
+    <!-- 存在场次的电影列表 -->
+    <select id="findMovieWithList" parameterType="Map" resultMap="MovieWithTypeResult">
+        select * from screening,cinema,movie,type,type_item where 1 = 1
+        <if test="startTime != null and endTime != null">
+            and start_time &gt;= #{startTime}
+            and start_time &lt; #{endTime}
+        </if>
+        <if test="cinemaId != null">
+            and screening.cinema_id = #{cinemaId}
+        </if>
+            and screening.movie_id = movie.movie_id
+            and movie.movie_id = type_item.movie_id
+            and type.type_id = type_item.type_id
+    </select>
+
+    <!-- 只查询全部电影列表本身 -->
+    <select id="findMovieList" parameterType="Map" resultMap="MovieWithTypeResult">
+        select * from movie,type,type_item where 1 = 1
+        <if test="movieStatus != null">
+            and movie_status = #{movieStatus}
+        </if>
+        <if test="keyWord != null">
+            and
+                (   chinese_name like #{keyWord}
+                    or english_name like #{keyWord}
+                    or director like #{keyWord}
+                    or actors like #{keyWord}
+                )
+        </if>
+        <if test="NotInBan != null">
+            and movie_id not in (
+                select movie_id
+                from banner
+            )
+        </if>
+        and movie.movie_id = type_item.movie_id
+        and type.type_id = type_item.type_id
+        order by movie.movie_id
+    </select>
+
+    <!-- 电影添加操作 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="movieId"  parameterType="Movie">
+        insert into movie(movie_id,chinese_name,english_name,img_url,time_len,release_date,introduction,country,director,actors,movie_status,add_date) values(null,#{chineseName},#{englishName},#{imgUrl},#{timeLen},#{releaseDate},#{introduction},#{country},#{director},#{actors},#{movieStatus},#{addDate})
+    </insert>
+
+    <!-- 电影更新操作 -->
+    <update id="edit" parameterType="Movie">
+        update movie
+        set chinese_name = #{chineseName},
+            english_name = #{englishName},
+            img_url      = #{imgUrl},
+            time_len     = #{timeLen},
+            release_date = #{releaseDate},
+            introduction = #{introduction},
+            country      = #{country},
+            director     = #{director},
+            actors       = #{actors},
+            movie_status = #{movieStatus}
+        where movie_id = #{movieId}
+    </update>
+
+    <select id="findMovieByIdDemo" parameterType="int" resultMap="MovieWithTypeResult">
+        SELECT
+            m.*,t.*
+        FROM
+            movie m,
+            type t,
+            type_item ti
+        WHERE
+            m.movie_id = #{id}
+          AND m.movie_id = ti.movie_id
+          AND t.type_id = ti.type_id
+    </select>
+
+    <resultMap id="MovieWithTypeResult" type="Movie">
+        <id property="movieId" column="movie_id"/>
+        <result property="chineseName" column="chinese_name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="timeLen" column="time_len"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="introduction" column="introduction"/>
+        <result property="country" column="country"/>
+        <result property="director" column="director"/>
+        <result property="actors" column="actors"/>
+        <result property="movieStatus" column="movie_status"/>
+        <result property="addDate" column="add_date"/>
+        <collection property="typeList" javaType="list" ofType="Type">
+            <id property="typeId" column="type_id"/>
+            <result property="typeName" column="type_name"/>
+        </collection>
+    </resultMap>
+</mapper>

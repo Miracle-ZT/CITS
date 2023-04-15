@@ -1,0 +1,10 @@
+.row-center {
+    text-align: center;
+    margin-top: 200px;
+}
+
+.col-center {
+    display: inline-block;
+    float: none;
+    text-align: left;
+}

@@ -1,0 +1,134 @@
+.scope {                                /* 整个选座区域 */
+    width:1000px;
+    min-height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px #d3d3d3 solid;
+    border-radius: 5px;
+}
+.screen {
+    width: 300px;
+    background-color: #f0f0f0;
+    color: #666;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.seat-title {
+    margin: 5px 20px;
+    font-size: 25px;
+    color: #a84c10;
+    border-bottom: 1px solid #d3d3d3;
+}
+.seat-scope {                                   /* 左边布局 */
+    padding: 30px 30px 40px 30px;               /* 上-右-下-左  顺时针 */
+    width: 400px;
+    margin: auto;
+}
+.info-scope {                                   /* 右边的信息布局 */
+    border-left: 1px solid #d3d3d3;
+    padding: 40px;
+}
+.seat {
+    padding: 40px 40px 40px 20px;
+}
+.seat-row {
+    height: 35px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+.seat-cell {                                    /* 忘了干什么的了 */
+    height: 25px;
+    width: 25px;
+    /*line-height: 25px;*/
+    margin: 3px;
+    float: left;                                /* 浮动 使得div不换行 */
+    text-align: center;
+    outline: none;
+    font-size: 13px;
+}
+.seatCharts-seat {                               /* 单个座位的基本样式*/
+    color: #fff;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    margin: 3px;
+    text-align: center;
+    outline: none;
+    font-size: 13px;
+}
+.seat-up {                                      /* 单个座位 -- 悬停 */
+    background-color: #76B474;
+}
+.seat-available {                               /* 单个座位 -- 可用 */
+    background-color: #B9DEA0;
+}
+.seat-unavailable {                             /* 单个座位 -- 不可用 */
+    background-color: #000;
+    cursor: not-allowed;
+}
+.seat-selected {                                /* 单个座位 -- 被选中 */
+    background-color: #E6CAC4;
+}
+.seat-empty {                                   /* 单个座位 -- 不显示 */
+    background-color: #fff;
+    pointer-events: none;
+}
+.seat-sold {                                    /* 单个座位 -- 已售出 */
+    background-color: #ad8d48;
+    pointer-events: none;
+}
+.seat-null {                                    /* 单个座位 -- 只有轮廓 管理端配置->不存在座位 */
+    background-color: #fff;
+    border: 1px #d3d3d3 solid;
+}
+.tag {                                          /* 排号标记 */
+    color: #000;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    margin: 3px;
+    text-align: center;
+    outline: none;
+    font-size: 13px;
+    background-color: #fff;
+    float: left;
+}
+.ticket-info-name {                             /* 信息字段名 */
+    line-height: 25px;
+    font-size: 16px;
+    color: #999;
+    margin-bottom: 5px;
+}
+.ticket-info-content {                          /* 信息字段对应的值 */
+    line-height: 25px;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}
+.selected-seats {                               /* 汇总区 当前选中的座位信息块 */
+    float: left;
+    width: 72px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #d3d3d3;
+    background: #f7f7f7;
+    margin: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}

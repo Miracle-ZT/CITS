@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.RoomDao">
+    <select id="findRoomById" parameterType="int" resultType="Room">
+        select *
+        from room
+        where room_id = #{id}
+    </select>
+
+    <select id="findRoomList" parameterType="Map" resultType="Room">
+        select *
+        from room
+        where 1=1
+        <if test="cinemaId != null">
+            and cinema_id = #{cinemaId}
+        </if>
+        <if test="keyWord != null">
+            and room_name like #{keyWord}
+        </if>
+    </select>
+
+    <update id="updateLayout" parameterType="Map">
+        update room
+        set room_name = #{roomName},
+            room_row       = #{roomRow},
+            room_col       = #{roomCol},
+            layout    = #{newSeats}
+        where room_id = #{roomId}
+    </update>
+
+    <!-- 轮播添加操作 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="roomId"  parameterType="Room">
+        insert into room(room_id,room_name,room_row,room_col,layout,cinema_id) values(null,#{roomName},#{roomRow},#{roomCol},#{layout},#{cinemaId})
+    </insert>
+
+</mapper>

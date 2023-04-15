@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.CinemaDao">
+        <select id="findCinemaById" parameterType="int" resultMap="CinemaMap">
+            select *
+            from cinema,admin_cinema,brand
+            where 1=1
+                and cinema.cinema_id = #{id}
+                and cinema.cinema_id = admin_cinema.cinema_id
+                and cinema.brand_id = brand.brand_id
+        </select>
+
+    <!-- 存在场次的影院列表 -->
+    <select id="findCinemaListWithScreening" parameterType="Map" resultType="sfw.xmut.pojo.Cinema">
+        select * from screening,cinema,movie where 1 = 1
+        <if test="startTime != null and endTime != null">
+            and start_time &gt;= #{startTime}
+            and start_time &lt; #{endTime}
+        </if>
+            and cinema.cinema_id = screening.cinema_id
+        <if test="movieId != null">
+            and movie.movie_id = #{movieId}
+            and screening.movie_id = #{movieId}
+        </if>
+        group by cinema.cinema_id
+    </select>
+
+    <resultMap id="CinemaMap" type="Cinema">
+        <id property="cinemaId" column="cinema_id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="city" column="city"/>
+        <result property="photo" column="photo"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="cinemaStatus" column="cinema_status"/>
+        <result property="adminCinemaId" column="admin_cinema_id"/>
+        <result property="brandId" column="brand_id"/>
+        <association property="adminCinema" javaType="AdminCinema">     <!-- 关联的AdminCinema实体 -->
+            <id property="adminCinemaId" column="admin_cinema_id"/>
+            <result property="name" column="acname"/>
+            <result property="password" column="acpassword"/>
+            <result property="email" column="acemail"/>
+            <result property="phone" column="acphone"/>
+            <result property="cinemaId" column="cinema_id"/>
+        </association>
+        <association property="brand" javaType="Brand">                 <!-- 关联的Brand实体 -->
+            <id property="brandId" column="brand_id"/>
+            <result property="brandName" column="brand_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 在数据库配置文件db.properties中 '&allowMultiQueries=true' 即可实现多条update语句一次执行 -->
+    <update id="edit" parameterType="Map">
+        update cinema set name = #{name},address = #{address},brand_id = #{brandId},city = #{city},phone = #{phone} where cinema_id = #{cinemaId};
+        update admin_cinema set acname = #{acname},acemail = #{acemail} where cinema_id=#{cinemaId}
+    </update>
+
+    <!-- 查询符合条件的影院列表本身及其对应负责人 -->
+    <select id="findCinemaList" parameterType="Map" resultMap="CinemaMap">
+        select * from cinema,admin_cinema,brand where 1 = 1
+        <if test="keyWord != null">
+            and
+            (   name like #{keyWord}
+            or phone like #{keyWord}
+            or address like #{keyWord}
+            or acname like #{keyWord}
+            )
+        </if>
+            and cinema.admin_cinema_id = admin_cinema.admin_cinema_id
+            and cinema.brand_id = brand.brand_id
+    </select>
+
+    <!-- 影院状态更新操作 -->
+    <update id="updateStatus" parameterType="Map">
+        update cinema
+        set cinema_status = #{cinemaStatus}
+        where cinema_id = #{cinemaId}
+    </update>
+
+    <select id="runTime" parameterType="int" resultType="int">
+        select datediff(CURRENT_DATE(),
+            (
+                select join_date
+                from cinema
+                where cinema_id = #{cinemaId}
+            )
+        )
+    </select>
+
+</mapper>

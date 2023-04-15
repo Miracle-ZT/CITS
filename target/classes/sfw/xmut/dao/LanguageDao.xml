@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.LanguageDao">
+    <select id="findLanguageById" parameterType="int" resultType="Language">
+        select *
+        from language
+        where language_id = #{languageId}
+    </select>
+
+    <select id="findLanguageList" parameterType="Map" resultType="Language">
+        select *
+        from language
+    </select>
+</mapper>

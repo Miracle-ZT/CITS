@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.MessageDao">
+    <select id="findMessageById" parameterType="int" resultType="Message">
+        select *
+        from message,user,cinema
+        where message_id = #{messageId}
+        and message.msg_cinema_id = cinema.cinema_id
+        and message.msg_user_id = user.id
+    </select>
+
+    <select id="findMessageList" parameterType="Map" resultMap="MessageMap">
+        select m.message_id,m.msg_cinema_id,m.msg_user_id,m.msg_str,m.create_time,m.status,
+        c.cinema_id,c.name as cname,c.address,c.phone as cphone,c.city,c.photo as cphoto,c.join_date,c.admin_cinema_id,c.brand_id,
+        u.id,u.username,u.password,u.email,u.photo as uphoto,u.phone as uphone,u.sex
+        from message m,cinema c,user u
+        where 1=1
+        <if test="cinemaId != null">
+            and m.msg_cinema_id = #{cinemaId}
+        </if>
+        <if test="userId != null">
+            and m.msg_user_id = #{userId}
+        </if>
+        and m.msg_cinema_id = c.cinema_id
+        and m.msg_user_id = u.id
+        order by create_time DESC
+    </select>
+
+    <resultMap id="MessageMap" type="Message">
+        <id property="messageId" column="message_id"/>
+        <result property="msgCinemaId" column="msg_cinema_id"/>
+        <result property="msgUserId" column="msg_user_id"/>
+        <result property="msgStr" column="msg_str"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+        <association property="msgCinema" javaType="Cinema">           <!-- 关联的Cinema实体 -->
+            <id property="cinemaId" column="cinema_id"/>
+            <result property="name" column="cname"/>
+            <result property="address" column="address"/>
+            <result property="phone" column="cphone"/>
+            <result property="city" column="city"/>
+            <result property="photo" column="cphoto"/>
+            <result property="joinDate" column="join_date"/>
+            <result property="adminCinemaId" column="admin_cinema_id"/>
+            <result property="brandId" column="brand_id"/>
+        </association>
+        <association property="msgUser" javaType="User">                <!-- 关联的User实体 -->
+            <id property="id" column="id"/>
+            <result property="username" column="username"/>
+            <result property="password" column="password"/>
+            <result property="email" column="email"/>
+            <result property="photo" column="uphoto"/>
+            <result property="phone" column="uphone"/>
+            <result property="sex" column="sex"/>
+        </association>
+    </resultMap>
+
+    <insert id="add" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId">
+        INSERT into message(message_id,msg_cinema_id,msg_user_id,msg_str,create_time,status) values(null,#{msgCinemaId},#{msgUserId},#{msgStr},#{createTime},#{status})
+    </insert>
+
+    <select id="notReadCnt" resultType="Integer">
+        select count(*)
+        from message
+        where status = 0
+    </select>
+
+    <!-- 消息已读状态更新操作 -->
+    <update id="updateStatus" parameterType="int">
+        update message
+        set status = 1
+        where message_id = #{messageId}
+    </update>
+
+</mapper>

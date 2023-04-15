@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.ScreeningDao">
+    <select id="findScreeningById" parameterType="int" resultMap="ScreeningMap">
+        select *
+        from screening,cinema,movie,language,seat,room
+        where 1 = 1
+            and screening.screening_id = #{id}
+            and screening.cinema_id = cinema.cinema_id
+            and screening.movie_id = movie.movie_id
+            and screening.language_id = language.language_id
+            and screening.seat_id = seat.seat_id
+            and screening.room_id = room.room_id
+    </select>
+
+    <select id="findScreeningList" parameterType="Map" resultMap="ScreeningMap">
+        select * from screening,cinema,movie,language,seat,room where 1 = 1
+        <if test="startTime != null and endTime != null">
+            and start_time &gt;= #{startTime}
+            and start_time &lt; #{endTime}
+        </if>
+        <if test="movieId != null">
+            and screening.movie_id = #{movieId}
+        </if>
+        <if test="cinemaId != null">
+            and screening.cinema_id = #{cinemaId}
+        </if>
+        and screening.movie_id = movie.movie_id
+        and screening.language_id = language.language_id
+        and screening.seat_id = seat.seat_id
+    </select>
+
+    <resultMap id="ScreeningMap" type="Screening">
+        <id property="screeningId" column="screening_id"/>
+        <result property="cinemaId" column="cinema_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="languageId" column="language_id"/>
+        <result property="price" column="price"/>
+        <result property="roomId" column="room_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="seatId" column="seat_id"/>
+        <association property="cinema" javaType="Cinema">           <!-- 关联的Cinema实体 -->
+            <id property="cinemaId" column="cinema_id"/>
+            <result property="name" column="name"/>
+            <result property="address" column="address"/>
+            <result property="phone" column="phone"/>
+            <result property="city" column="city"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+        <association property="language" javaType="Language">       <!-- 关联的Language实体 -->
+            <id property="languageId" column="language_id"/>
+            <result property="lanName" column="lan_name"/>
+        </association>
+        <association property="seat" javaType="Seat">               <!-- 关联的Seat实体 -->
+            <id property="seatId" column="seat_id"/>
+            <result property="row" column="seat_row"/>
+            <result property="col" column="seat_col"/>
+            <result property="seats" column="seats"/>
+        </association>
+        <association property="room" javaType="Room">               <!-- 关联的Room实体 -->
+            <id property="roomId" column="room_id"/>
+            <result property="roomName" column="room_name"/>
+            <result property="roomRow" column="room_row"/>
+            <result property="roomCol" column="room_col"/>
+            <result property="layout" column="layout"/>
+            <result property="cinemaId" column="cinemaId"/>
+        </association>
+    </resultMap>
+
+    <update id="updateSeats" parameterType="Map">
+        update seat
+        set seats = #{seats}
+        where seat_id = (
+            select seat_id
+            from screening
+            where screening_id = #{screening_id}
+        )
+    </update>
+
+    <select id="totalNumByCinemaId" parameterType="int" resultType="Long">
+        select count(*)
+        from screening
+        where cinema_id=#{cinemaId}
+    </select>
+
+    <!-- 场次添加操作 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="screeningId"  parameterType="Screening">
+        insert into screening(screening_id,cinema_id,movie_id,language_id,price,room_id,start_time,end_time,seat_id) values(null,#{cinemaId},#{movieId},#{languageId},#{price},#{roomId},#{startTime},#{endTime},#{seatId})
+    </insert>
+
+    <!-- 新增场次所属座位布局 -->
+    <insert id="generateSeat" useGeneratedKeys="true" keyProperty="seatId"  parameterType="Seat">
+        insert into seat(seat_id,seat_row,seat_col,seats) values(null,#{row},#{col},#{seats})
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.OrdersDao">
+    <select id="findOrderById" parameterType="int" resultMap="OrdersMap">
+        select *
+        from orders,
+             screening,
+             user,
+             seat,
+             language,
+             cinema,
+             movie,
+             room
+        where order_id = #{orderId}
+          and orders.screening_id = screening.screening_id
+          and orders.user_id = user.id
+          and screening.cinema_id = cinema.cinema_id
+          and screening.language_id= language.language_id
+          and screening.seat_id= seat.seat_id
+          and screening.room_id= room.room_id
+          and screening.movie_id= movie.movie_id
+    </select>
+
+    <insert id="add" parameterType="Orders" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT into orders(order_id,screening_id,user_id,create_time,total_price,total_n_o_p,status,seat_nums,order_num) values(null,#{screeningId},#{userId},#{createTime},#{totalPrice},#{totalNOP},#{status},#{seatNums},#{orderNum})
+    </insert>
+
+    <select id="findOrdersList" parameterType="Map" resultMap="OrdersMap">
+        select *
+        from orders,
+             screening,
+             user,
+             seat,
+             language,
+             cinema,
+             movie,
+             room
+        where 1 = 1
+            and orders.screening_id = screening.screening_id
+            and orders.user_id = user.id
+            and screening.cinema_id = cinema.cinema_id
+            and screening.language_id= language.language_id
+            and screening.seat_id= seat.seat_id
+            and screening.room_id= room.room_id
+            and screening.movie_id= movie.movie_id
+        <if test="userId != null">
+            and user.id = #{userId}
+        </if>
+        <if test="cinemaId != null">
+            and screening.cinema_id = #{cinemaId}
+        </if>
+        <if test="orderNum != null">
+            and order_num = #{orderNum}
+        </if>
+        <if test="username != null">
+            and username = #{username}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        --           左闭右闭(天)
+        <if test="orderFrom != null">
+            and create_time &gt;= #{orderFrom}
+        </if>
+        <if test="orderTo != null">
+            and create_time &lt;= #{orderTo}
+        </if>
+        order by orders.create_time desc
+    </select>
+
+    <resultMap id="OrdersMap" type="Orders">
+        <id property="orderId" column="order_id"/>
+        <result property="screeningId" column="screening_id"/>
+        <result property="userId" column="id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="totalNOP" column="total_n_o_p"/>
+        <result property="status" column="status"/>
+        <result property="seatNums" column="seat_nums"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="QRCode" column="qr_code"/>
+        <association property="screening" javaType="Screening" resultMap="ScreeningMap">           <!-- 关联的Screening实体 -->
+
+        </association>
+        <association property="user" javaType="User">                <!-- 关联的User实体 -->
+            <id property="id" column="id"/>
+            <result property="username" column="username"/>
+            <result property="password" column="password"/>
+            <result property="email" column="email"/>
+            <result property="photo" column="photo"/>
+            <result property="phone" column="phone"/>
+            <result property="sex" column="sex"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="ScreeningMap" type="Screening">
+        <id property="screeningId" column="screening_id"/>
+        <result property="cinemaId" column="cinema_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="languageId" column="language_id"/>
+        <result property="price" column="price"/>
+        <result property="roomId" column="room_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="seatId" column="seat_id"/>
+        <association property="cinema" javaType="Cinema">           <!-- 关联的Cinema实体 -->
+            <id property="cinemaId" column="cinema_id"/>
+            <result property="name" column="name"/>
+            <result property="address" column="address"/>
+            <result property="phone" column="phone"/>
+            <result property="city" column="city"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+        <association property="language" javaType="Language">       <!-- 关联的Language实体 -->
+            <id property="languageId" column="language_id"/>
+            <result property="lanName" column="lan_name"/>
+        </association>
+        <association property="seat" javaType="Seat">               <!-- 关联的Seat实体 -->
+            <id property="seatId" column="seat_id"/>
+            <result property="row" column="seat_row"/>
+            <result property="col" column="seat_col"/>
+            <result property="seats" column="seats"/>
+        </association>
+        <association property="room" javaType="Room">               <!-- 关联的Room实体 -->
+            <id property="roomId" column="room_id"/>
+            <result property="roomName" column="room_name"/>
+            <result property="roomRow" column="room_row"/>
+            <result property="roomCol" column="room_col"/>
+            <result property="layout" column="layout"/>
+            <result property="cinemaId" column="cinemaId"/>
+        </association>
+    </resultMap>
+
+    <!-- 订单状态更新操作 -->
+    <update id="updateStatus" parameterType="Map">
+        update orders
+        set status = #{status}
+        where order_num = #{orderNum}
+    </update>
+
+    <!-- 订单状态更新操作 -->
+    <update id="updateQRCode" parameterType="Map">
+        update orders
+        set qr_code = #{QRCode}
+        where order_num = #{orderNum}
+    </update>
+
+    <select id="countPerson" parameterType="Map" resultType="Long">
+        select ifnull(sum(total_n_o_p),0)
+        from orders
+        where screening_id in (
+            select screening_id
+            from screening
+            where cinema_id=#{cinemaId}
+        )
+        <if test="orderFrom != null">
+            and create_time &gt;= #{orderFrom}
+        </if>
+        <if test="orderTo != null">
+            and create_time &lt; #{orderTo}
+        </if>
+    </select>
+
+    <select id="countPrice" parameterType="Map" resultType="Long">
+        select ifnull(sum(total_price),0)
+        from orders
+        where screening_id in (
+            select screening_id
+            from screening
+            where cinema_id=#{cinemaId}
+        )
+        <if test="orderFrom != null">
+            and create_time &gt;= #{orderFrom}
+        </if>
+        <if test="orderTo != null">
+            and create_time &lt; #{orderTo}
+        </if>
+    </select>
+</mapper>

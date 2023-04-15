@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sfw.xmut.dao.BannerDao">
+
+    <select id="findBannerById" parameterType="int" resultMap="bannerMap">
+        select *
+        from banner,movie
+        where ban_id = #{banId}
+            and banner.movie_id = movie.movie_id
+    </select>
+
+    <!-- resultMap用法 -->
+    <select id="findAll" resultMap="bannerMap">
+        select *
+        from banner,movie
+        where banner.movie_id = movie.movie_id
+    </select>
+
+    <resultMap id="bannerMap" type="Banner">
+        <id property="banId" column="ban_id"/>
+        <result property="path" column="path"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="banAddDate" column="ban_add_date"/>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+    </resultMap>
+
+    <!-- 轮播更新操作 -->
+    <update id="edit" parameterType="Banner">
+        update banner
+        set path = #{path},
+            movie_id = #{movieId}
+        where ban_id = #{banId}
+    </update>
+
+    <!-- 轮播添加操作 -->
+    <insert id="add" useGeneratedKeys="true" keyProperty="banId"  parameterType="Banner">
+        insert into banner(ban_id,path,movie_id,ban_add_date) values(null,#{path},#{movieId},#{banAddDate})
+    </insert>
+
+    <!-- 带关键字的查询 -->
+    <select id="findBannerList" parameterType="Map" resultMap="bannerMap">
+        select * from banner,movie where 1 = 1
+        <if test="keyWord != null">
+            and
+            (
+                movie.chinese_name like #{keyWord}
+            or movie.english_name like #{keyWord}
+            )
+        </if>
+        and banner.movie_id=movie.movie_id
+    </select>
+
+    <!-- 删除轮播图 -->
+    <delete id="delete" parameterType="int">
+        delete from banner where ban_id =${banId}
+    </delete>
+</mapper>
