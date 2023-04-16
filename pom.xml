@@ -228,9 +228,46 @@
 <!--            <version>4.6</version>-->
 <!--        </dependency>-->
 
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-core -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-core</artifactId>
+            <version>0.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-math -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-math</artifactId>
+            <version>0.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-integration -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-integration</artifactId>
+            <version>0.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-examples -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-examples</artifactId>
+            <version>0.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
     </dependencies>
+
+
+
+
 
 
 
