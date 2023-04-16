@@ -1,12 +1,22 @@
 package sfw.xmut.mahout;
 
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLBooleanPrefJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,38 +39,34 @@ public class mahoutTest {
 
     }
 
+    // 初始 = 1.0
+    // 浏览  +0.5
+    // 评价  -1.5/+0/+1.5
+    // 生成订单  +3.0
+    // 支付成功  +4.0
+    // 收藏  +4.5
     @Test
-    public void CF() {
-        File file = new File("E:\\XMUT\\毕业设计\\CFtest.dat");
+    public void CF() throws TasteException {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setServerName("localhost");
+        dataSource.setUser("root");
+        dataSource.setPassword("root");
+        dataSource.setDatabaseName("cits");
         // 实例化DataModel并将数据传入其内
-        DataModel dataModel = null;
-        try {
-            dataModel = new FileDataModel(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 计算相似度
-        ItemSimilarity itemSimilarity = null;
-        try {
-            itemSimilarity = new PearsonCorrelationSimilarity(dataModel);
-        } catch (TasteException e) {
-            e.printStackTrace();
-        }
-        // 构建推荐器，使用基于物品的协同过滤推荐
-        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, itemSimilarity);
+        DataModel dataModel = new MySQLJDBCDataModel(dataSource,"preference","user_id","movie_id","preference_val",null);
 
-        List<RecommendedItem> recommendedItemList = null;
-        try {
-            // 计算用户2当前浏览的商品2，推荐2个相似的商品
-            recommendedItemList = recommender.recommendedBecause(2, 2, 2);
-        } catch (TasteException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("使用基于物品的协同过滤算法");
-        System.out.println("根据用户2当前浏览的商品2，推荐2个相似的商品");
-        for (RecommendedItem recommendedItem : recommendedItemList) {
-            System.out.println(recommendedItem);
+        // userCF
+        UserSimilarity similarity=new PearsonCorrelationSimilarity(dataModel);
+//        System.out.println("similarity = " + similarity);
+        UserNeighborhood neighborhood=new NearestNUserNeighborhood(30,similarity,dataModel);
+//        UserNeighborhood neighborhood = new ThresholdUserNeighborhood(3.0, similarity, dataModel);
+        Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity);
+        // the Recommender.recommend() method's arguments: first one is the user id;
+        //     the second one is the number recommended
+        List<RecommendedItem> recommendations=recommender.recommend(18,5);
+        System.out.println("size=" + recommendations.size());
+        for(RecommendedItem recommendation:recommendations){
+            System.out.println(recommendation);
         }
     }
 }
