@@ -16,6 +16,19 @@ public class User {
 //    private String address;//家庭住址
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", photo='" + photo + '\'' +
+                ", phone='" + phone + '\'' +
+                ", sex=" + sex +
+                '}';
+    }
+
     public User() {
     }
 

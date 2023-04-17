@@ -16,5 +16,6 @@ public interface UserService {
     public User findUserById(Integer userId);
     public User login(User user);
     public List<User> findUserList(Map<String, Object> queryMap);
+    public int add(User user);
     public int edit(User user);
 }

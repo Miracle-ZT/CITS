@@ -11,9 +11,9 @@
 <head>
     <meta charset="UTF-8">
     <title>影院智能购票平台</title>
-    <link rel="stylesheet" href="../../../resources/plugins/bootstrap-5.1.3/css/bootstrap.css">
-    <link rel="stylesheet" href="../../../resources/plugins/bootstrap-3.4.1/bootstrap-3.4.1-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../../../resources/css/form.css">
+    <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-5.1.3/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-3.4.1/bootstrap-3.4.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../../resources/css/form.css">
 </head>
 <body>
 <%
@@ -30,7 +30,7 @@
             <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                 <div class="card shadow-lg">
                     <div class="card-body p-5">
-                        <h1 class="fs-2 card-title fw-bold mb-5" style="margin-left: 115px">影院智能购票平台</h1>
+                        <h1 class="fs-2 card-title fw-bold mb-5 text-center">影院智能购票平台</h1>
                         <form method="post" action="${pageContext.request.contextPath}/user/login/" class="needs-validation" autocomplete="off">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="email">邮箱：</label>
@@ -51,7 +51,10 @@
                                     <input type="checkbox" name="remember" id="remember" class="form-check-input">
                                     <label for="remember" class="form-check-label">自动登录</label>
                                 </div>
-                                <button type="submit" class="btn btn-success ms-auto">
+                                <button type="button" onclick="toRegister()" class="btn btn-outline-info ms-auto" style="margin-right: 10px;">
+                                    注册
+                                </button>
+                                <button type="submit" class="btn btn-success">
                                     登录
                                 </button>
                             </div>
@@ -65,7 +68,15 @@
         </div>
     </div>
 </section>
-<script src="js/login.js"></script>
+
+<script src="../../../../resources/js/jquery-3.6.3.js"></script>
+<script>
+    function toRegister(){
+        window.location = "/user/register";
+    }
+</script>
+
+
 </body>
 </html>
 

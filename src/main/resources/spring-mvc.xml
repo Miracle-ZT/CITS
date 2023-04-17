@@ -54,10 +54,11 @@
 <!--            <bean class="sfw.xmut.interceptor.admin.LoginInterceptor"/>-->
 <!--        </mvc:interceptor>-->
         <mvc:interceptor>
-            <mvc:mapping path="/user/*"/>
+<!--            <mvc:mapping path="/user/*"/>-->
             <mvc:mapping path="/home/order/*"/>
             <mvc:mapping path="/home/center/*"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/register"/>
             <mvc:exclude-mapping path="/resources/**"/>
             <bean class="sfw.xmut.interceptor.user.LoginInterceptor"/>
         </mvc:interceptor>

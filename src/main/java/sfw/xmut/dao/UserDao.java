@@ -14,5 +14,6 @@ public interface UserDao {
     public User findUserById(Integer userId);
     public User findUserByEmailAndPassword(User user);
     public List<User> findUserList(Map<String, Object> queryMap);
+    public int add(User user);
     public int edit(User user);
 }

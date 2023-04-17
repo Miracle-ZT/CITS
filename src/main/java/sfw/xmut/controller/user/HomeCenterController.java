@@ -133,6 +133,7 @@ public class HomeCenterController {
         }
 
         user = userService.findUserById(Integer.valueOf(request.getParameter("userId")));
+        request.getSession().setAttribute("logined_user", user);
         Integer type = 0;                           // 更新完依旧显示在基本设置界面
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/home/center");
