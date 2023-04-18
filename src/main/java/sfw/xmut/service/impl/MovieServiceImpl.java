@@ -49,5 +49,10 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.edit(movie);
     }
 
+    @Override
+    public List<Map> findMovieListWithBO(Map<String, Object> queryMap) {
+        return movieDao.findMovieListWithBO(queryMap);
+    }
+
 
 }

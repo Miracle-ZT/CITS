@@ -17,4 +17,5 @@ public interface MovieDao {
     public List<Movie> findMovieList(Map<String, Object> queryMap);
     public int add(Movie movie);
     public int edit(Movie movie);
+    public List<Map> findMovieListWithBO(Map<String, Object> queryMap);
 }

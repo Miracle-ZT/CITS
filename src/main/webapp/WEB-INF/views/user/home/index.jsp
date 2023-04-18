@@ -14,210 +14,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
-    <%--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"--%>
-    <%--         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">--%>
-    <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"--%>
-    <%--            integrity="sha384-/mhDoLbDldZc3qpsJHpLogda//BVZbgYuw6kof4u2FrCedxOtgRZDTHgHUhOCVim"--%>
-    <%--            crossorigin="anonymous"></script>--%>
     <title>用户首页</title>
 </head>
 <body>
 
+
 <div style="width: 1400px;margin: 0px auto 100px;">
     <jsp:include page="../../utils/nav.jsp" flush="true"/>
-    <%--    <main>--%>                                 <!-- 备选导航栏 -->
-    <%--        <div class="container">--%>
-    <%--            <header class="d-flex justify-content-center py-3">--%>
-    <%--                <ul class="nav nav-pills">--%>
-    <%--                    <li class="nav-item"><a href="/user/index" class="nav-link ${ac_home}">Home</a></li>--%>
-    <%--                    <li class="nav-item"><a href="/user/Features" class="nav-link ${ac_Features}">Features</a></li>--%>
-    <%--                    <li class="nav-item"><a href="#" class="nav-link ${ac_Pricing}">Pricing</a></li>--%>
-    <%--                    <li class="nav-item"><a href="#" class="nav-link ${ac_FAQs}">FAQs</a></li>--%>
-    <%--                    <li class="nav-item"><a href="#" class="nav-link ${ac_About}">About</a></li>--%>
-    <%--                </ul>--%>
-    <%--            </header>--%>
-    <%--        </div>--%>
-    <%--    </main>--%>
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <div class="col-4 text-black" style="height: 495px">
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action"><h1>今日热映</h1></a>
-                    <a href="#" class="list-group-item list-group-item-action list-group-item-danger"
-                       style="height: 70px;line-height: 55px">
-                        <div class="row">
-                            <div class="col-1">1.</div>
-                            <div class="col-7">阿凡达：水之道</div>
-                            <div class="col-4">591.63万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action list-group-item-secondary"
-                       style="height: 60px;line-height: 45px">
-                        <div class="row">
-                            <div class="col-1">2.</div>
-                            <div class="col-7">想见你</div>
-                            <div class="col-4">153.33万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action list-group-item-info"
-                       style="height: 50px;line-height: 35px;">
-                        <div class="row">
-                            <div class="col-1">3.</div>
-                            <div class="col-7">绝望主夫</div>
-                            <div class="col-4">136.78万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">4.</div>
-                            <div class="col-7">穿靴子的猫2</div>
-                            <div class="col-4">71.41万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">5.</div>
-                            <div class="col-7">航海王：红发歌姬</div>
-                            <div class="col-4">33.34万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">6.</div>
-                            <div class="col-7">航海王：红发歌姬</div>
-                            <div class="col-4">33.34万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">7.</div>
-                            <div class="col-7">航海王：红发歌姬</div>
-                            <div class="col-4">33.34万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">8.</div>
-                            <div class="col-7">航海王：红发歌姬</div>
-                            <div class="col-4">33.34万</div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="row">
-                            <div class="col-1">9.</div>
-                            <div class="col-7">航海王：红发歌姬</div>
-                            <div class="col-4">33.34万</div>
-                        </div>
-                    </a>
-                </div>
+
+    <%--轮播--%>
+    <div class="row">
+        <div id="carouselExampleAutoplaying" class="carousel slide col-8" style="width: 945px;height: 495px"
+             data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <!-- 被替代的静态轮播图下方指示标 -->
+                <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"--%>
+                <%--                                class="active" aria-current="true" aria-label="Slide 1"></button>--%>
+                <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1"--%>
+                <%--                                aria-label="Slide 2"></button>--%>
+                <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2"--%>
+                <%--                                aria-label="Slide 3"></button>--%>
+                <c:forEach var="ban" items="${bannerList}" varStatus="status">
+                    <c:if test="${status.first}"> <!-- 第一个indicator -->
+                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"
+                                class="active" aria-current="true" aria-label="Slide 1"></button>
+                    </c:if>
+                    <c:if test="${!status.first}"> <!-- 非第一个indicator -->
+                        <button type="button" data-bs-target="#carouselExampleAutoplaying"
+                                data-bs-slide-to="${status.index}"
+                                aria-label="Slide ${status.count}"></button>
+                    </c:if>
+                </c:forEach>
             </div>
-            <div id="carouselExampleAutoplaying" class="carousel slide" style="width: 880px;height: 495px"
-                 data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <!-- 被替代的静态轮播图下方指示标 -->
-                    <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"--%>
-                    <%--                                class="active" aria-current="true" aria-label="Slide 1"></button>--%>
-                    <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1"--%>
-                    <%--                                aria-label="Slide 2"></button>--%>
-                    <%--                        <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2"--%>
-                    <%--                                aria-label="Slide 3"></button>--%>
-                    <c:forEach var="ban" items="${bannerList}" varStatus="status">
-                        <c:if test="${status.first}"> <!-- 第一个indicator -->
-                            <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"
-                                    class="active" aria-current="true" aria-label="Slide 1"></button>
-                        </c:if>
-                        <c:if test="${!status.first}"> <!-- 非第一个indicator -->
-                            <button type="button" data-bs-target="#carouselExampleAutoplaying"
-                                    data-bs-slide-to="${status.index}"
-                                    aria-label="Slide ${status.count}"></button>
-                        </c:if>
-                    </c:forEach>
-                </div>
-                <div class="carousel-inner">
-                    <c:forEach var="ban" items="${bannerList}" varStatus="status">
-                        <c:if test="${status.first}"> <!-- 第一个元素 class中需要有active 表明初始默认展示哪一个-->
-                            <div class="carousel-item active" data-bs-interval="3000">
-                                <a href="/home/movie_detail?movieId=${ban.movieId}">
-                                    <img src="../../../..${ban.path}" class="d-block w-100" alt="...">
-                                </a>
+            <div class="carousel-inner">
+                <c:forEach var="ban" items="${bannerList}" varStatus="status">
+                    <c:if test="${status.first}"> <!-- 第一个元素 class中需要有active 表明初始默认展示哪一个-->
+                        <div class="carousel-item active" data-bs-interval="3000">
+                            <a href="/home/movie_detail?movieId=${ban.movieId}">
+                                <img src="../../../..${ban.path}" class="d-block w-100" alt="...">
+                            </a>
+                        </div>
+                    </c:if>
+                    <c:if test="${!status.first}"> <!-- 但多个内容也仅需设置一个active -->
+                        <div class="carousel-item" data-bs-interval="3000">
+                            <a href="/home/movie_detail?movieId=${ban.movieId}">
+                                <img src="../../../..${ban.path}" class="d-block w-100" alt="...">
+                            </a>
+                        </div>
+                    </c:if>
+                </c:forEach>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="col-4">
+            <div class="list-group">
+                <div style="font-size: 33px;font-weight: 450;display:inline;color: #0d6efd;">今日热映</div>
+                <c:forEach items="${movieListWithBO}" var="movie" varStatus="status">
+                    <c:if test="${status.first}">
+                        <a href="/home/movie_detail?movieId=${movie['movie_id']}" class="list-group-item list-group-item-action" style="border: 0px">
+                            <div class="row">
+                                <div class="col-1">
+                                    <span class="badge" style="color:red;background:lightcoral;">${status.count}</span>
+                                </div>
+                                <div class="col-4">
+                                    <img src="../../../..${movie['img_url']}" style="height: 72px;width: 128px">
+                                </div>
+                                <div class="col-4">
+                                    <div style="font-weight: bold;font-size: 20px;width: 120px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                            ${movie['movie_name']}
+                                    </div>
+                                    <div style="font-size: 15px;margin-top: 15px;width: 120px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                            ${movie['actors']}
+                                    </div>
+                                </div>
+                                <div class="col-3 text-center">
+                                        ${movie['bo']}&nbsp;
+                                </div>
                             </div>
-                        </c:if>
-                        <c:if test="${!status.first}"> <!-- 但多个内容也仅需设置一个active -->
-                            <div class="carousel-item" data-bs-interval="3000">
-                                <a href="/home/movie_detail?movieId=${ban.movieId}">
-                                    <img src="../../../..${ban.path}" class="d-block w-100" alt="...">
-                                </a>
+                        </a>
+                    </c:if>
+                    <c:if test="${!status.first}">
+                        <a href="/home/movie_detail?movieId=${movie['movie_id']}" class="list-group-item list-group-item-action" style="padding: 0.7rem 1rem;border: 0px">
+                            <div class="row">
+                                <div class="col-1">
+                                    <span id="cube-${movie['movie_id']}" class="badge" onload="getColor(this)">${status.count}</span>
+                                </div>
+                                <div class="col-4" style="font-weight: bold;width: 147.55px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                        ${movie['movie_name']}
+                                </div>
+                                <div class="col-4" style="width: 147.55px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                        ${movie['actors']}
+                                </div>
+                                <div class="col-3 text-center">${movie['bo']}&nbsp;</div>
                             </div>
-                        </c:if>
-                    </c:forEach>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                        data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-                        data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                        </a>
+                    </c:if>
+                </c:forEach>
             </div>
         </div>
     </div>
 
-    <%-- 第二大行块 --%>
-    <div class="row">
-        <div class="col-8" style="border-right: 1px #d3d3d3 solid">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist" style="margin: 15px">
-                    <button class="nav-link active" id="nav-being-tab" data-bs-toggle="tab" data-bs-target="#nav-being" type="button" role="tab" aria-controls="nav-being" aria-selected="true">正在热映</button>
-                    <button class="nav-link" id="nav-soon-tab" data-bs-toggle="tab" data-bs-target="#nav-soon" type="button" role="tab" aria-controls="nav-soon" aria-selected="false">即将上映</button>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <%-- 正在热映 --%>
-                <div class="tab-pane fade show active" id="nav-being" role="tabpanel" aria-labelledby="nav-being-tab" tabindex="0">
-                    <c:forEach var="movie" items="${movieListBeing}" varStatus="status">
-                        <div class="text-center" style="float: left;margin: 15px">
-                            <div>
-                                <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
-                            </div>
-                            <div style="height: 35px;line-height: 35px">
-                                    ${movie.chineseName}
-                            </div>
-                            <a href="/home/movie_detail?movieId=${movie.movieId}">
-                                <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
-                                        movieId="${movie.movieId}">
-                                    立即购票
-                                </button>
-                            </a>
-                        </div>
-                    </c:forEach>
-                </div>
-                <%-- 即将上映 --%>
-                <div class="tab-pane fade" id="nav-soon" role="tabpanel" aria-labelledby="nav-soon-tab" tabindex="0">
-                    <c:forEach var="movie" items="${movieListSoon}" varStatus="status">
-                        <div class="text-center" style="float: left;margin: 15px">
-                            <div>
-                                <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
-                            </div>
-                            <div style="height: 35px;line-height: 35px">
-                                    ${movie.chineseName}
-                            </div>
-                            <a href="/home/movie_detail?movieId=${movie.movieId}">
-                                <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
-                                        movieId="${movie.movieId}">
-                                    立即购票
-                                </button>
-                            </a>
-                        </div>
-                    </c:forEach>
-                </div>
+    <%-- 为你推荐 --%>
+    <div style="padding: 40px 10px 15px 10px;border-bottom: 1px #d3d3d3 dashed;">
+        <div class="row" style="border-bottom: 1px #d3d3d3 solid">
+            <div class="col-3">
+                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">为你推荐</h3>
             </div>
+            <div class="col-8"></div>
+            <div class="col-1" style="color: #0d6efd;"><a href="/home/movie" style="text-decoration: none"></a></div>
         </div>
-        <div class="col-4">111</div>
+        <div>
+            <c:forEach var="movie" items="${recommendedMovieList}" varStatus="status">
+                <div class="text-center" style="display: inline-block;margin: 15px 47px 20px 5px">
+                    <div>
+                        <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
+                    </div>
+                    <div style="height: 35px;width: 139px;line-height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                            ${movie.chineseName}
+                    </div>
+                    <a href="/home/movie_detail?movieId=${movie.movieId}">
+                        <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
+                                movieId="${movie.movieId}">
+                            立即购票
+                        </button>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <%-- 正在热映 --%>
+    <div style="padding: 20px 10px 15px 10px;">
+        <div class="row" style="border-bottom: 1px #d3d3d3 solid">
+            <div class="col-3">
+                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">正在热映</h3>
+            </div>
+            <div class="col-8"></div>
+            <div class="col-1"><a href="/home/movie" style="text-decoration: none">全部 >></a></div>
+        </div>
+        <div>
+            <c:forEach var="movie" items="${movieListBeing}" varStatus="status">
+                <div class="text-center" style="display: inline-block;margin: 12px">
+                    <div>
+                        <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
+                    </div>
+                    <div style="height: 35px;line-height: 35px">
+                            ${movie.chineseName}
+                    </div>
+                    <a href="/home/movie_detail?movieId=${movie.movieId}">
+                        <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
+                                movieId="${movie.movieId}">
+                            立即购票
+                        </button>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <%-- 即将上映 --%>
+    <div style="padding: 20px 10px 15px 10px;">
+        <div class="row" style="border-bottom: 1px #d3d3d3 solid">
+            <div class="col-3">
+                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">即将上映</h3>
+            </div>
+            <div class="col-8"></div>
+            <div class="col-1"><a href="/home/movie" style="text-decoration: none">全部 >></a></div>
+        </div>
+        <div>
+            <c:forEach var="movie" items="${movieListSoon}" varStatus="status">
+                <div class="text-center" style="float: left;margin: 12px">
+                    <div>
+                        <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
+                    </div>
+                    <div style="height: 35px;line-height: 35px">
+                            ${movie.chineseName}
+                    </div>
+                    <a href="/home/movie_detail?movieId=${movie.movieId}">
+                        <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
+                                movieId="${movie.movieId}">
+                            立即购票
+                        </button>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
     </div>
 </div>
+
+<script src="../../../../resources/js/jquery-3.6.3.js"></script>
+
+<%-- 今日热映部分 序号-随机样式 --%>
+<script>
+    $(document).ready(function(){
+        let colorArrayText = [
+            'green',
+            'red',
+            'green',
+            'green',
+        ];
+        let backgroundArrayText = [
+            'lightgreen',
+            'lightsalmon',
+            'lightgray',
+            'lightblue',
+            'pink',
+            'pink',
+        ];
+
+        $("span[id^='cube-']").each(function (){
+            $(this).css('color',colorArrayText[Math.floor((Math.random()*3))]);
+            $(this).css('background',backgroundArrayText[Math.floor((Math.random()*5))]);
+        })
+        // $("span[id^='cube-']").css('color',colorArrayText[Math.floor((Math.random()*4))]);
+        // $("span[id^='cube-']").css('background',backgroundArrayText[Math.floor((Math.random()*5))]);
+    });
+
+</script>
+
 
 
 </body>

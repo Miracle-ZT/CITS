@@ -1,7 +1,18 @@
 package sfw.xmut.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +57,7 @@ public class HomeController {
     private TypeService typeService;
 
     @RequestMapping(value = "/index")
-    public ModelAndView index(HttpServletRequest request){
+    public ModelAndView index(HttpServletRequest request) throws TasteException {
         User user = (User) request.getSession().getAttribute("logined_user");
         List<Banner> bannerList = bannerService.findAll();
         Map<String,Object> queryMap = new HashMap<>();
@@ -55,12 +66,25 @@ public class HomeController {
         queryMap.put("movieStatus",0);
         List<Movie> movieListSoon = movieService.findMovieList(queryMap);
 
+        // 今日热映部分数据
+        queryMap.clear();
+//        queryMap.put("today","today");
+        List<Map> movieListWithBO = movieService.findMovieListWithBO(queryMap);
+
+//        List<RecommendedItem> recommendedItemList = userCF(user.getId(),7);
+//        List<Movie> recommendedMovieList = new ArrayList<>();
+//        for(RecommendedItem recommendation:recommendedItemList){
+//            recommendedMovieList.add(movieService.findMovieById((int) recommendation.getItemID()));
+//        }
+
         ModelAndView mv = new ModelAndView();                       // 登录成功
         mv.setViewName("user/home/index");                          // 进入首页     --直接跳转拼接后的 admin/index.jsp
         mv.addObject("user",user);
         mv.addObject("bannerList",bannerList);
+        mv.addObject("recommendedMovieList",movieListBeing);
         mv.addObject("movieListBeing",movieListBeing);
         mv.addObject("movieListSoon",movieListSoon);
+        mv.addObject("movieListWithBO",movieListWithBO);
         mv.addObject("ac_home","active");
 //        mv.addObject("include","welcome.jsp");          // 设置主页区域显示内容(被包含)
         return mv;
@@ -358,5 +382,36 @@ public class HomeController {
 
         Map<String, Object> resultMap = new HashMap<>();
         return resultMap;
+    }
+
+    public List<RecommendedItem> userCF(long userId,int recommendNum) throws TasteException {
+        System.out.println("111111111");
+        MysqlDataSource dataSource = new MysqlDataSource();
+        System.out.println("222222222");
+        dataSource.setServerName("localhost");
+        System.out.println("333333333");
+        dataSource.setUser("root");
+        dataSource.setPassword("root");
+        dataSource.setDatabaseName("cits");
+        System.out.println("==========");
+
+        // 实例化DataModel并将数据传入其内
+        DataModel dataModel = new MySQLJDBCDataModel(dataSource,"preference","user_id","movie_id","preference_val",null);
+
+        // userCF
+        UserSimilarity similarity=new PearsonCorrelationSimilarity(dataModel);
+//        System.out.println("similarity = " + similarity);
+        UserNeighborhood neighborhood=new NearestNUserNeighborhood(30,similarity,dataModel);
+//        UserNeighborhood neighborhood = new ThresholdUserNeighborhood(3.0, similarity, dataModel);
+        Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity);
+        // the Recommender.recommend() method's arguments: first one is the user id;
+        //     the second one is the number recommended
+        List<RecommendedItem> recommendations=recommender.recommend(userId,recommendNum);
+        System.out.println("size=" + recommendations.size());
+        for(RecommendedItem recommendation:recommendations){
+            System.out.println(recommendation);
+        }
+
+        return recommendations;
     }
 }

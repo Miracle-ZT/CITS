@@ -63,7 +63,7 @@ public class mahoutTest {
         Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity);
         // the Recommender.recommend() method's arguments: first one is the user id;
         //     the second one is the number recommended
-        List<RecommendedItem> recommendations=recommender.recommend(18,5);
+        List<RecommendedItem> recommendations=recommender.recommend(1,7);
         System.out.println("size=" + recommendations.size());
         for(RecommendedItem recommendation:recommendations){
             System.out.println(recommendation);

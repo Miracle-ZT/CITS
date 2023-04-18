@@ -211,11 +211,11 @@ public class HomeOrderController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user/ticket/pay_success");
-        modelAndView.addObject("total_amount",total_amount);
-        modelAndView.addObject("out_trade_no",out_trade_no);
-        modelAndView.addObject("trade_no",trade_no);
-        modelAndView.addObject("seller_id",seller_id);
+        modelAndView.setViewName("home/center/index?type=1");
+//        modelAndView.addObject("total_amount",total_amount);
+//        modelAndView.addObject("out_trade_no",out_trade_no);
+//        modelAndView.addObject("trade_no",trade_no);
+//        modelAndView.addObject("seller_id",seller_id);
         return modelAndView;
     }
 

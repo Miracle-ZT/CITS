@@ -24,7 +24,7 @@
     <jsp:include page="../../utils/nav.jsp" flush="true"/>
 </div>
 
-<div class="card card-body" style="transform: translateX(10%);width: 1400px;margin-top: -50px">
+<div class="card card-body" style="width: 1400px;margin: -50px auto 0px auto">
     <div class="row">                       <!-- 品牌 -->
         <div class="col-1">
             <h7 class="align-self-center text-muted" style="padding: 5px;margin-top: 8px">品牌：</h7>
@@ -51,7 +51,7 @@
         </div>
     </div>
 </div>
-<div class="card card-body" style="transform: translateX(10%);width: 1400px">
+<div class="card card-body" style="width: 1400px;margin: 0px auto 0px auto">
     <div class="row">                       <!-- 影厅服务 -->
         <div class="col-1">
             <h7 class="align-self-center text-muted" style="padding: 5px;margin-top: 8px">影厅服务：</h7>
@@ -88,7 +88,7 @@
 </div>
 
 <div class="mt-5">                              <!-- 影院列表 -->
-    <div class="row" style="transform: translateX(10%);width: 1400px;">
+    <div class="row" style="margin: 0px auto 0px auto;width: 1400px;">
         <div class="col-4" style="align-items: center">
             <img src="../../../../resources/img/pic_movie_list.png" width="20px" height="20px"
                  class="d-inline-block align-text-top" style="margin-top: 1px">
@@ -107,7 +107,7 @@
     <div id="cinemaList">
         <c:if test="${not empty cinemaList}">
             <c:forEach var="cinema" items="${cinemaList}" varStatus="status">
-                <div class="card card-body" style="transform: translateX(10%);width: 1400px">
+                <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                     <div class="row">
                         <div class="col-10">
                             <div>${cinema.name}</div>
@@ -129,7 +129,7 @@
             </c:forEach>
         </c:if>
         <c:if test="${empty cinemaList}">
-            <div class="card card-body" style="transform: translateX(10%);width: 1400px">
+            <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                 <h5>抱歉，没有找到相关结果，请尝试用其他条件筛选。</h5>
             </div>
         </c:if>

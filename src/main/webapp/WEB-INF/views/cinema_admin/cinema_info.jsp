@@ -79,7 +79,7 @@
     <div class="col-12 col-md-6 col-lg-6 col-xl-6">
         <div class="card">
             <div class="card-body">
-                <div id="lineChart" style="width: 800px;height:400px;">
+                <div id="lineChart" style="width: 700px;height:400px;">
 
                 </div>
             </div>
@@ -88,7 +88,7 @@
     <div class="col-12 col-md-6 col-lg-6 col-xl-6">
         <div class="card">
             <div class="card-body">
-                <div id="barChart" style="width: 800px;height:400px;">
+                <div id="barChart" style="width: 700px;height:400px;">
 
                 </div>
             </div>

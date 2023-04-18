@@ -57,6 +57,22 @@
         order by movie.movie_id
     </select>
 
+    <!-- 查询电影的票房排名列表及其对应的票房值 -->
+    <select id="findMovieListWithBO" parameterType="Map" resultType="Map">
+        select m.movie_id,m.actors,m.chinese_name as movie_name,sum(o.total_price) as bo,m.img_url
+        from movie m,orders o,screening s
+        where o.screening_id = s.screening_id
+        and s.movie_id = m.movie_id
+
+--         今日范围内
+        <if test="today != null">
+            and s.start_time &gt; DATE(NOW())
+            and s.start_time &lt; DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+        </if>
+        group by m.movie_id
+        order by bo DESC
+    </select>
+
     <!-- 电影添加操作 -->
     <insert id="add" useGeneratedKeys="true" keyProperty="movieId"  parameterType="Movie">
         insert into movie(movie_id,chinese_name,english_name,img_url,time_len,release_date,introduction,country,director,actors,movie_status,add_date) values(null,#{chineseName},#{englishName},#{imgUrl},#{timeLen},#{releaseDate},#{introduction},#{country},#{director},#{actors},#{movieStatus},#{addDate})

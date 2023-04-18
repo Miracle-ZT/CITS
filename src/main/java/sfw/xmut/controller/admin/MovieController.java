@@ -149,9 +149,11 @@ public class MovieController {
         }
 
         List<Movie> movieList = movieService.findMovieList(new HashMap<>());
+        List<Type> typeList = typeService.findTypeList(new HashMap<>());
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/movie_list");
         mv.addObject("movieList",movieList);
+        mv.addObject("typeList",typeList);
         return mv;
     }
 
@@ -266,9 +268,11 @@ public class MovieController {
         }
 
         List<Movie> movieList = movieService.findMovieList(new HashMap<>());
+        List<Type> typeList = typeService.findTypeList(new HashMap<>());
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/movie_list");
         mv.addObject("movieList",movieList);
+        mv.addObject("typeList",typeList);
         return mv;
     }
 
