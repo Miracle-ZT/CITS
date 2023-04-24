@@ -42,6 +42,22 @@
             </bean>
         </property>
 
+        <!--配置分页助手-->
+        <property name="plugins">
+            <array>
+                <!-- 引入插件类型 -->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <!-- 指定使用的数据库-->
+                    <property name="properties">
+                        <!--因为分页插件支持多种数据库,需指明当前所用数据库 ,helperDialect  mysql数据库(方言)-->
+                        <props>
+                            <prop key="helperDialect"></prop>
+                        </props>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
         <!-- 扫描映射文件 -->
 <!--        <property name="mapperLocations" value="classpath:sfw/xmut/dao/*.xml"></property>-->
     </bean>

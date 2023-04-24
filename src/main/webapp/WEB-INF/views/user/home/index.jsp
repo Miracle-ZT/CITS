@@ -125,16 +125,47 @@
     </div>
 
     <%-- 为你推荐 --%>
+    <c:if test="${not empty recommendedMovieList}">
+        <div style="padding: 40px 10px 15px 10px;border-bottom: 1px #d3d3d3 dashed;">
+            <div class="row" style="border-bottom: 1px #d3d3d3 solid">
+                <div class="col-3">
+                    <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">为你推荐</h3>
+                </div>
+                <div class="col-8"></div>
+                <div class="col-1" style="color: #0d6efd;"><a href="/home/movie" style="text-decoration: none"></a></div>
+            </div>
+            <div>
+                <c:forEach var="movie" items="${recommendedMovieList}" varStatus="status">
+                    <div class="text-center" style="display: inline-block;margin: 15px 47px 20px 5px">
+                        <div>
+                            <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
+                        </div>
+                        <div style="height: 35px;width: 139px;line-height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                ${movie.chineseName}
+                        </div>
+                        <a href="/home/movie_detail?movieId=${movie.movieId}">
+                            <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
+                                    movieId="${movie.movieId}">
+                                立即购票
+                            </button>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
+
+    <%-- 正在热映 --%>
     <div style="padding: 40px 10px 15px 10px;border-bottom: 1px #d3d3d3 dashed;">
         <div class="row" style="border-bottom: 1px #d3d3d3 solid">
             <div class="col-3">
-                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">为你推荐</h3>
+                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">正在热映</h3>
             </div>
             <div class="col-8"></div>
-            <div class="col-1" style="color: #0d6efd;"><a href="/home/movie" style="text-decoration: none"></a></div>
+            <div class="col-1"><a href="/home/movie" style="text-decoration: none">全部 >></a></div>
         </div>
         <div>
-            <c:forEach var="movie" items="${recommendedMovieList}" varStatus="status">
+            <c:forEach var="movie" items="${moviePageInfoBeing.list}" varStatus="status">
                 <div class="text-center" style="display: inline-block;margin: 15px 47px 20px 5px">
                     <div>
                         <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
@@ -153,37 +184,8 @@
         </div>
     </div>
 
-    <%-- 正在热映 --%>
-    <div style="padding: 20px 10px 15px 10px;">
-        <div class="row" style="border-bottom: 1px #d3d3d3 solid">
-            <div class="col-3">
-                <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">正在热映</h3>
-            </div>
-            <div class="col-8"></div>
-            <div class="col-1"><a href="/home/movie" style="text-decoration: none">全部 >></a></div>
-        </div>
-        <div>
-            <c:forEach var="movie" items="${movieListBeing}" varStatus="status">
-                <div class="text-center" style="display: inline-block;margin: 12px">
-                    <div>
-                        <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
-                    </div>
-                    <div style="height: 35px;line-height: 35px">
-                            ${movie.chineseName}
-                    </div>
-                    <a href="/home/movie_detail?movieId=${movie.movieId}">
-                        <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
-                                movieId="${movie.movieId}">
-                            立即购票
-                        </button>
-                    </a>
-                </div>
-            </c:forEach>
-        </div>
-    </div>
-
     <%-- 即将上映 --%>
-    <div style="padding: 20px 10px 15px 10px;">
+    <div style="padding: 40px 10px 15px 10px;border-bottom: 1px #d3d3d3 dashed;">
         <div class="row" style="border-bottom: 1px #d3d3d3 solid">
             <div class="col-3">
                 <h3 style="padding: 0px 15px 5px 0px;color: #0d6efd">即将上映</h3>
@@ -192,12 +194,12 @@
             <div class="col-1"><a href="/home/movie" style="text-decoration: none">全部 >></a></div>
         </div>
         <div>
-            <c:forEach var="movie" items="${movieListSoon}" varStatus="status">
-                <div class="text-center" style="float: left;margin: 12px">
+            <c:forEach var="movie" items="${moviePageInfoSoon.list}" varStatus="status">
+                <div class="text-center" style="display: inline-block;margin: 15px 47px 20px 5px">
                     <div>
                         <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
                     </div>
-                    <div style="height: 35px;line-height: 35px">
+                    <div style="height: 35px;width: 139px;line-height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
                             ${movie.chineseName}
                     </div>
                     <a href="/home/movie_detail?movieId=${movie.movieId}">

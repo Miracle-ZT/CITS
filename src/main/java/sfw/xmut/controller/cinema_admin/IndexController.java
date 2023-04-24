@@ -1,5 +1,6 @@
 package sfw.xmut.controller.cinema_admin;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -283,7 +284,10 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/screening_list")
-    public ModelAndView screening_list(HttpServletRequest request){
+    public ModelAndView screening_list(HttpServletRequest request,
+                                       @RequestParam(name = "currPage",defaultValue = "1") Integer currPage,
+                                       @RequestParam(name = "pageSize",defaultValue = (Integer.MAX_VALUE + "")) Integer pageSize
+    ){
         Integer cinemaId = Integer.valueOf(request.getParameter("cinemaId"));
         Cinema cinema = cinemaService.findCinemaById(cinemaId);
 
@@ -292,7 +296,9 @@ public class IndexController {
         List<Screening> screeningList = screeningService.findScreeningList(queryMap);
 
         queryMap.put("movieStatus",1);
-        List<Movie> movieList = movieService.findMovieList(queryMap);
+        queryMap.put("currPage",currPage);
+        queryMap.put("pageSize",pageSize);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
 
         List<Room> roomList = roomService.findRoomList(queryMap);
         List<Language> languageList = languageService.findLanguageList(queryMap);
@@ -302,7 +308,7 @@ public class IndexController {
         mv.setViewName("cinema_admin/menu_bar");
         getMessageListAndPutIn(cinemaId,mv);
         mv.addObject("screeningList",screeningList);
-        mv.addObject("movieList",movieList);
+        mv.addObject("movieList",moviePageInfo.getList());
         mv.addObject("roomList",roomList);
         mv.addObject("languageList",languageList);
         mv.addObject("cinema",cinema);
@@ -310,9 +316,9 @@ public class IndexController {
         return mv;
     }
 
-    // 新增电影
+    // 新增场次
     @RequestMapping("/add_screening")
-    public void add_movie(HttpServletRequest request, HttpServletResponse response,
+    public void add_screening(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam("add-movie-id") Integer movieId,
                                   @RequestParam("add-room-id") Integer roomId,
                                   @RequestParam("add-language-id") Integer languageId,

@@ -2,6 +2,7 @@ package sfw.xmut.controller.admin;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -141,8 +142,9 @@ public class BannerController {
         }
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("NotInBan","NotInBan");        // 排除已存在banner电影的List
-        List<Movie> movieList = movieService.findMovieList(queryMap);    // 用于绑定所属电影的选择下拉框
-        resultMap.put("movieList",movieList);
+        queryMap.put("pageSize",Integer.MAX_VALUE);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);    // 用于绑定所属电影的选择下拉框
+        resultMap.put("movieList",moviePageInfo.getList());
         return resultMap;
     }
 

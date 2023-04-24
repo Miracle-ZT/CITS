@@ -1,6 +1,7 @@
 package sfw.xmut.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -60,30 +61,41 @@ public class HomeController {
     public ModelAndView index(HttpServletRequest request) throws TasteException {
         User user = (User) request.getSession().getAttribute("logined_user");
         List<Banner> bannerList = bannerService.findAll();
+
+        Integer colNum = 7;                                 // 一排展示的电影数
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("movieStatus",1);
-        List<Movie> movieListBeing = movieService.findMovieList(queryMap);
+        PageInfo<Movie> moviePageInfoBeing = movieService.findMovieList(queryMap);
+        if (moviePageInfoBeing.getList().size() > colNum) moviePageInfoBeing.setList(moviePageInfoBeing.getList().subList(0,colNum));
+
         queryMap.put("movieStatus",0);
-        List<Movie> movieListSoon = movieService.findMovieList(queryMap);
+        PageInfo<Movie> moviePageInfoSoon = movieService.findMovieList(queryMap);
+        if (moviePageInfoSoon.getList().size() > colNum) moviePageInfoSoon.setList(moviePageInfoSoon.getList().subList(0,colNum));
 
         // 今日热映部分数据
         queryMap.clear();
 //        queryMap.put("today","today");
+        // 需要一天内 有足够多个的电影订单 才能填满列表
         List<Map> movieListWithBO = movieService.findMovieListWithBO(queryMap);
-
-//        List<RecommendedItem> recommendedItemList = userCF(user.getId(),7);
-//        List<Movie> recommendedMovieList = new ArrayList<>();
-//        for(RecommendedItem recommendation:recommendedItemList){
-//            recommendedMovieList.add(movieService.findMovieById((int) recommendation.getItemID()));
-//        }
 
         ModelAndView mv = new ModelAndView();                       // 登录成功
         mv.setViewName("user/home/index");                          // 进入首页     --直接跳转拼接后的 admin/index.jsp
         mv.addObject("user",user);
         mv.addObject("bannerList",bannerList);
-        mv.addObject("recommendedMovieList",movieListBeing);
-        mv.addObject("movieListBeing",movieListBeing);
-        mv.addObject("movieListSoon",movieListSoon);
+        if (user != null){                                          // 已登录才获取推荐列表
+            List<RecommendedItem> recommendedItemList = userCF(user.getId(),20);
+            List<Movie> recommendedMovieList = new ArrayList<>();
+            for(RecommendedItem recommendation:recommendedItemList){
+                Movie movie = movieService.findMovieById((int) recommendation.getItemID());
+                // 若为热映中的影片 才加入推荐
+                if (movie.getMovieStatus() == 1) recommendedMovieList.add(movie);
+            }
+            if (recommendedMovieList.size() > colNum) recommendedMovieList = recommendedMovieList.subList(0,colNum);
+            mv.addObject("recommendedMovieList",recommendedMovieList);
+        }
+
+        mv.addObject("moviePageInfoBeing",moviePageInfoBeing);
+        mv.addObject("moviePageInfoSoon",moviePageInfoSoon);
         mv.addObject("movieListWithBO",movieListWithBO);
         mv.addObject("ac_home","active");
 //        mv.addObject("include","welcome.jsp");          // 设置主页区域显示内容(被包含)
@@ -97,24 +109,32 @@ public class HomeController {
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("keyWord","%" + keyWord + "%");
 
-        List<Movie> movieList = movieService.findMovieList(queryMap);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
         List<Cinema> cinemaList = cinemaService.findCinemaList(queryMap);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/home/search_content");
         mv.addObject("keyWord",keyWord);
-        mv.addObject("movieList",movieList);
+        mv.addObject("moviePageInfo",moviePageInfo);
         mv.addObject("cinemaList",cinemaList);
         return mv;
     }
 
     @RequestMapping(value = "/movie")
-    public ModelAndView index_movie(HttpServletRequest request){
+    public ModelAndView index_movie(HttpServletRequest request,
+                                    @RequestParam(name = "currPage",defaultValue = "1") Integer currPage,
+                                    @RequestParam(name = "pageSize",defaultValue = "14") Integer pageSize
+                                    ){
+        Map<String,Object> queryMap = new HashMap<>();
+        queryMap.put("currPage",currPage);
+        queryMap.put("pageSize",pageSize);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
 
         List<Type> typeList = typeService.findTypeList(new HashMap<>());
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/movie/index");
+        mv.addObject("moviePageInfo",moviePageInfo);
         mv.addObject("typeList",typeList);
         mv.addObject("ac_movie","active");
         return mv;
@@ -139,7 +159,6 @@ public class HomeController {
         Map<String, Object> queryMap = new HashMap<>();
         Cinema cinema = cinemaService.findCinemaById(cinemaId);
         queryMap.put("cinemaId",cinemaId);
-        List<Movie> movieList = movieService.findMovieWithList(queryMap);
 
         LinkedHashMap<String,String> dateTextMap = new LinkedHashMap<>();   // 后七天的日期元素的文本
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
@@ -174,12 +193,20 @@ public class HomeController {
             date.setTime(date.getTime()+oneDayTime);
         }
 
+        // 只显示七天内有场次的电影
+        // 从当前日期开始
+        queryMap.put("startTime",DateFormatUtils.format(new Date(),"yyyy-MM-dd"));
+        // 从七天后日期结束 借用上一步求七日文本的过程中的Date对象来获取
+        queryMap.put("endTime",DateFormatUtils.format(date,"yyyy-MM-dd"));
+        List<Movie> movieList = movieService.findMovieWithList(queryMap);
+
         date = new Date();
         String startTime = DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");  // 默认起始时间(当天)
         queryMap.put("startTime",startTime);
         date.setTime(date.getTime()+oneDayTime);
         String endTime = DateFormatUtils.format(date,"yyyy-MM-dd") + " 00:00:00";  // 默认结束时间(当天)
         queryMap.put("endTime",endTime);
+        // TODO error in home_cinema when enter a cinema_detail which haven't the screening
         queryMap.put("movieId",movieList.get(0).getMovieId());          // 默认场次列表显示的是存在电影列表的第一个电影的场次
         List<Screening> screeningList = screeningService.findScreeningList(queryMap);
 //        for (Screening screening:screeningList){
@@ -384,28 +411,28 @@ public class HomeController {
         return resultMap;
     }
 
+    // 协同过滤推荐
     public List<RecommendedItem> userCF(long userId,int recommendNum) throws TasteException {
-        System.out.println("111111111");
         MysqlDataSource dataSource = new MysqlDataSource();
-        System.out.println("222222222");
         dataSource.setServerName("localhost");
-        System.out.println("333333333");
         dataSource.setUser("root");
         dataSource.setPassword("root");
         dataSource.setDatabaseName("cits");
-        System.out.println("==========");
-
         // 实例化DataModel并将数据传入其内
-        DataModel dataModel = new MySQLJDBCDataModel(dataSource,"preference","user_id","movie_id","preference_val",null);
+        DataModel dataModel = new MySQLJDBCDataModel(dataSource,"preference",
+                "user_id","movie_id",
+                "preference_val",null);
 
         // userCF
+        // 计算相似度
         UserSimilarity similarity=new PearsonCorrelationSimilarity(dataModel);
 //        System.out.println("similarity = " + similarity);
         UserNeighborhood neighborhood=new NearestNUserNeighborhood(30,similarity,dataModel);
 //        UserNeighborhood neighborhood = new ThresholdUserNeighborhood(3.0, similarity, dataModel);
+        // 构建推荐器，使用基于用户的协同过滤推荐
         Recommender recommender=new GenericUserBasedRecommender(dataModel,neighborhood,similarity);
-        // the Recommender.recommend() method's arguments: first one is the user id;
-        //     the second one is the number recommended
+        // the Recommender.recommend() method's arguments:  first one is the user id;
+        //                                                  the second one is the number recommended
         List<RecommendedItem> recommendations=recommender.recommend(userId,recommendNum);
         System.out.println("size=" + recommendations.size());
         for(RecommendedItem recommendation:recommendations){

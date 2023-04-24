@@ -48,7 +48,7 @@
                     <a class="nav-link ${ac_home}" aria-current="page" href="/home/index">首页</a>
                 </li>
                 <li class="nav-item" style="font-size: 20px;padding: 10px">
-                    <a class="nav-link ${ac_movie}" href="/home/movie">电影</a>
+                    <a class="nav-link ${ac_movie}" href="/home/movie?currPage=1&pageSize=14">电影</a>
                 </li>
                 <li class="nav-item" style="font-size: 20px;padding: 10px">
                     <a class="nav-link ${ac_cinema}" href="/home/cinema">影院</a>

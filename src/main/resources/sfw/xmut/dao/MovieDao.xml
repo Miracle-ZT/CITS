@@ -6,20 +6,16 @@
 <mapper namespace="sfw.xmut.dao.MovieDao">
     <select id="findMovieById" parameterType="int" resultMap="MovieWithTypeResult">
         SELECT
-            m.*,t.*
+            m.*
         FROM
-            movie m,
-            type t,
-            type_item ti
+            movie m
         WHERE
             m.movie_id = #{id}
-          AND m.movie_id = ti.movie_id
-          AND t.type_id = ti.type_id
     </select>
 
-    <!-- 存在场次的电影列表 -->
+    <!-- 存在场次的 符合时间段的 电影列表 -->
     <select id="findMovieWithList" parameterType="Map" resultMap="MovieWithTypeResult">
-        select * from screening,cinema,movie,type,type_item where 1 = 1
+        select * from screening,cinema,movie where 1 = 1
         <if test="startTime != null and endTime != null">
             and start_time &gt;= #{startTime}
             and start_time &lt; #{endTime}
@@ -28,13 +24,12 @@
             and screening.cinema_id = #{cinemaId}
         </if>
             and screening.movie_id = movie.movie_id
-            and movie.movie_id = type_item.movie_id
-            and type.type_id = type_item.type_id
+            and screening.cinema_id = cinema.cinema_id
     </select>
 
     <!-- 只查询全部电影列表本身 -->
     <select id="findMovieList" parameterType="Map" resultMap="MovieWithTypeResult">
-        select * from movie,type,type_item where 1 = 1
+        select * from movie where 1 = 1
         <if test="movieStatus != null">
             and movie_status = #{movieStatus}
         </if>
@@ -52,9 +47,10 @@
                 from banner
             )
         </if>
-        and movie.movie_id = type_item.movie_id
-        and type.type_id = type_item.type_id
         order by movie.movie_id
+<!--        <if test="begin != null and pageSize != null">-->
+<!--            limit #{begin},#{pageSize}-->
+<!--        </if>-->
     </select>
 
     <!-- 查询电影的票房排名列表及其对应的票房值 -->
@@ -120,9 +116,28 @@
         <result property="actors" column="actors"/>
         <result property="movieStatus" column="movie_status"/>
         <result property="addDate" column="add_date"/>
-        <collection property="typeList" javaType="list" ofType="Type">
-            <id property="typeId" column="type_id"/>
-            <result property="typeName" column="type_name"/>
+        <collection property="typeList" ofType="Type"
+                    select="sfw.xmut.dao.MovieDao.findTypeList"
+                    column="movie_id">
+            <!-- 将原有形式修改为子查询 -->
+<!--            <id property="typeId" column="type_id"/>-->
+<!--            <result property="typeName" column="type_name"/>-->
         </collection>
+    </resultMap>
+
+    <select id="findTypeList" resultMap="TypeMap">
+        SELECT
+            t.type_id,t.type_name
+        FROM
+            type t,
+            type_item ti
+        WHERE
+            1 = 1
+          AND t.type_id = ti.type_id
+          AND ti.movie_id = #{movieId}
+    </select>
+    <resultMap id="TypeMap" type="Type">
+        <id property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
     </resultMap>
 </mapper>

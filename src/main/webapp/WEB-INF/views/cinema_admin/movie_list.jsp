@@ -47,10 +47,20 @@
         </div>
     </c:forEach>
 </div>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="see-all">
-            <a class="see-all-btn" href="javascript:void(0);">Load More</a>
-        </div>
-    </div>
-</div>
+
+<nav aria-label="Page navigation example">
+    <ul id="pageList" class="pagination justify-content-end">
+        <li class="page-item"><a class="page-link" href="javascript:gotoPage(${moviePageInfo.prePage})">&laquo;</a></li>
+        <c:forEach begin="${moviePageInfo.navigateFirstPage}" end="${moviePageInfo.navigateLastPage}" var="i">
+            <%--如果不是当前页 则无选中样式active --%>
+            <c:if test="${moviePageInfo.pageNum != i}">
+                <li class="page-item"><a class="page-link" href="javascript:gotoPage(${i})">${i}</a></li>
+            </c:if>
+            <%--如果是当前页 则有选中样式active --%>
+            <c:if test="${moviePageInfo.pageNum == i}">
+                <li class="page-item active"><a class="page-link" href="javascript:gotoPage(${i})">${i}</a></li>
+            </c:if>
+        </c:forEach>
+        <li class="page-item"><a class="page-link" href="javascript:gotoPage(${moviePageInfo.nextPage})">&raquo;</a></li>
+    </ul>
+</nav>

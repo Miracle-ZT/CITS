@@ -2,6 +2,7 @@ package sfw.xmut.controller.admin;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,16 +43,21 @@ public class MovieController {
     LanguageService languageService;
 
     @RequestMapping(value = "/list")
-    public ModelAndView index(HttpServletRequest request){
+    public ModelAndView index(HttpServletRequest request,
+                              @RequestParam(name = "currPage",defaultValue = "1") Integer currPage,
+                              @RequestParam(name = "pageSize",defaultValue = "9") Integer pageSize
+    ){
         Map<String,Object> queryMap = new HashMap<>();
-//        queryMap.put()
-        List<Movie> movieList = movieService.findMovieList(queryMap);
+        // 一页9个电影
+        queryMap.put("currPage",currPage);
+        queryMap.put("pageSize",pageSize);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
         List<Type> typeList = typeService.findTypeList(queryMap);
         List<Language> languageList = languageService.findLanguageList(queryMap);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/movie_list");
-        mv.addObject("movieList",movieList);
+        mv.addObject("moviePageInfo",moviePageInfo);
         mv.addObject("typeList",typeList);
         mv.addObject("languageList",languageList);
         return mv;
@@ -70,10 +76,10 @@ public class MovieController {
         if (!keyWord.equals("%%")){                     // 默认为"" 全部
             queryMap.put("keyWord",keyWord);
         }
-        List<Movie> movieList = movieService.findMovieList(queryMap);
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
 
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("movieList",movieList);
+        resultMap.put("movieList",moviePageInfo.getList());
         return resultMap;
     }
 
@@ -148,11 +154,11 @@ public class MovieController {
             }
         }
 
-        List<Movie> movieList = movieService.findMovieList(new HashMap<>());
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(new HashMap<>());
         List<Type> typeList = typeService.findTypeList(new HashMap<>());
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/movie_list");
-        mv.addObject("movieList",movieList);
+        mv.addObject("moviePageInfo",moviePageInfo);
         mv.addObject("typeList",typeList);
         return mv;
     }
@@ -267,11 +273,11 @@ public class MovieController {
             System.out.println("更新失败");
         }
 
-        List<Movie> movieList = movieService.findMovieList(new HashMap<>());
+        PageInfo<Movie> moviePageInfo = movieService.findMovieList(new HashMap<>());
         List<Type> typeList = typeService.findTypeList(new HashMap<>());
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/movie_list");
-        mv.addObject("movieList",movieList);
+        mv.addObject("moviePageInfo",moviePageInfo);
         mv.addObject("typeList",typeList);
         return mv;
     }

@@ -124,7 +124,7 @@
                         </tr>
                         </thead>
                         <tbody id="movieList">
-                        <c:forEach var="movie" items="${movieList}" varStatus="status">
+                        <c:forEach var="movie" items="${moviePageInfo.list}" varStatus="status">
                             <tr>
                                 <td>
                                     <input id="checkbox-${movie.movieId}" movieId="${movie.movieId}" type="checkbox" name="input[]">
@@ -149,6 +149,23 @@
                         </c:forEach>
                         </tbody>
                     </table>
+                    <div id="pageSize" pageSize="${moviePageInfo.pageSize}" hidden></div>
+                    <nav aria-label="Page navigation example">
+                        <ul id="pageList" class="pagination justify-content-end">
+                            <li class="page-item"><a class="page-link" href="javascript:gotoPage(${moviePageInfo.prePage})">&laquo;</a></li>
+                            <c:forEach begin="${moviePageInfo.navigateFirstPage}" end="${moviePageInfo.navigateLastPage}" var="i">
+                                <%--如果不是当前页 则无选中样式active --%>
+                                <c:if test="${moviePageInfo.pageNum != i}">
+                                    <li class="page-item"><a class="page-link" href="javascript:gotoPage(${i})">${i}</a></li>
+                                </c:if>
+                                <%--如果是当前页 则有选中样式active --%>
+                                <c:if test="${moviePageInfo.pageNum == i}">
+                                    <li class="page-item active"><a class="page-link" href="javascript:gotoPage(${i})">${i}</a></li>
+                                </c:if>
+                            </c:forEach>
+                            <li class="page-item"><a class="page-link" href="javascript:gotoPage(${moviePageInfo.nextPage})">&raquo;</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -920,7 +937,6 @@
     }
 </script>
 
-
 <%-- 新增类型 --%>
 <script>
     $(document).ready(function () {
@@ -1077,7 +1093,22 @@
     }
 </script>
 
-
+<%-- 传递currPage和pageSize 跳转指定分页函数 --%>
+<script type="text/javascript">
+    //分页相关内容
+    function gotoPage(currPage) {
+        //获取下拉列表中pageSize的值
+        let pageSize = $("#pageSize").attr("pageSize");
+        //判断控制页码范围
+        if (currPage < 1) {
+            return;//终止代码执行
+        }
+        if (currPage >${moviePageInfo.total}) {
+            return;//终止代码执行
+        }
+        location.href = "${pageContext.request.contextPath}/admin/movie/list?currPage=" + currPage + "&pageSize=" + pageSize;
+    }
+</script>
 
 
 
