@@ -146,6 +146,7 @@ public class HomeOrderController {
         order.setStatus(0);             // 此时还未支付
         order.setSeatNums(seatNums);
         order.setOrderNum(new OrderNumProducer().OrderNum());
+        order.setIsCommented(0);
 
         // 此时本应该先锁定相关位置
         // 在支付成功后 正式修改数据库中的位置

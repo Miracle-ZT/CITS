@@ -34,7 +34,7 @@
                  style="width: 232px;height: 322px;margin-top: 40px">
         </div>
     </div>
-    <div class="col-3" style="margin-top: 40px">
+    <div class="col-4" style="margin-top: 40px">
         <div class="text-white">                <!-- 白色文字信息部分 -->
             <h1 style="font-weight: bold;margin-top: 5px">${movie.chineseName}</h1>
             <h4 style="margin-top: -10px;">${movie.englishName}</h4>
@@ -66,7 +66,7 @@
             </p>
         </div>
     </div>
-    <div class="col-5 text-white">
+    <div class="col-4 text-white">
         <div class="col" style="height: 200px;width: 100%"></div>
         <div class="col">
             小蓝口碑

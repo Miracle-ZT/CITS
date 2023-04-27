@@ -82,6 +82,7 @@
         <result property="seatNums" column="seat_nums"/>
         <result property="orderNum" column="order_num"/>
         <result property="QRCode" column="qr_code"/>
+        <result property="isCommented" column="is_commented"/>
         <association property="screening" javaType="Screening" resultMap="ScreeningMap">           <!-- 关联的Screening实体 -->
 
         </association>
@@ -155,10 +156,17 @@
         where order_num = #{orderNum}
     </update>
 
-    <!-- 订单状态更新操作 -->
+    <!-- 订单二维码生成 -->
     <update id="updateQRCode" parameterType="Map">
         update orders
         set qr_code = #{QRCode}
+        where order_num = #{orderNum}
+    </update>
+
+    <!-- 订单被评论状态更新 -->
+    <update id="updateIsComment" parameterType="Map">
+        update orders
+        set is_commented = #{isCommented}
         where order_num = #{orderNum}
     </update>
 

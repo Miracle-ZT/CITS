@@ -46,7 +46,7 @@
                 <button class="nav-link" id="v-pills-collect-tab" data-bs-toggle="pill" data-bs-target="#v-pills-collect" type="button" role="tab" aria-controls="v-pills-collect" aria-selected="false">我的收藏</button>
                 <button class="nav-link" id="v-pills-comment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-comment" type="button" role="tab" aria-controls="v-pills-comment" aria-selected="false">我的评论</button>
             </div>
-            <div class="tab-content" id="v-pills-tabContent" style="padding: 10px 50px 50px 50px;min-height: 700px;box-shadow: 2px 2px 20px #d3d3d3;min-width: 1000px">
+            <div class="tab-content" id="v-pills-tabContent" style="padding: 10px 50px 50px 50px;min-height: 700px;box-shadow: 2px 2px 20px #d3d3d3;min-width: 1000px"> <!-- 外框大小 -->
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
                     <div style="padding: 10px;font-size: 18px">
                         <h4>个人资料</h4>
@@ -110,6 +110,7 @@
                         </form>
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
                     <div class="row" style="padding: 10px;font-size: 18px">
                         <div>
@@ -120,7 +121,7 @@
                             <c:forEach var="order" items="${ordersList}" varStatus="status">
                                 <div class="row" style="padding: 10px;border: 1px solid #d3d3d3;border-radius: 5px">
                                     <div class="col-2">
-                                        <img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px">
+                                        <a href="/home/movie_detail?movieId=${order.screening.movie.movieId}"><img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px"></a>
                                     </div>
                                     <div class="col-4" style="height: 90px">
                                         <h6 style="line-height: 25px;font-size: 20px;font-weight: bold;
@@ -135,10 +136,21 @@
 <%--                                             <div class="selected-seats">3排6座</div>--%>
                                     </div>
                                     <div class="col-2" style="vertical-align:middle;display: flex;align-items: center">
-                                        <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId})"
-                                                data-bs-toggle="modal" data-bs-target="#commentModal">
-                                            评论
-                                        </button>
+<%--                                        <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},${order.orderNum})"--%>
+<%--                                                data-bs-toggle="modal" data-bs-target="#commentModal">--%>
+<%--                                            评论--%>
+<%--                                        </button>--%>
+                                        <c:if test="${order.isCommented == 0}">
+                                            <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},'${order.orderNum}')"
+                                                    data-bs-toggle="modal" data-bs-target="#commentModal">
+                                                评论
+                                            </button>
+                                        </c:if>
+                                        <c:if test="${order.isCommented == 1}">
+                                            <button class="btn btn-outline-secondary" disabled>
+                                                已评
+                                            </button>
+                                        </c:if>
                                         <button class="btn btn-outline-info"
                                                 data-bs-toggle="modal" data-bs-target="#detailModal"
                                                 id="btn-detail-${order.orderId}" orderId="${order.orderId}"
@@ -151,6 +163,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="tab-pane fade" id="v-pills-collect" role="tabpanel" aria-labelledby="v-pills-collect-tab" tabindex="0">我的收藏</div>
                 <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">我的评论</div>
             </div>
@@ -418,10 +432,11 @@
     });
 </script>
 
-<%-- 实时修改弹窗表单的GET参数 --%>
+<%-- 实时修改发布评论弹窗表单的GET参数 --%>
 <script>
-    function open_comment_modal(movieId){
-        $("#comment").attr("action","/home/center/public_comment?userId=" + ${user.id} + "&movieId=" + movieId);
+    function open_comment_modal(movieId,orderNum){
+        console.log('+++');
+        $("#comment").attr("action","/home/center/public_comment?userId=" + ${user.id} + "&movieId=" + movieId + "&orderNum=" + orderNum);
         $("#comment-score").val("");
         $("#comment-content").val("");
     }

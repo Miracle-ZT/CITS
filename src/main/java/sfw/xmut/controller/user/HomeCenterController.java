@@ -150,11 +150,18 @@ public class HomeCenterController {
                                ) throws IOException {
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         Integer userId = Integer.valueOf(request.getParameter("userId"));
+        String orderNum = request.getParameter("orderNum");
 
-        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0);
+        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0,1);
 
         if (commentService.add(comment) > 0){
             System.out.println("添加成功");
+            Map<String,Object> queryMap = new HashMap<>();
+            queryMap.put("isCommented",1);
+            queryMap.put("orderNum",orderNum);
+            if (ordersService.updateIsComment(queryMap) > 0){
+                System.out.println("该订单评论成功");
+            }
         }
         else {
             System.out.println("添加失败");

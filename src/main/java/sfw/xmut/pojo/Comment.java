@@ -14,6 +14,7 @@ public class Comment {
     private Integer commentScore;
     private String commentContent;
     private Integer commentLikeCnt;
+    private Integer isOrderComment;                 // 是否为来自订单的评论
 
     private Movie movie;
     private User user;
@@ -21,7 +22,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Integer commentId, Integer movieId, Integer userId, Date createTime, Integer commentScore, String commentContent, Integer commentLikeCnt) {
+    public Comment(Integer commentId, Integer movieId, Integer userId, Date createTime, Integer commentScore, String commentContent, Integer commentLikeCnt, Integer isOrderComment) {
         this.commentId = commentId;
         this.movieId = movieId;
         this.userId = userId;
@@ -29,21 +30,7 @@ public class Comment {
         this.commentScore = commentScore;
         this.commentContent = commentContent;
         this.commentLikeCnt = commentLikeCnt;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "commentId=" + commentId +
-                ", movieId=" + movieId +
-                ", userId=" + userId +
-                ", createTime=" + createTime +
-                ", commentScore=" + commentScore +
-                ", commentContent='" + commentContent + '\'' +
-                ", commentLikeCnt=" + commentLikeCnt +
-                ", movie=" + movie +
-                ", user=" + user +
-                '}';
+        this.isOrderComment = isOrderComment;
     }
 
     public Integer getCommentId() {
@@ -100,6 +87,14 @@ public class Comment {
 
     public void setCommentLikeCnt(Integer commentLikeCnt) {
         this.commentLikeCnt = commentLikeCnt;
+    }
+
+    public Integer getIsOrderComment() {
+        return isOrderComment;
+    }
+
+    public void setIsOrderComment(Integer isOrderComment) {
+        this.isOrderComment = isOrderComment;
     }
 
     public Movie getMovie() {

@@ -45,6 +45,11 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public int updateIsComment(Map<String, Object> queryMap) {
+        return ordersDao.updateIsComment(queryMap);
+    }
+
+    @Override
     public Long countPerson(Map<String, Object> queryMap) {
         return ordersDao.countPerson(queryMap);
     }

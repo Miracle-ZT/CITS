@@ -33,6 +33,18 @@
             color: #333;
             margin-bottom: 60px;
         }
+        /* 已购 标识 */
+        .bought-tag {
+            display: inline-block;
+            width: 17px;
+            height: 17px;
+            border: 1px solid #7cc6f9;
+            border-radius: 2px;
+            color: #7cc6f9;
+            font-size: 12px;
+            line-height: 17px;
+            text-align: center;
+        }
     </style>
     <link href="../../../../resources/plugins/admin_assets/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 </head>
@@ -141,9 +153,11 @@
                                  style=";width: 50px;height: 50px;border-radius: 50%;border: 1px #d3d3d3 solid;overflow: hidden">
                         </div>
                         <div class="col-6">
-                            <div style="font-weight: bold">${comment.user.username}&nbsp;&nbsp;
+                            <div style="font-weight: bold;">${comment.user.username}&nbsp;&nbsp;
                                 <%-- 是否购票 --%>
-
+                                <c:if test="${comment.isOrderComment == 1}">
+                                    <span class="bought-tag">购</span>
+                                </c:if>
                             </div>
                             <div style="color:#868686;">
                                 <fmt:formatDate value="${comment.createTime}" pattern="yyyy-MM-dd"/>
@@ -160,7 +174,7 @@
                             </div>
                         </div>
                         <div class="col-2 text-center" style="color:#d3d3d3;display: flex;justify-content: flex-end;align-items: center">
-                            <a href="#" style="text-decoration: none;color:#d3d3d3;">举报</a>
+<%--                            <a href="#" style="text-decoration: none;color:#d3d3d3;">举报</a>--%>
                         </div>
                         <div class="col-3 text-right" style="display: flex;justify-content: flex-end;align-items: center">
                             <div id="area-like-${comment.commentId}" commentId="${comment.commentId}"

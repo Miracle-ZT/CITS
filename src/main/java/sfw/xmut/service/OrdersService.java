@@ -17,6 +17,7 @@ public interface OrdersService {
     public List<Orders> findOrdersList(Map<String, Object> queryMap);
     public int updateStatus(Map<String, Object> queryMap);
     public int updateQRCode(Map<String, Object> queryMap);
+    public int updateIsComment(Map<String, Object> queryMap);
     public Long countPerson(Map<String, Object> queryMap);
     public Long countPrice(Map<String, Object> queryMap);
 }

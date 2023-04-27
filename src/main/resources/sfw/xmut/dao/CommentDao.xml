@@ -27,7 +27,7 @@
     </select>
 
     <insert id="add" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
-        INSERT into comment(comment_id,movie_id,user_id,create_time,comment_score,comment_content,comment_like_cnt) values(null,#{movieId},#{userId},#{createTime},#{commentScore},#{commentContent},#{commentLikeCnt})
+        INSERT into comment(comment_id,movie_id,user_id,create_time,comment_score,comment_content,comment_like_cnt,is_order_comment) values(null,#{movieId},#{userId},#{createTime},#{commentScore},#{commentContent},#{commentLikeCnt},#{isOrderComment})
     </insert>
 
 
@@ -39,6 +39,7 @@
         <result property="commentScore" column="comment_score"/>
         <result property="commentContent" column="comment_content"/>
         <result property="commentLikeCnt" column="comment_like_cnt"/>
+        <result property="isOrderComment" column="is_order_comment"/>
         <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
             <id property="movieId" column="movie_id"/>
             <result property="chineseName" column="chinese_name"/>

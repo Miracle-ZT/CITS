@@ -266,7 +266,7 @@ public class HomeController {
             return mv;
         }
 
-        // 获取相关电影列表
+        // 获取 "相关电影" 列表
         List<Movie> relevantMovieList = new ArrayList<>();
         Map<String, Object> queryMap = new HashMap<>();
         for(Type tempType:movie.getTypeList()){
@@ -290,6 +290,7 @@ public class HomeController {
         if (relevantMovieList.size() > 9) relevantMovieList=relevantMovieList.subList(0,9);
 
         List<Comment> commentList = commentService.findCommentListByMovieId(movieId);
+        if (commentList.size() > 6) commentList=commentList.subList(0,6);
 
         // 标记是否为发布评论后再次刷新进入 影响是否显示toast通知
         String isRefresh = request.getParameter("isRefresh");
@@ -516,7 +517,7 @@ public class HomeController {
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         Integer userId = Integer.valueOf(request.getParameter("userId"));
 
-        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0);
+        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0,0);
 
         if (commentService.add(comment) > 0){
             System.out.println("添加成功");

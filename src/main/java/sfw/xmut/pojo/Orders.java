@@ -17,6 +17,7 @@ public class Orders {
     private String seatNums;
     private String orderNum;
     private String QRCode;
+    private Integer isCommented;                // 该订单是否被评论过
 
     private Screening screening;
     private User user;
@@ -34,6 +35,7 @@ public class Orders {
                 ", seatNums='" + seatNums + '\'' +
                 ", orderNum='" + orderNum + '\'' +
                 ", QRCode='" + QRCode + '\'' +
+                ", isCommented=" + isCommented +
                 ", screening=" + screening +
                 ", user=" + user +
                 '}';
@@ -117,6 +119,14 @@ public class Orders {
 
     public void setQRCode(String QRCode) {
         this.QRCode = QRCode;
+    }
+
+    public Integer getIsCommented() {
+        return isCommented;
+    }
+
+    public void setIsCommented(Integer isCommented) {
+        this.isCommented = isCommented;
     }
 
     public Screening getScreening() {
