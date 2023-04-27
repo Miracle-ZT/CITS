@@ -74,5 +74,15 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.findMovieListWithBO(queryMap);
     }
 
+    @Override
+    public Long findBOWithMovieId(Integer movieId) {
+        return movieDao.findBOWithMovieId(movieId);
+    }
+
+    @Override
+    public Double findAvgScoreWithMovieId(Integer movieId) {
+        return movieDao.findAvgScoreWithMovieId(movieId);
+    }
+
 
 }

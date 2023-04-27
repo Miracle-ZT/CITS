@@ -83,6 +83,34 @@
         order by bo DESC
     </select>
 
+    <!-- 查询指定电影对应的票房值 -->
+    <select id="findBOWithMovieId" parameterType="int" resultType="Long">
+        SELECT
+            sum( o.total_price )
+        FROM
+            movie m,
+            orders o,
+            screening s
+        WHERE
+            o.screening_id = s.screening_id
+          AND s.movie_id = m.movie_id
+          AND s.movie_id = #{movieId}
+        GROUP BY
+            m.movie_id
+    </select>
+
+    <!-- 查询指定电影的平均评分 -->
+    <!-- 若无结果则默认为0 -->
+    <select id="findAvgScoreWithMovieId" parameterType="int" resultType="Double">
+        SELECT
+            IFNULL(AVG( co.comment_score ),0) AS avg_score
+        FROM
+            comment co
+        WHERE
+            co.is_order_comment = 1
+          AND co.movie_id = #{movieId}
+    </select>
+
     <!-- 电影添加操作 -->
     <insert id="add" useGeneratedKeys="true" keyProperty="movieId"  parameterType="Movie">
         insert into movie(movie_id,chinese_name,english_name,img_url,time_len,release_date,introduction,country,director,actors,movie_status,add_date) values(null,#{chineseName},#{englishName},#{imgUrl},#{timeLen},#{releaseDate},#{introduction},#{country},#{director},#{actors},#{movieStatus},#{addDate})

@@ -94,12 +94,29 @@
         <div class="col" style="height: 200px;width: 100%"></div>
         <div class="col">
             小蓝口碑
-            <div class="row">
-                <div class="col-2">
-                    x.x
-                </div>
-                <div class="col-3">
-                    ※※※※※
+<%--            <svg width="20" height="20" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z" fill="none" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/><path d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248" stroke="#d3d3d3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" fill="#d3d3d3"/></svg>--%>
+            <div class="row">              <%-- col: 2+3+7 --%>
+                <%-- 判断是否存在评分 --%>
+                <c:if test="${movieAvgScore != 0}">
+                    <div class="col-2" style="color:#ffc600;font-size: 30px">
+                        ${movieAvgScore}
+                    </div>
+                </c:if>
+                <c:if test="${movieAvgScore == 0}">
+                    <div class="col-2" style="font-size: 30px">
+                        <span style="font-size: 24px;color:#9c87b8;">暂无</span>
+                    </div>
+                </c:if>
+                <div class="col-3" style="display: flex;justify-content: start;align-items: center;">
+                    <%-- 总评分 --%>
+                    <c:forEach var="i" begin="1" end="5">
+                        <c:if test="${i <= movieAvgScore}">
+                            <svg width="30" height="30" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#ffc600" stroke="#ffc600" stroke-width="4" stroke-linejoin="round"/></svg>
+                        </c:if>
+                        <c:if test="${i > movieAvgScore}">
+                                <svg width="30" height="30" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                        </c:if>
+                    </c:forEach>
                 </div>
                 <div class="col-7"></div>
             </div>
@@ -107,8 +124,8 @@
         <div class="col">
             累计票房
             <div class="row">
-                <div class="col-3">
-                    xx.xx亿
+                <div class="col-3" style="font-size: 30px">
+                    ${movieBO}
                 </div>
                 <div class="col-7"></div>
             </div>
@@ -145,55 +162,62 @@
                     id="send-comment">写影评</button>
                 </div>
             </div>
-            <c:forEach var="comment" items="${commentList}" varStatus="status">
-                <div style="margin-top: 20px">
-                    <div class="row">
-                        <div class="col-1">
-                            <img src="../../../..${comment.user.photo}"
-                                 style=";width: 50px;height: 50px;border-radius: 50%;border: 1px #d3d3d3 solid;overflow: hidden">
-                        </div>
-                        <div class="col-6">
-                            <div style="font-weight: bold;">${comment.user.username}&nbsp;&nbsp;
-                                <%-- 是否购票 --%>
-                                <c:if test="${comment.isOrderComment == 1}">
-                                    <span class="bought-tag">购</span>
-                                </c:if>
-                            </div>
-                            <div style="color:#868686;">
-                                <fmt:formatDate value="${comment.createTime}" pattern="yyyy-MM-dd"/>
-                                &nbsp;&nbsp;
-                                <%-- 循环评分star样式 --%>
-                                <c:forEach var="i" begin="1" end="5">
-                                    <c:if test="${i <= comment.commentScore}">
-                                        <svg width="20" height="20" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#ffc600" stroke="#ffc600" stroke-width="4" stroke-linejoin="round"/></svg>
-                                    </c:if>
-                                    <c:if test="${i > comment.commentScore}">
-                                        <svg width="20" height="20" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-                        </div>
-                        <div class="col-2 text-center" style="color:#d3d3d3;display: flex;justify-content: flex-end;align-items: center">
-<%--                            <a href="#" style="text-decoration: none;color:#d3d3d3;">举报</a>--%>
-                        </div>
-                        <div class="col-3 text-right" style="display: flex;justify-content: flex-end;align-items: center">
-                            <div id="area-like-${comment.commentId}" commentId="${comment.commentId}"
-                                 style="cursor:pointer;pointer-events: auto" >
-                                <a id="ico-like-${comment.commentId}" commentId="${comment.commentId}">
-                                    <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M27.6002 18.5998V11.3998C27.6002 8.41743 25.1826 5.99977 22.2002 5.99977L15.0002 22.1998V41.9998H35.9162C37.7113 42.0201 39.2471 40.7147 39.5162 38.9398L42.0002 22.7398C42.1587 21.6955 41.8506 20.6343 41.1576 19.8373C40.4645 19.0403 39.4564 18.5878 38.4002 18.5998H27.6002Z" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/><path d="M15 22.0001H10.194C8.08532 21.9628 6.2827 23.7095 6 25.7994V38.3994C6.2827 40.4894 8.08532 42.0367 10.194 41.9994H15V22.0001Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
-                                </a>
-                                <span style="color:#a1a1a1;">${comment.commentLikeCnt}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-11" style="margin-top: 15px;padding-bottom: 25px;border-bottom: 1px solid #e5e5e5">
-                            ${comment.commentContent}
-                        </div>
-                    </div>
+            <c:if test="${empty commentList}">
+                <div style="font-size: 40px;color:#d3d3d3;text-align: center;border-bottom: 1px dashed #d3d3d3">
+                    暂无内容
                 </div>
-            </c:forEach>
+            </c:if>
+            <c:if test="${not empty commentList}">
+                <c:forEach var="comment" items="${commentList}" varStatus="status">
+                    <div style="margin-top: 20px">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="../../../..${comment.user.photo}"
+                                     style=";width: 50px;height: 50px;border-radius: 50%;border: 1px #d3d3d3 solid;overflow: hidden">
+                            </div>
+                            <div class="col-6">
+                                <div style="font-weight: bold;">${comment.user.username}&nbsp;&nbsp;
+                                        <%-- 是否购票 --%>
+                                    <c:if test="${comment.isOrderComment == 1}">
+                                        <span class="bought-tag">购</span>
+                                    </c:if>
+                                </div>
+                                <div style="color:#868686;">
+                                    <fmt:formatDate value="${comment.createTime}" pattern="yyyy-MM-dd"/>
+                                    &nbsp;&nbsp;
+                                        <%-- 循环评分star样式 --%>
+                                    <c:forEach var="i" begin="1" end="5">
+                                        <c:if test="${i <= comment.commentScore}">
+                                            <svg width="20" height="20" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#ffc600" stroke="#ffc600" stroke-width="4" stroke-linejoin="round"/></svg>
+                                        </c:if>
+                                        <c:if test="${i > comment.commentScore}">
+                                            <svg width="20" height="20" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                            <div class="col-2 text-center" style="color:#d3d3d3;display: flex;justify-content: flex-end;align-items: center">
+                                    <%--                            <a href="#" style="text-decoration: none;color:#d3d3d3;">举报</a>--%>
+                            </div>
+                            <div class="col-3 text-right" style="display: flex;justify-content: flex-end;align-items: center">
+                                <div id="area-like-${comment.commentId}" commentId="${comment.commentId}"
+                                     style="cursor:pointer;pointer-events: auto" >
+                                    <a id="ico-like-${comment.commentId}" commentId="${comment.commentId}">
+                                        <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M27.6002 18.5998V11.3998C27.6002 8.41743 25.1826 5.99977 22.2002 5.99977L15.0002 22.1998V41.9998H35.9162C37.7113 42.0201 39.2471 40.7147 39.5162 38.9398L42.0002 22.7398C42.1587 21.6955 41.8506 20.6343 41.1576 19.8373C40.4645 19.0403 39.4564 18.5878 38.4002 18.5998H27.6002Z" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/><path d="M15 22.0001H10.194C8.08532 21.9628 6.2827 23.7095 6 25.7994V38.3994C6.2827 40.4894 8.08532 42.0367 10.194 41.9994H15V22.0001Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                    </a>
+                                    <span style="color:#a1a1a1;">${comment.commentLikeCnt}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-11" style="margin-top: 15px;padding-bottom: 25px;border-bottom: 1px solid #e5e5e5">
+                                    ${comment.commentContent}
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:if>
         </div>
     </div>
 

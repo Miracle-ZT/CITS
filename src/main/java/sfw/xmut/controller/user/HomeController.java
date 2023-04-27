@@ -24,6 +24,9 @@ import sfw.xmut.service.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -259,6 +262,15 @@ public class HomeController {
     public ModelAndView movie_detail(HttpServletRequest request){
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         Movie movie = movieService.findMovieById(movieId);
+        // 累计票房数
+        Long movieBO = movieService.findBOWithMovieId(movieId);
+        // 手动改值 持久层查询结果为N/A 赋给Long(不能是long--报错)的结果为null
+        if (movieBO == null) movieBO = 0L;
+
+        // 格式化Double为一位小数的字符串
+        double movieAvgScore = movieService.findAvgScoreWithMovieId(movieId);
+        BigDecimal bd = new BigDecimal(movieAvgScore);
+        movieAvgScore = bd.setScale(1, RoundingMode.HALF_UP).doubleValue();
 
         if (movie == null){
             ModelAndView mv = new ModelAndView();
@@ -289,6 +301,7 @@ public class HomeController {
         Collections.shuffle(relevantMovieList);                     // 乱序
         if (relevantMovieList.size() > 9) relevantMovieList=relevantMovieList.subList(0,9);
 
+        // 获取 "热门短评" 列表
         List<Comment> commentList = commentService.findCommentListByMovieId(movieId);
         if (commentList.size() > 6) commentList=commentList.subList(0,6);
 
@@ -298,6 +311,8 @@ public class HomeController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/movie/movie_detail");
         mv.addObject("movie",movie);
+        mv.addObject("movieBO",movieBO);
+        mv.addObject("movieAvgScore",movieAvgScore);
         mv.addObject("relevantMovieList",relevantMovieList);
         mv.addObject("commentList",commentList);
         if ((isRefresh != null) && isRefresh.equals("true")){

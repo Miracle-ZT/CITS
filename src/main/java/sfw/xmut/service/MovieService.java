@@ -20,4 +20,8 @@ public interface MovieService {
     public int add(Movie movie);
     public int edit(Movie movie);
     public List<Map> findMovieListWithBO(Map<String, Object> queryMap);
+
+    // 平均评分(口碑) + 累计票房
+    public Long findBOWithMovieId(Integer movieId);
+    public Double findAvgScoreWithMovieId(Integer movieId);
 }
