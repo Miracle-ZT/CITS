@@ -114,9 +114,8 @@
                     <div class="row" style="padding: 10px;font-size: 18px">
                         <div>
                             <div class="col-4"><h4>订单列表</h4></div>
-                            <div class="col-8">
+                            <div class="col-8"></div>
 
-                            </div>
                             <div class="divider-form"></div>
                             <c:forEach var="order" items="${ordersList}" varStatus="status">
                                 <div class="row" style="padding: 10px;border: 1px solid #d3d3d3;border-radius: 5px">
@@ -124,7 +123,9 @@
                                         <img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px">
                                     </div>
                                     <div class="col-4" style="height: 90px">
-                                        <h6 style="line-height: 25px;font-size: 20px;font-weight: bold">${order.screening.movie.chineseName}&nbsp;&nbsp;&nbsp;&nbsp;${order.totalNOP}张</h6>
+                                        <h6 style="line-height: 25px;font-size: 20px;font-weight: bold;
+                                        width: 269px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                                ${order.screening.movie.chineseName}&nbsp;&nbsp;&nbsp;&nbsp;${order.totalNOP}张</h6>
                                         <h6 style="line-height: 25px">${order.screening.cinema.name}</h6>
                                         <small style="line-height: 25px">创建时间：<fmt:formatDate value="${order.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></small>
                                     </div>
@@ -171,20 +172,25 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-2 text-center"
-                             style="font-weight: bold;font-size: 22px;display: inline-block;vertical-align: middle">标题
+                             style="font-weight: bold;font-size: 22px;display: inline-block;vertical-align: middle">评分
                         </div>
-                        <div class="col-10">
-                            <input id="comment-title" name="comment-title" class="form-control me-2">
+                        <div class="col-10" style="display: flex;justify-content: space-between">
+                            <input id="score" name="score" type="text" value="0" hidden>
+                            <div id="star" style="display: flex;justify-content: flex-end;align-items: center">
+                                <svg id="star-1" star="1" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                <svg id="star-2" star="2" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                <svg id="star-3" star="3" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                <svg id="star-4" star="4" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                                <svg id="star-5" star="5" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                            </div>
+                            <span id="score-display" style="display: flex;justify-content: flex-end;align-items: center;color: #ffc600;font-size: 20px">
+                                0.0
+                            </span>
                         </div>
                     </div>
                     <div style="height: 25px"></div>
-                    <div class="row">
-                        <div class="col-2 text-center"
-                             style="font-weight: bold;font-size: 22px;display: inline-block;vertical-align: middle">内容
-                        </div>
-                        <div class="col-10">
-                            <textarea id="comment-content" name="comment-content" class="form-control" rows="5"></textarea>
-                        </div>
+                    <div>
+                        <textarea id="comment-content" name="comment-content" class="form-control" rows="5" placeholder="大家都在问：剧情怎么样，画面好吗，演技如何？"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -416,7 +422,7 @@
 <script>
     function open_comment_modal(movieId){
         $("#comment").attr("action","/home/center/public_comment?userId=" + ${user.id} + "&movieId=" + movieId);
-        $("#comment-title").val("");
+        $("#comment-score").val("");
         $("#comment-content").val("");
     }
 </script>
@@ -534,6 +540,25 @@
     }
 </script>
 
+<%-- 评分窗口的打分动效 --%>
+<script>
+    $(document).ready(function () {
+        $(document).on("click", "svg[id^='star-']", function(){
+            $("#star").empty();
+            let score = $(this).attr("star");
+            $("#score-display").text(score + ".0");
+            $("#score").attr("value",score);
+            for (let i = 0;i < 5;i++){
+                if (i < score){
+                    $("#star").append('<svg id="star-' + (i+1) + '" star="' + (i+1) + '" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#ffc600" stroke="#ffc600" stroke-width="4" stroke-linejoin="round"/></svg>');
+                }
+                else{
+                    $("#star").append('<svg id="star-' + (i+1) + '" star="' + (i+1) + '" style="pointer-events: auto;cursor:pointer;" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>');
+                }
+            }
+        });
+    });
+</script>
 
 
 <script src="../../../../resources/plugins/admin_assets/js/plugins/toastr/toastr.min.js"></script>

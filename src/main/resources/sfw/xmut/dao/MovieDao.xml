@@ -47,6 +47,20 @@
                 from banner
             )
         </if>
+        <if test="typeId != null">
+            AND movie_id IN (
+            SELECT
+            movie_id
+            FROM
+            type_item ti
+            WHERE
+            ti.type_id = #{typeId}
+            )
+        </if>
+        <if test="beginYear != null and endYear != null">
+            AND release_date &gt;= #{beginYear}
+            AND release_date &lt;= #{endYear}
+        </if>
         order by movie.movie_id
 <!--        <if test="begin != null and pageSize != null">-->
 <!--            limit #{begin},#{pageSize}-->

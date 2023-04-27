@@ -2,6 +2,7 @@ package sfw.xmut.pojo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 　　　　* @author ZT
@@ -22,6 +23,14 @@ public class Movie {
     private String actors;
     private Integer movieStatus;
     private Date addDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(movieId, movie.movieId);
+    }
 
     public Movie() {
     }

@@ -4,14 +4,120 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sfw.xmut.dao.CommentDao">
-<!--    <select id="findById" parameterType="int" resultType="User">-->
-<!--        select *-->
-<!--        from table_name-->
-<!--        where id = #{id}-->
-<!--    </select>-->
+    <select id="findCommentById" parameterType="int" resultType="Comment">
+        select *
+        from comment
+        where comment_id = #{commentId}
+    </select>
+
+    <select id="findCommentListByMovieId" parameterType="int" resultMap="CommentMap">
+        SELECT
+            *
+        FROM
+            comment co,
+            movie m,
+            user u
+        WHERE
+            1 = 1
+          AND co.movie_id = m.movie_id
+          AND co.user_id = u.id
+          AND co.movie_id = #{movieId}
+        ORDER BY
+            co.comment_like_cnt DESC
+    </select>
 
     <insert id="add" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
-        INSERT into comment(comment_id,movie_id,user_id,create_time,comment_title,comment_content) values(null,#{movieId},#{userId},#{createTime},#{commentTitle},#{commentContent})
+        INSERT into comment(comment_id,movie_id,user_id,create_time,comment_score,comment_content,comment_like_cnt) values(null,#{movieId},#{userId},#{createTime},#{commentScore},#{commentContent},#{commentLikeCnt})
     </insert>
 
+
+    <resultMap id="CommentMap" type="Comment">
+        <id property="commentId" column="comment_id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="commentScore" column="comment_score"/>
+        <result property="commentContent" column="comment_content"/>
+        <result property="commentLikeCnt" column="comment_like_cnt"/>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+        <association property="user" javaType="User">                <!-- 关联的User实体 -->
+            <id property="id" column="id"/>
+            <result property="username" column="username"/>
+            <result property="password" column="password"/>
+            <result property="email" column="email"/>
+            <result property="photo" column="photo"/>
+            <result property="phone" column="phone"/>
+            <result property="sex" column="sex"/>
+        </association>
+    </resultMap>
+
+    <!-- 点赞数+1 -->
+    <update id="addLikeNumByCommentId" parameterType="Integer">
+        UPDATE COMMENT
+        SET comment_like_cnt = comment_like_cnt + 1
+        WHERE
+            comment_id = #{commentId}
+    </update>
+    <!-- 点赞数-1 -->
+    <update id="subLikeNumByCommentId" parameterType="Integer">
+        UPDATE COMMENT
+        SET comment_like_cnt = comment_like_cnt - 1
+        WHERE
+            comment_id = #{commentId}
+    </update>
+
+    <!-- ====================================================================== 点赞部分 -->
+
+    <!-- 1==true, 0==false -->
+    <select id="isExist" parameterType="Map" resultType="boolean">
+        SELECT
+            count(*)
+        FROM
+            comment_like
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND comment_id = #{commentId}
+    </select>
+
+    <!-- 插入一条点赞记录 -->
+    <!-- 1:已点赞  2: 未点赞 -->
+    <insert id="addLike" parameterType="Map">
+        INSERT into comment_like(comment_like_id,user_id,comment_id,comment_like_status) values(null,#{userId},#{commentId},1)
+    </insert>
+
+    <!-- 返回某个用户对某条评论的点赞状态 -->
+    <select id="checkLikeStatus" parameterType="Map" resultType="Integer">
+        SELECT
+            cl.comment_like_status
+        FROM
+            comment_like cl
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND comment_id = #{commentId}
+    </select>
+
+    <!-- 更新点赞记录状态 -->
+    <update id="updateLikeStatus" parameterType="Map">
+        UPDATE comment_like
+        SET comment_like_status = #{commentLikeStatus}
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND comment_id = #{commentId}
+    </update>
 </mapper>

@@ -25,21 +25,45 @@
         </div>
         <div class="col-11">
             <ul class="nav nav-pills" id="pills-tab-1" role="tablist">
-                <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
-                    <button class="nav-link btn-sm active" name="types" value="0" data-bs-toggle="pill"
-                            type="button" id="types-0"
-                            style="border-radius: 50px;padding-block: 4px">
-                        全部
-                    </button>
-                </li>
-                <c:forEach var="type" items="${typeList}" varStatus="status">
+                <%-- 判断"全部"是否被选中 --%>
+                <c:if test="${nowTypeId == 0}">
                     <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
-                        <button class="nav-link btn-sm" name="spanDate" value="${status.index}" data-bs-toggle="pill"
-                                type="button" id="types-${status.index}"
+                        <button class="nav-link btn-sm active" name="types" value="0" data-bs-toggle="pill"
+                                type="button" id="types-0" typeId="0"
                                 style="border-radius: 50px;padding-block: 4px">
-                                ${type.typeName}
+                            全部
                         </button>
                     </li>
+                </c:if>
+                <c:if test="${nowTypeId != 0}">
+                    <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                        <button class="nav-link btn-sm" name="types" value="0" data-bs-toggle="pill"
+                                type="button" id="types-0" typeId="0"
+                                style="border-radius: 50px;padding-block: 4px">
+                            全部
+                        </button>
+                    </li>
+                </c:if>
+                <%-- 与当前选中的typeId比较 判断各个类型名是否有被选中样式 --%>
+                <c:forEach var="type" items="${typeList}" varStatus="status">
+                    <c:if test="${type.typeId == nowTypeId}">
+                        <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                            <button class="nav-link btn-sm active" name="typeName" value="${status.index}" data-bs-toggle="pill"
+                                    type="button" id="types-${status.index}" typeId="${type.typeId}"
+                                    style="border-radius: 50px;padding-block: 4px">
+                                    ${type.typeName}
+                            </button>
+                        </li>
+                    </c:if>
+                    <c:if test="${type.typeId != nowTypeId}">
+                        <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                            <button class="nav-link btn-sm" name="typeName" value="${status.index}" data-bs-toggle="pill"
+                                    type="button" id="types-${status.index}" typeId="${type.typeId}"
+                                    style="border-radius: 50px;padding-block: 4px">
+                                    ${type.typeName}
+                            </button>
+                        </li>
+                    </c:if>
                 </c:forEach>
             </ul>
         </div>
@@ -52,22 +76,50 @@
         </div>
         <div class="col-11">
             <ul class="nav nav-pills" id="pills-tab-2" role="tablist">
-                <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
-                    <button class="nav-link btn-sm active"
-                            data-bs-toggle="pill"
-                            type="button"
-                            style="border-radius: 50px;padding-block: 4px">
-                        全部
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
-                    <button class="nav-link btn-sm"
-                            data-bs-toggle="pill"
-                            type="button" id="refund"
-                            style="border-radius: 50px;padding-block: 4px">
-                        可退票
-                    </button>
-                </li>
+                <%-- 判断"全部"是否被选中 --%>
+                <c:if test="${nowYear == 0}">
+                    <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                        <button class="nav-link btn-sm active"
+                                data-bs-toggle="pill"
+                                type="button" id="year-0" year="0"
+                                style="border-radius: 50px;padding-block: 4px">
+                            全部
+                        </button>
+                    </li>
+                </c:if>
+                <c:if test="${nowYear != 0}">
+                    <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                        <button class="nav-link btn-sm"
+                                data-bs-toggle="pill"
+                                type="button" id="year-0" year="0"
+                                style="border-radius: 50px;padding-block: 4px">
+                            全部
+                        </button>
+                    </li>
+                </c:if>
+                <%-- 与当前选中的year比较 判断各个类型名是否有被选中样式 --%>
+                <c:forEach var="year" begin="2010" end="2024" step="1">
+                    <c:if test="${year == nowYear}">
+                        <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                            <button class="nav-link btn-sm active"
+                                    data-bs-toggle="pill"
+                                    type="button" id="year-${year}" year="${year}"
+                                    style="border-radius: 50px;padding-block: 4px">
+                                    ${year}
+                            </button>
+                        </li>
+                    </c:if>
+                    <c:if test="${year != nowYear}">
+                        <li class="nav-item" role="presentation" style="padding: 5px;margin-top: -7px">
+                            <button class="nav-link btn-sm"
+                                    data-bs-toggle="pill"
+                                    type="button" id="year-${year}" year="${year}"
+                                    style="border-radius: 50px;padding-block: 4px">
+                                    ${year}
+                            </button>
+                        </li>
+                    </c:if>
+                </c:forEach>
             </ul>
         </div>
     </div>
@@ -109,7 +161,7 @@
                 </div>
             </c:forEach>
         </c:if>
-        <c:if test="${empty moviePageInfo}">
+        <c:if test="${empty moviePageInfo.list}">
             <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                 <h5>抱歉，没有找到相关结果，请尝试用其他条件筛选。</h5>
             </div>
@@ -154,6 +206,28 @@
         location.href = "${pageContext.request.contextPath}/home/movie?currPage=" + currPage + "&pageSize=" + pageSize;
     }
 </script>
+
+
+<%-- 选择类型 刷新列表 --%>
+<script>
+    // 监听类型选择
+    $("button[id^='types-']").on("click",function (e){              // 监听types-开头的id的button
+        let typeId = $(e.target).attr("typeId");
+        let year = $("button[id^='year-'].active").attr("year");    // 当前被选中active的控件
+
+        window.location = "/home/movie?typeId=" + typeId + "&year=" + year;
+    });
+
+    // 监听年份选择
+    $("button[id^='year-']").on("click",function (e){                       // 监听year-开头的id的button
+        let year = $(e.target).attr("year");
+        let typeId = $("button[id^='types-'].active").attr("typeId");       // 当前被选中active的控件
+
+        window.location = "/home/movie?typeId=" + typeId + "&year=" + year;
+    });
+
+</script>
+
 
 
 </body>

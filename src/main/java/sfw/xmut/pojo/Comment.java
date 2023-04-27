@@ -11,19 +11,24 @@ public class Comment {
     private Integer movieId;
     private Integer userId;
     private Date createTime;
-    private String commentTitle;
+    private Integer commentScore;
     private String commentContent;
+    private Integer commentLikeCnt;
+
+    private Movie movie;
+    private User user;
 
     public Comment() {
     }
 
-    public Comment(Integer commentId, Integer movieId, Integer userId, Date createTime, String commentTitle, String commentContent) {
+    public Comment(Integer commentId, Integer movieId, Integer userId, Date createTime, Integer commentScore, String commentContent, Integer commentLikeCnt) {
         this.commentId = commentId;
         this.movieId = movieId;
         this.userId = userId;
         this.createTime = createTime;
-        this.commentTitle = commentTitle;
+        this.commentScore = commentScore;
         this.commentContent = commentContent;
+        this.commentLikeCnt = commentLikeCnt;
     }
 
     @Override
@@ -33,8 +38,11 @@ public class Comment {
                 ", movieId=" + movieId +
                 ", userId=" + userId +
                 ", createTime=" + createTime +
-                ", commentTitle='" + commentTitle + '\'' +
+                ", commentScore=" + commentScore +
                 ", commentContent='" + commentContent + '\'' +
+                ", commentLikeCnt=" + commentLikeCnt +
+                ", movie=" + movie +
+                ", user=" + user +
                 '}';
     }
 
@@ -70,12 +78,12 @@ public class Comment {
         this.createTime = createTime;
     }
 
-    public String getCommentTitle() {
-        return commentTitle;
+    public Integer getCommentScore() {
+        return commentScore;
     }
 
-    public void setCommentTitle(String commentTitle) {
-        this.commentTitle = commentTitle;
+    public void setCommentScore(Integer commentScore) {
+        this.commentScore = commentScore;
     }
 
     public String getCommentContent() {
@@ -84,5 +92,29 @@ public class Comment {
 
     public void setCommentContent(String commentContent) {
         this.commentContent = commentContent;
+    }
+
+    public Integer getCommentLikeCnt() {
+        return commentLikeCnt;
+    }
+
+    public void setCommentLikeCnt(Integer commentLikeCnt) {
+        this.commentLikeCnt = commentLikeCnt;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

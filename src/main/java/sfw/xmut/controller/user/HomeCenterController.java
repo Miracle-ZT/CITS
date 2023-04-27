@@ -145,13 +145,13 @@ public class HomeCenterController {
 
     @RequestMapping(value = "/public_comment")
     public void public_comment(HttpServletRequest request, HttpServletResponse response,
-                               @RequestParam("comment-title") String commentTitle,
+                               @RequestParam("score") Integer score,
                                @RequestParam("comment-content") String commentContent
                                ) throws IOException {
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         Integer userId = Integer.valueOf(request.getParameter("userId"));
 
-        Comment comment = new Comment(null,movieId,userId,new Date(),commentTitle,commentContent);
+        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0);
 
         if (commentService.add(comment) > 0){
             System.out.println("添加成功");

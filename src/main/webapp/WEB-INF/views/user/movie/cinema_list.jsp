@@ -26,7 +26,7 @@
 
 </div>
 
-<div class="row box" style="width: 100%;margin-top: -84px;">
+<div class="row box" style="width: 100%;margin-top: -100px;">
     <div class="col-2"></div>
     <div class="col-2">
         <div>
@@ -93,7 +93,7 @@
 </div>
 
 <!-- 日期 -->
-<div class="card card-body" style="transform: translateX(10%);width: 1400px;margin-top: 50px">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;margin-top: 50px">
     <div>
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">日期：</h5>
@@ -117,7 +117,7 @@
     </div>
 </div>
 
-<div class="card card-body" style="transform: translateX(10%);width: 1400px">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
     <div>
         <ul class="nav nav-pills mb-3" role="tablist">
             <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">影院服务：</h5>
@@ -135,7 +135,7 @@
         </ul>
     </div>
 </div>
-<div class="card card-body" style="transform: translateX(10%);width: 1400px">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
     <div>
         <ul class="nav nav-pills mb-3" role="tablist">
             <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">影厅类型：</h5>
@@ -156,7 +156,7 @@
 
 <div>
     <div class="collapse" id="collapseExample">
-        <div class="card card-body" style="transform: translateX(10%);width: 1400px;">
+        <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">
             <ul class="nav nav-pills mb-3" role="tablist">
                 <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">更多选项：</h5>
                 <li class="nav-item" role="presentation" style="padding: 5px">
@@ -182,7 +182,7 @@
 </div>
 
 <div class="mt-5">                              <!-- 影院列表 -->
-    <div class="row" style="transform: translateX(10%);width: 1400px;">
+    <div class="row" style="margin: 0px auto 0px auto;width: 1400px;">
         <div class="col-4" style="align-items: center">
             <img src="../../../../resources/img/pic_movie_list.png" width="20px" height="20px"
                  class="d-inline-block align-text-top" style="margin-top: 1px">
@@ -201,7 +201,7 @@
     <div id="cinemaList">
         <c:if test="${not empty cinemaList}">
             <c:forEach var="cinema" items="${cinemaList}" varStatus="status">
-                <div class="card card-body" style="transform: translateX(10%);width: 1400px">
+                <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                     <div class="row">
                         <div class="col-10">
                             <div><a href="/home/cinema_detail?cinemaId=${cinema.cinemaId}" style="text-decoration: none">${cinema.name}</a></div>
@@ -223,7 +223,7 @@
             </c:forEach>
         </c:if>
         <c:if test="${empty cinemaList}">
-            <div class="card card-body" style="transform: translateX(10%);width: 1400px">
+            <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                 <h5>抱歉，没有找到相关结果，请尝试用其他条件筛选。</h5>
             </div>
         </c:if>
@@ -278,7 +278,7 @@
                 $("#cinemaList").empty();
                 if (cinemaList.length > 0){                        // 有结果
                     for (var i = 0;i < cinemaList.length;i++){
-                        var eachText = '<div class="card card-body" style="transform: translateX(10%);width: 1400px">\n' +
+                        var eachText = '<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">\n' +
                             '                <div class="row">\n' +
                             '                    <div class="col-10">\n' +
                             '                            <div><a href="/home/cinema_detail?cinemaId=' + cinemaList[i].cinemaId + '" style="text-decoration: none">' + cinemaList[i].name + '</a></div>\n' +
@@ -300,7 +300,7 @@
                         $("#cinemaList").append(eachText);
                     }
                 }else {                                             // 无结果
-                    var noResultText = '<div class="card card-body" style="transform: translateX(10%);width: 1400px">\n' +
+                    var noResultText = '<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">\n' +
                         '<h5>抱歉，没有找到相关结果，请尝试用其他条件筛选。</h5>\n' +
                         '</div>\n';
                     $("#cinemaList").append(noResultText);

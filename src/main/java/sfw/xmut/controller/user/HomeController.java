@@ -22,6 +22,8 @@ import sfw.xmut.pojo.*;
 import sfw.xmut.service.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,6 +58,9 @@ public class HomeController {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping(value = "/index")
     public ModelAndView index(HttpServletRequest request) throws TasteException {
@@ -123,11 +128,19 @@ public class HomeController {
     @RequestMapping(value = "/movie")
     public ModelAndView index_movie(HttpServletRequest request,
                                     @RequestParam(name = "currPage",defaultValue = "1") Integer currPage,
-                                    @RequestParam(name = "pageSize",defaultValue = "14") Integer pageSize
+                                    @RequestParam(name = "pageSize",defaultValue = "14") Integer pageSize,
+                                    @RequestParam(name = "typeId",defaultValue = "0") Integer typeId,
+                                    @RequestParam(name = "year",defaultValue = "0") Integer year
                                     ){
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("currPage",currPage);
         queryMap.put("pageSize",pageSize);
+        if (typeId != 0) queryMap.put("typeId",typeId);
+        System.out.println("year = " + year);
+        if (year != 0){
+            queryMap.put("beginYear",year + "-01-01 00:00:00");
+            queryMap.put("endYear",year + "-12-31 23:59:59");
+        }
         PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
 
         List<Type> typeList = typeService.findTypeList(new HashMap<>());
@@ -135,6 +148,8 @@ public class HomeController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/movie/index");
         mv.addObject("moviePageInfo",moviePageInfo);
+        mv.addObject("nowTypeId",typeId);
+        mv.addObject("nowYear",year);
         mv.addObject("typeList",typeList);
         mv.addObject("ac_movie","active");
         return mv;
@@ -243,18 +258,52 @@ public class HomeController {
     @RequestMapping(value = "/movie_detail")
     public ModelAndView movie_detail(HttpServletRequest request){
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        System.out.println(movieId);
         Movie movie = movieService.findMovieById(movieId);
+
         if (movie == null){
             ModelAndView mv = new ModelAndView();
             mv.setViewName("common/error");
             return mv;
         }
-        String movieDate = DateFormatUtils.format(movie.getReleaseDate(),"yyyy-MM-dd");      // 单独获取上映时间并格式化
+
+        // 获取相关电影列表
+        List<Movie> relevantMovieList = new ArrayList<>();
+        Map<String, Object> queryMap = new HashMap<>();
+        for(Type tempType:movie.getTypeList()){
+            // 每轮查询一个类型的电影
+//            queryMap.clear();
+            queryMap.put("typeId",tempType.getTypeId());
+            List<Movie> tempMovieList = movieService.findMovieList(queryMap).getList();
+            // 打乱顺序
+            Collections.shuffle(tempMovieList);
+            // 取部分
+//            if (tempMovieList.size() > 3) tempMovieList=tempMovieList.subList(0,3);
+            // 循环加入
+            for (Movie tempMovie:tempMovieList){
+                // 判断是否重复或为其本身
+                if (!relevantMovieList.contains(tempMovie) && (tempMovie.getMovieId()!=movie.getMovieId())){
+                    relevantMovieList.add(tempMovie);
+                }
+            }
+        }
+        Collections.shuffle(relevantMovieList);                     // 乱序
+        if (relevantMovieList.size() > 9) relevantMovieList=relevantMovieList.subList(0,9);
+
+        List<Comment> commentList = commentService.findCommentListByMovieId(movieId);
+
+        // 标记是否为发布评论后再次刷新进入 影响是否显示toast通知
+        String isRefresh = request.getParameter("isRefresh");
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/movie/movie_detail");
-        mv.addObject("movieDate",movieDate);
         mv.addObject("movie",movie);
+        mv.addObject("relevantMovieList",relevantMovieList);
+        mv.addObject("commentList",commentList);
+        if ((isRefresh != null) && isRefresh.equals("true")){
+            mv.addObject("isRefresh",1);
+        }else{
+            mv.addObject("isRefresh",0);
+        }
         return mv;
     }
 
@@ -441,4 +490,80 @@ public class HomeController {
 
         return recommendations;
     }
+
+    // 前端的ajax请求 获取用户的登录状态
+    @RequestMapping(value = "/isLogin",method = RequestMethod.POST)
+    @ResponseBody
+    public Map isLogin(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Object user = request.getSession().getAttribute("logined_user");
+        if (user != null){
+            resultMap.put("isLogin","true");
+            resultMap.put("userId",((User)user).getId());
+        }
+        else{
+            resultMap.put("isLogin","false");
+        }
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/public_comment")
+    public void public_comment(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam("score") Integer score,
+                               @RequestParam("comment-content") String commentContent
+    ) throws IOException {
+        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+        Integer userId = Integer.valueOf(request.getParameter("userId"));
+
+        Comment comment = new Comment(null,movieId,userId,new Date(),score,commentContent,0);
+
+        if (commentService.add(comment) > 0){
+            System.out.println("添加成功");
+        }
+        else {
+            System.out.println("添加失败");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/home/movie_detail?movieId=" + movieId + "&isRefresh=true");
+    }
+
+
+    // 前端用户单击点赞按钮后的操作
+    @RequestMapping(value = "/clickLike",method = RequestMethod.POST)
+    @ResponseBody
+    public Map clickLike(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Integer userId = Integer.valueOf(map.get("userId"));
+        Integer commentId = Integer.valueOf(map.get("commentId"));
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("userId",userId);
+        queryMap.put("commentId",commentId);
+
+        // 操作结束后 图标应该有的样式 交由前端据此去渲染
+        // 0 = 未赞   1 = 赞
+        int actionSign = commentService.clickLike(queryMap);
+
+        Comment comment = commentService.findCommentById(commentId);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("comment",comment);
+        resultMap.put("actionSign",actionSign);
+        return resultMap;
+    }
+
+    // 判断用户是否对某一条评论进行点赞
+    @RequestMapping(value = "/checkLike",method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkLike(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Integer userId = Integer.valueOf(map.get("userId"));
+        Integer commentId = Integer.valueOf(map.get("commentId"));
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("userId",userId);
+        queryMap.put("commentId",commentId);
+
+        Integer isLike = commentService.checkLike(queryMap);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isLike",isLike);
+        return resultMap;
+    }
+
 }
