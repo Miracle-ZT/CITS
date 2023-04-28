@@ -61,17 +61,24 @@
 
     <!-- 查询符合条件的影院列表本身及其对应负责人 -->
     <select id="findCinemaList" parameterType="Map" resultMap="CinemaMap">
-        select * from cinema,admin_cinema,brand where 1 = 1
+        SELECT *
+        FROM
+        cinema c,
+        admin_cinema ac,
+        brand b
+        WHERE 1 = 1
         <if test="keyWord != null">
-            and
-            (   name like #{keyWord}
-            or phone like #{keyWord}
-            or address like #{keyWord}
-            or acname like #{keyWord}
-            )
+            AND ( c.NAME LIKE #{keyWord}
+            OR c.phone LIKE #{keyWord}
+            OR c.address LIKE #{keyWord}
+            OR ac.acname LIKE #{keyWord}
+        )
         </if>
-            and cinema.admin_cinema_id = admin_cinema.admin_cinema_id
-            and cinema.brand_id = brand.brand_id
+        <if test="brandId != null">
+            AND b.brand_id = #{brandId}
+        </if>
+        AND c.admin_cinema_id = ac.admin_cinema_id
+        AND c.brand_id = b.brand_id
     </select>
 
     <!-- 影院状态更新操作 -->

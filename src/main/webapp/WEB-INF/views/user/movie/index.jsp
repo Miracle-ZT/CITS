@@ -208,7 +208,7 @@
 </script>
 
 
-<%-- 选择类型 刷新列表 --%>
+<%-- 选择 类型/年份 刷新列表 --%>
 <script>
     // 监听类型选择
     $("button[id^='types-']").on("click",function (e){              // 监听types-开头的id的button

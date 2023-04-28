@@ -178,6 +178,7 @@ public class IndexController {
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("cinemaId",cinemaId);
         List<Movie> movieList = movieService.findMovieWithList(queryMap);
+        System.out.println("movieList = " + movieList);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("cinema_admin/menu_bar");
@@ -294,6 +295,9 @@ public class IndexController {
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("cinemaId",cinemaId);
         List<Screening> screeningList = screeningService.findScreeningList(queryMap);
+//        for (Screening screening:screeningList){
+//            System.out.println("screening = " + screening);
+//        }
 
         queryMap.put("movieStatus",1);
         queryMap.put("currPage",currPage);

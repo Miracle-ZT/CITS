@@ -101,7 +101,7 @@
                     <div class="col-1"></div>
                     <div class="col-7">
                         <div class="screen align-items-center">屏幕</div>
-                        <div id="roomSeats" class="align-items-center" style="margin-left: 85px">
+                        <div id="roomSeats" class="align-items-center" style="margin-left: 50px">
 
                         </div>
                     </div>

@@ -98,6 +98,7 @@
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">日期：</h5>
             <c:forEach var="dateText" items="${dateTextMap}" varStatus="status">
+                <!-- 默认第一个选中 -->
                 <c:if test="${status.first}">
                     <li class="nav-item" role="presentation" style="padding: 5px">
                         <button class="nav-link active" name="spanDate" value="${status.index}" data-bs-toggle="pill"
@@ -117,43 +118,7 @@
     </div>
 </div>
 
-<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
-    <div>
-        <ul class="nav nav-pills mb-3" role="tablist">
-            <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">影院服务：</h5>
-            <li class="nav-item" role="presentation" style="padding: 5px">
-                <button class="nav-link active" name="spanDate" value="" data-bs-toggle="pill"
-                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                        aria-selected="true">全部
-                </button>
-            </li>
-            <li class="nav-item" role="presentation" style="padding: 5px">
-                <button class="nav-link" name="spanDate" value="" data-bs-toggle="pill" data-bs-target="#pills-home"
-                        type="button" role="tab" aria-controls="pills-home" aria-selected="true">可退票
-                </button>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
-    <div>
-        <ul class="nav nav-pills mb-3" role="tablist">
-            <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">影厅类型：</h5>
-            <li class="nav-item" role="presentation" style="padding: 5px">
-                <button class="nav-link active" name="spanDate" value="" data-bs-toggle="pill"
-                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                        aria-selected="true">全部
-                </button>
-            </li>
-            <li class="nav-item" role="presentation" style="padding: 5px">
-                <button class="nav-link" name="spanDate" value="" data-bs-toggle="pill" data-bs-target="#pills-home"
-                        type="button" role="tab" aria-controls="pills-home" aria-selected="true">可退票
-                </button>
-            </li>
-        </ul>
-    </div>
-</div>
-
+<!-- 折叠选项卡 -->
 <div>
     <div class="collapse" id="collapseExample">
         <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">
@@ -208,11 +173,11 @@
                             <div class="text-muted">${cinema.address}</div>
                         </div>
                         <div class="col-1">
-                            <div>￥xx元 起</div>
-                            <div>x.x km</div>
+<%--                            <div>￥xx元 起</div>--%>
+<%--                            <div>x.x km</div>--%>
                         </div>
                         <div class="col-1">
-                            <a href="">
+                            <a href="/home/cinema_detail?cinemaId=${cinema.cinemaId}">
                                 <button class="btn btn-outline-danger" style="border-radius: 300px" name="spanDate"
                                         type="button">购票
                                 </button>
@@ -285,11 +250,11 @@
                             '                        <div class="text-muted">' + cinemaList[i].address +'</div>\n' +
                             '                    </div>\n' +
                             '                    <div class="col-1">\n' +
-                            '                        <div>￥xx元 起</div>\n' +
-                            '                        <div>x.x km</div>\n' +
+                            // '                        <div>￥xx元 起</div>\n' +
+                            // '                        <div>x.x km</div>\n' +
                             '                    </div>\n' +
                             '                    <div class="col-1">\n' +
-                            '                        <a href="">\n' +
+                            '                        <a href="/home/cinema_detail?cinemaId=' + cinemaList[i].cinemaId + '">\n' +
                             '                            <button class="btn btn-outline-danger" style="border-radius: 300px" name="spanDate" value=""\n' +
                             '                                    type="button">购票\n' +
                             '                            </button>\n' +

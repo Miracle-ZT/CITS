@@ -59,7 +59,7 @@
                                         <img src="../../../..${user.photo}" onclick="file_photo()" id="img-selector"
                                              style="width: 70px;height: 70px;border: 1px #d3d3d3 solid;border-radius: 5px">
                                     </div>
-                                    <input type="file" name="file" id="photo" onchange="show(this)" hidden>
+                                    <input type="file" name="file" id="photo" onchange="show(this)" accept="image/jpeg,image/png" hidden>
                                 </div>
                             </div>
                             <div class="row">

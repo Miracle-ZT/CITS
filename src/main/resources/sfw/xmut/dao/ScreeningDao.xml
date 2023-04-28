@@ -17,20 +17,31 @@
     </select>
 
     <select id="findScreeningList" parameterType="Map" resultMap="ScreeningMap">
-        select * from screening,cinema,movie,language,seat,room where 1 = 1
+        SELECT *
+        FROM
+        screening,
+        cinema,
+        movie,
+        LANGUAGE,
+        seat,
+        room
+        WHERE 1 = 1
+        AND screening.cinema_id = cinema.cinema_id
+        AND screening.movie_id = movie.movie_id
+        AND screening.language_id = LANGUAGE.language_id
+        AND screening.room_id = room.room_id
+        AND screening.seat_id = seat.seat_id
         <if test="startTime != null and endTime != null">
-            and start_time &gt;= #{startTime}
-            and start_time &lt; #{endTime}
+            AND start_time &gt;= #{startTime}
+            AND start_time &lt; #{endTime}
         </if>
         <if test="movieId != null">
-            and screening.movie_id = #{movieId}
+            AND screening.movie_id = #{movieId}
         </if>
         <if test="cinemaId != null">
-            and screening.cinema_id = #{cinemaId}
+            AND screening.cinema_id = #{cinemaId}
+            ORDER BY screening.start_time DESC
         </if>
-        and screening.movie_id = movie.movie_id
-        and screening.language_id = language.language_id
-        and screening.seat_id = seat.seat_id
     </select>
 
     <resultMap id="ScreeningMap" type="Screening">

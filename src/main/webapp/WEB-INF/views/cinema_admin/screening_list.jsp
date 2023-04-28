@@ -48,47 +48,84 @@
                 </tr>
                 </thead>
                 <tbody>
+                <c:set var="currentTime" value="<%= System.currentTimeMillis()%>"></c:set>
+                <!-- 未开始 -->
                 <c:forEach var="screening" items="${screeningList}" varStatus="status">
-                    <tr>
-                        <td><img width="28" height="28" src="../../..${screening.movie.imgUrl}" class="rounded-circle m-r-5" alt="">
-                            ${screening.movie.chineseName}
-                        </td>
-                        <td>${screening.room.roomName}</td>
-                        <td>${screening.language.lanName}</td>
-                        <td>
-                            <fmt:formatDate value="${screening.startTime}" pattern="yyyy-MM-dd"/>
-                        </td>
-                        <td>
-                            <fmt:formatDate value="${screening.startTime}" pattern="HH:mm"/>
-                        </td>
-                        <td>
-                            <fmt:formatDate value="${screening.endTime}" pattern="HH:mm"/>
-                        </td>
-                        <td>
-                            ${screening.price}
-                        </td>
-                        <td>
-                            <c:set var="currentTime" value="<%= System.currentTimeMillis()%>"></c:set>
-                            <c:if test="${currentTime >= screening.startTime.time}">
-                                <span class="custom-badge status-red">已结束</span>
-                            </c:if>
-                            <c:if test="${currentTime < screening.startTime.time}">
+                    <c:if test="${currentTime < screening.startTime.time}">
+                        <tr>
+                            <td><img width="28" height="28" src="../../..${screening.movie.imgUrl}" class="rounded-circle m-r-5" alt="">
+                                    ${screening.movie.chineseName}
+                            </td>
+                            <td>${screening.room.roomName}</td>
+                            <td>${screening.language.lanName}</td>
+                            <td>
+                                <fmt:formatDate value="${screening.startTime}" pattern="yyyy-MM-dd"/>
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${screening.startTime}" pattern="HH:mm"/>
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${screening.endTime}" pattern="HH:mm"/>
+                            </td>
+                            <td>
+                                    ${screening.price}
+                            </td>
+                            <td>
                                 <span class="custom-badge status-green">未开始</span>
-                            </c:if>
-                        </td>
-                        <td class="text-right">
-                            <div class="dropdown dropdown-action">
-                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-                                   aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="edit-patient.html"><i class="fa fa-pencil m-r-5"></i>
-                                        编辑</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i
-                                            class="fa fa-trash-o m-r-5"></i> 删除</a>
+                            </td>
+                            <td class="text-right">
+                                <div class="dropdown dropdown-action">
+                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="edit-patient.html"><i class="fa fa-pencil m-r-5"></i>
+                                            编辑</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i
+                                                class="fa fa-trash-o m-r-5"></i> 删除</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+                <!-- 已结束 -->
+                <c:forEach var="screening" items="${screeningList}" varStatus="status">
+                    <c:if test="${currentTime >= screening.startTime.time}">
+                        <tr>
+                            <td><img width="28" height="28" src="../../..${screening.movie.imgUrl}" class="rounded-circle m-r-5" alt="">
+                                    ${screening.movie.chineseName}
+                            </td>
+                            <td>${screening.room.roomName}</td>
+                            <td>${screening.language.lanName}</td>
+                            <td>
+                                <fmt:formatDate value="${screening.startTime}" pattern="yyyy-MM-dd"/>
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${screening.startTime}" pattern="HH:mm"/>
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${screening.endTime}" pattern="HH:mm"/>
+                            </td>
+                            <td>
+                                    ${screening.price}
+                            </td>
+                            <td>
+                                <span class="custom-badge status-red">已结束</span>
+                            </td>
+                            <td class="text-right">
+                                <div class="dropdown dropdown-action">
+                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="edit-patient.html"><i class="fa fa-pencil m-r-5"></i>
+                                            编辑</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_patient"><i
+                                                class="fa fa-trash-o m-r-5"></i> 删除</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
                 </c:forEach>
                 </tbody>
             </table>

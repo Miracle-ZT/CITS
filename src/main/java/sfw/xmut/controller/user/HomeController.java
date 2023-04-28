@@ -159,12 +159,18 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/cinema")
-    public ModelAndView index_cinema(HttpServletRequest request){
+    public ModelAndView index_cinema(HttpServletRequest request,
+                                     @RequestParam(name = "brandId",defaultValue = "0") Integer brandId
+
+    ){
         Map<String,Object> queryMap = new HashMap<>();
         List<Brand> brandList = brandService.findBrandList(queryMap);
-        List<Cinema> cinemaList = cinemaService.findCinemaListWithScreening(queryMap);
+        if (brandId != 0) queryMap.put("brandId",brandId);
+        List<Cinema> cinemaList = cinemaService.findCinemaList(queryMap);
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/cinema/index");
+        mv.addObject("nowBrandId",brandId);
         mv.addObject("brandList",brandList);
         mv.addObject("cinemaList",cinemaList);
         mv.addObject("ac_cinema","active");
@@ -172,8 +178,9 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/cinema_detail")
-    public ModelAndView cinema_detail(HttpServletRequest request){
-        Integer cinemaId = Integer.valueOf(request.getParameter("cinemaId"));
+    public ModelAndView cinema_detail(HttpServletRequest request,
+                                      @RequestParam(name = "cinemaId",defaultValue = "0") Integer cinemaId){
+
         Map<String, Object> queryMap = new HashMap<>();
         Cinema cinema = cinemaService.findCinemaById(cinemaId);
         queryMap.put("cinemaId",cinemaId);
@@ -224,8 +231,8 @@ public class HomeController {
         date.setTime(date.getTime()+oneDayTime);
         String endTime = DateFormatUtils.format(date,"yyyy-MM-dd") + " 00:00:00";  // 默认结束时间(当天)
         queryMap.put("endTime",endTime);
-        // TODO error in home_cinema when enter a cinema_detail which haven't the screening
-        queryMap.put("movieId",movieList.get(0).getMovieId());          // 默认场次列表显示的是存在电影列表的第一个电影的场次
+        // Fixed error in home_cinema when enter a cinema_detail which haven't the screening
+        queryMap.put("movieId",movieList.size()>0 ? movieList.get(0).getMovieId() : 0);          // 默认场次列表显示的是存在电影列表的第一个电影的场次
         List<Screening> screeningList = screeningService.findScreeningList(queryMap);
 //        for (Screening screening:screeningList){
 //            System.out.println("getLanName=" + screening.getLanguage().getLanName());

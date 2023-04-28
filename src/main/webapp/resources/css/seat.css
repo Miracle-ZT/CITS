@@ -22,8 +22,8 @@
     border-bottom: 1px solid #d3d3d3;
 }
 .seat-scope {                                   /* 左边布局 */
-    padding: 30px 30px 40px 30px;               /* 上-右-下-左  顺时针 */
-    width: 400px;
+    padding: 30px 0px 40px 0px;               /* 上-右-下-左  顺时针 */
+    width: 500px;
     margin: auto;
 }
 .info-scope {                                   /* 右边的信息布局 */
@@ -31,7 +31,7 @@
     padding: 40px;
 }
 .seat {
-    padding: 40px 40px 40px 20px;
+    padding: 40px 0px 40px 0px;
 }
 .seat-row {
     height: 35px;

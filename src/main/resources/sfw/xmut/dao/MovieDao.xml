@@ -25,6 +25,7 @@
         </if>
             and screening.movie_id = movie.movie_id
             and screening.cinema_id = cinema.cinema_id
+            GROUP BY movie.movie_id
     </select>
 
     <!-- 只查询全部电影列表本身 -->

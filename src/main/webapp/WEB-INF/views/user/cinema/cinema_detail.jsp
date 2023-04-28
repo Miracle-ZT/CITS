@@ -31,7 +31,7 @@
 </div>
 
 <div class="row box" style="width: 100%;margin-top: -84px;">
-    <div class="col-1"></div>
+    <div class="col-2"></div>
     <div class="col-3">
         <div>
             <img src="../../../../resources/img/default_cinema_pic.png" class="mx-auto d-block border-white border border-3" style="width: 292px;height: 292px;margin-top: 50px;">
@@ -65,24 +65,24 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="margin-top: 20px;height: 20px">
-            <div class="col-2 text-white">                         <!-- 影院服务名 -->
-                <span class="border border-1 border-white align-items-center"
-                      style="min-width: 80px;display: inline-block;text-align: center">
-                    改签
-                </span>
-            </div>
-            <div class="col-10 text-white">                         <!-- 影院服务详情 -->
-                <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
-                    未取票用户放映前60分钟可改签
-                </p>
-            </div>
-        </div>
+<%--        <div class="row" style="margin-top: 20px;height: 20px">--%>
+<%--            <div class="col-2 text-white">                         <!-- 影院服务名 -->--%>
+<%--                <span class="border border-1 border-white align-items-center"--%>
+<%--                      style="min-width: 80px;display: inline-block;text-align: center">--%>
+<%--                    改签--%>
+<%--                </span>--%>
+<%--            </div>--%>
+<%--            <div class="col-10 text-white">                         <!-- 影院服务详情 -->--%>
+<%--                <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">--%>
+<%--                    未取票用户放映前60分钟可改签--%>
+<%--                </p>--%>
+<%--            </div>--%>
+<%--        </div>--%>
     </div>
-    <div class="col-4 text-white"></div>
+    <div class="col-3 text-white"></div>
 </div>
 
-<div class="card card-body" style="transform: translateX(10%);width: 1400px;margin-top: 10px">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;margin-top: 10px">
     <div style="width:1360px">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <c:forEach var="movie" items="${movieList}" varStatus="status">
@@ -139,7 +139,7 @@
     </div>
 </div>
 
-<div class="card card-body" style="transform: translateX(10%);width: 1400px;">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">
     <div>
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">日期：</h5>
@@ -163,7 +163,7 @@
     </div>
 </div>
 
-<div class="card card-body" style="transform: translateX(10%);width: 1400px;">
+<div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">
     <table class="table">
         <thead>
         <tr>
@@ -183,7 +183,7 @@
                         <div style="font-size: 13px">${screening.endTime.hours}:${screening.endTime.minutes}散场</div>
                     </td>
                     <td>${screening.language.lanName}</td>
-                    <td>${screening.roomId}</td>
+                    <td>${screening.room.roomName}</td>
                     <td>${screening.price}</td>
                     <td>                                                                                                <!-- 初始展示为movieList第一个元素的movieId 与后端的Dao层逻辑一致 -->
                         <a href="${pageContext.request.contextPath}/home/order/select_seat?cinemaId=${cinema.cinemaId}&movieId=${movieList[0].movieId}&screeningId=${screening.screeningId}">
@@ -273,6 +273,7 @@
 <script>
     $("button[id^='spanDate-']").on("click",function (e){               // 监听spanDate-开头的id的button
         let movieId = $("img[id^='movieId-'].active").attr("movieId")   // 当前被选中active的img控件
+        if (movieId == null) movieId = 0;           // 防止不存在场次时 movieId==0
         let spanDate = $(e.target).val()
         // alert("movieId" + movieId + "\nspanDate" + spanDate);
         $.ajax({
@@ -296,7 +297,7 @@
                             '                    <div style="font-size: 13px">' + transferTime(screeningList[i].endTime) + '散场</div>\n' +
                             '                </td>\n' +
                             '                <td>' + screeningList[i].language.lanName + '</td>\n' +
-                            '                <td>' + screeningList[i].roomId + '</td>\n' +
+                            '                <td>' + screeningList[i].room.roomName + '</td>\n' +
                             '                <td>' + screeningList[i].price + '</td>\n' +
                             '                <td>\n' +
                             '                    <a href="/home/order/select_seat?cinemaId=${cinema.cinemaId}&movieId=' + movieId + '&screeningId=' + screeningList[i].screeningId + '">\n' +
@@ -350,7 +351,7 @@
                             '                    <div style="font-size: 13px">' + transferTime(screeningList[i].endTime) + '散场</div>\n' +
                             '                </td>\n' +
                             '                <td>' + screeningList[i].language.lanName + '</td>\n' +
-                            '                <td>' + screeningList[i].roomId + '</td>\n' +
+                            '                <td>' + screeningList[i].room.roomName + '</td>\n' +
                             '                <td>' + screeningList[i].price + '</td>\n' +
                             '                <td>\n' +
                             '                    <a href="/home/order/select_seat?cinemaId=${cinema.cinemaId}&movieId=' + movieId + '&screeningId=' + screeningList[i].screeningId + '">\n' +
