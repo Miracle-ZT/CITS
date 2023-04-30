@@ -84,5 +84,10 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.findAvgScoreWithMovieId(movieId);
     }
 
+    @Override
+    public List<Map> findMovieListWithAvgScore() {
+        return movieDao.findMovieListWithAvgScore();
+    }
+
 
 }

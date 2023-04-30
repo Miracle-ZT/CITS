@@ -22,4 +22,6 @@ public interface MovieDao {
     // 平均评分(口碑) + 累计票房
     public Long findBOWithMovieId(Integer movieId);
     public Double findAvgScoreWithMovieId(Integer movieId);
+
+    public List<Map> findMovieListWithAvgScore();
 }

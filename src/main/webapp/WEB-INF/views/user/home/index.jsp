@@ -81,20 +81,20 @@
                 <div style="font-size: 33px;font-weight: 450;display:inline;color: #0d6efd;">今日热映</div>
                 <c:forEach items="${movieListWithBO}" var="movie" varStatus="status">
                     <c:if test="${status.first}">
-                        <a href="/home/movie_detail?movieId=${movie['movie_id']}" class="list-group-item list-group-item-action" style="border: 0px">
+                        <a href="/home/movie_detail?movieId=${movie['movie'].movieId}" class="list-group-item list-group-item-action" style="border: 0px">
                             <div class="row">
                                 <div class="col-1">
                                     <span class="badge" style="color:red;background:lightcoral;">${status.count}</span>
                                 </div>
                                 <div class="col-4">
-                                    <img src="../../../..${movie['img_url']}" style="height: 72px;width: 128px">
+                                    <img src="../../../..${movie['movie'].imgUrl}" style="height: 72px;width: 128px">
                                 </div>
                                 <div class="col-4">
                                     <div style="font-weight: bold;font-size: 20px;width: 120px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
-                                            ${movie['movie_name']}
+                                            ${movie['movie'].chineseName}
                                     </div>
                                     <div style="font-size: 15px;margin-top: 15px;width: 120px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
-                                            ${movie['actors']}
+                                            ${movie['movie'].actors}
                                     </div>
                                 </div>
                                 <div class="col-3 text-center">
@@ -104,16 +104,16 @@
                         </a>
                     </c:if>
                     <c:if test="${!status.first}">
-                        <a href="/home/movie_detail?movieId=${movie['movie_id']}" class="list-group-item list-group-item-action" style="padding: 0.7rem 1rem;border: 0px">
+                        <a href="/home/movie_detail?movieId=${movie['movie'].movieId}" class="list-group-item list-group-item-action" style="padding: 0.7rem 1rem;border: 0px">
                             <div class="row">
                                 <div class="col-1">
                                     <span id="cube-${movie['movie_id']}" class="badge" onload="getColor(this)">${status.count}</span>
                                 </div>
                                 <div class="col-4" style="font-weight: bold;width: 147.55px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
-                                        ${movie['movie_name']}
+                                        ${movie['movie'].chineseName}
                                 </div>
                                 <div class="col-4" style="width: 147.55px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
-                                        ${movie['actors']}
+                                        ${movie['movie'].actors}
                                 </div>
                                 <div class="col-3 text-center">${movie['bo']}&nbsp;</div>
                             </div>

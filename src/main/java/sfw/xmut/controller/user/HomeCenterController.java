@@ -43,9 +43,10 @@ public class HomeCenterController {
     CommentService commentService;
 
     @RequestMapping(value = "/index")
-    public ModelAndView index(HttpServletRequest request){
+    public ModelAndView index(HttpServletRequest request,
+                              @RequestParam(name = "type",defaultValue = "0") Integer type
+                              ){
         User user = (User) request.getSession().getAttribute("logined_user");
-        Integer type = Integer.valueOf(request.getParameter("type"));
 
         // 标记是否为发布评论后再次刷新进入 影响是否显示toast通知
         String isRefresh = request.getParameter("isRefresh");
@@ -187,8 +188,6 @@ public class HomeCenterController {
         resultMap.put("SeatsNumList",SeatsNumList);
         return resultMap;
     }
-
-
 
 
 }

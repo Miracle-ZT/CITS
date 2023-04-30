@@ -63,7 +63,7 @@
                             <div>
                                 <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
                             </div>
-                            <div style="height: 35px;line-height: 35px">
+                            <div style="height: 35px;line-height: 35px;width: 139px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
                                     ${movie.chineseName}
                             </div>
                             <a href="/home/movie_detail?movieId=${movie.movieId}">
@@ -125,7 +125,7 @@
                 </c:forEach>
             </c:if>
             <c:if test="${empty cinemaList}">
-                <div class="card card-body" style="transform: translateX(10%);width: 1400px">
+                <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px">
                     <h5>抱歉，没有找到相关结果，请尝试更换关键词查找。</h5>
                 </div>
             </c:if>

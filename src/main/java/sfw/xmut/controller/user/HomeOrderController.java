@@ -170,7 +170,7 @@ public class HomeOrderController {
     //支付成功回调函数
     //http://localhost:8080/alipay/pay
     @RequestMapping("/success")
-    public ModelAndView success(@RequestParam Map<String, String> map, HttpServletResponse response,HttpServletRequest request) throws Exception {
+    public void success(@RequestParam Map<String, String> map, HttpServletResponse response,HttpServletRequest request) throws Exception {
         String seller_id = map.get("seller_id");
         String trade_no = map.get("trade_no");
         String out_trade_no = map.get("out_trade_no");
@@ -211,13 +211,14 @@ public class HomeOrderController {
             System.out.println("订单QR生成失败");
         }
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home/center/index?type=1");
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("user/home/center/index?type=1");
 //        modelAndView.addObject("total_amount",total_amount);
 //        modelAndView.addObject("out_trade_no",out_trade_no);
 //        modelAndView.addObject("trade_no",trade_no);
 //        modelAndView.addObject("seller_id",seller_id);
-        return modelAndView;
+//        return modelAndView;
+        response.sendRedirect(request.getContextPath() + "/home/center/index?type=1");
     }
 
     public String uploadQRCode(HttpServletRequest request,String out_trade_no) throws Exception {

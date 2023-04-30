@@ -116,6 +116,7 @@ public class HomeController {
 
         Map<String,Object> queryMap = new HashMap<>();
         queryMap.put("keyWord","%" + keyWord + "%");
+        queryMap.put("pageSize",Integer.MAX_VALUE);
 
         PageInfo<Movie> moviePageInfo = movieService.findMovieList(queryMap);
         List<Cinema> cinemaList = cinemaService.findCinemaList(queryMap);
@@ -123,7 +124,7 @@ public class HomeController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/home/search_content");
         mv.addObject("keyWord",keyWord);
-        mv.addObject("moviePageInfo",moviePageInfo);
+        mv.addObject("movieList",moviePageInfo.getList());
         mv.addObject("cinemaList",cinemaList);
         return mv;
     }
@@ -139,7 +140,6 @@ public class HomeController {
         queryMap.put("currPage",currPage);
         queryMap.put("pageSize",pageSize);
         if (typeId != 0) queryMap.put("typeId",typeId);
-        System.out.println("year = " + year);
         if (year != 0){
             queryMap.put("beginYear",year + "-01-01 00:00:00");
             queryMap.put("endYear",year + "-12-31 23:59:59");
@@ -251,8 +251,21 @@ public class HomeController {
 
     @RequestMapping(value = "/top")
     public ModelAndView index_top(HttpServletRequest request){
+        // 限制条数
+        Integer colNum = 10;
+
+        // 牛犇啊家人们
+        List<Map> movieAvgScoreMapList = movieService.findMovieListWithAvgScore();
+        List<Map> movieListWithBO = movieService.findMovieListWithBO(new HashMap<>());
+        if (movieAvgScoreMapList.size() > colNum) movieAvgScoreMapList = movieAvgScoreMapList.subList(0,colNum);
+        if (movieListWithBO.size() > colNum) movieListWithBO = movieListWithBO.subList(0,colNum);
+//        System.out.println(movieAvgScoreMapList);
+//        System.out.println(movieListWithBO);
+
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("user/home/index");
+        mv.setViewName("user/top/index");
+        mv.addObject("movieAvgScoreMapList",movieAvgScoreMapList);
+        mv.addObject("movieListWithBO",movieListWithBO);
         mv.addObject("ac_top","active");
         return mv;
     }

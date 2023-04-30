@@ -19,9 +19,12 @@ public interface MovieService {
     public PageInfo<Movie> findMovieList(Map<String, Object> queryMap);
     public int add(Movie movie);
     public int edit(Movie movie);
+    // (某个时间段内的)票房总榜
     public List<Map> findMovieListWithBO(Map<String, Object> queryMap);
 
-    // 平均评分(口碑) + 累计票房
+    // 票房 + 平均评分(口碑)
     public Long findBOWithMovieId(Integer movieId);
     public Double findAvgScoreWithMovieId(Integer movieId);
+
+    public List<Map> findMovieListWithAvgScore();
 }

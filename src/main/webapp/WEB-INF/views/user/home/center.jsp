@@ -266,9 +266,9 @@
                         </div>
                         <div class="col-5">
                             <div class="text-center">
-                                <img src="../../../../resources/upload/qrcode/XL387465230C20C5395132.jpg" draggable="false" style="-moz-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-o-user-select: none;user-select: none;" oncontextmenu="return false">
+                                <img id="order-qrcode" src="" draggable="false" style="-moz-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-o-user-select: none;user-select: none;" oncontextmenu="return false">
                             </div>
-                            <div>
+                            <div style="margin-top: 10px">
                                 <h4>观影须知</h4>
                                 <div style="color: #888888">
                                     1.疫情期间,请注意当地防疫政策和影院观影需求。<br/>
@@ -380,7 +380,8 @@
 
 <%-- 日期对象格式化 --%>
 <script>
-    function transferTime(cTime) {     //将json串的一串数字进行解析
+    function transferTime(cTime,format) {     //将json串的一串数字进行解析
+        console.log(format);
         var jsonDate = new Date(parseInt(cTime));
         //       alert(jsonDate);
         //为Date对象添加一个新属性，主要是将解析到的时间数据转换为我们熟悉的“yyyy-MM-dd hh:mm:ss”样式
@@ -406,7 +407,7 @@
             }
             return format;
         }
-        var newDate = jsonDate.format("yyyy-MM-dd hh:mm:ss");
+        var newDate = jsonDate.format(format);
         // var newDate = jsonDate.format("yyyy-MM-dd");                     // 设置时间格式
         return newDate;
     }
@@ -480,10 +481,14 @@
 
                     $("#seatNum").text(getSeat(SeatsNumList,order.screening.seat.row,order.screening.seat.col));
 
-                    $("#totalPrice").text("实付金额：" + order.totalPrice);
+                    $("#totalPrice").text("实付金额：￥" + order.totalPrice);
                     $("#phone").text("手机号码：" + order.user.phone.substr(0,3) + "****" + order.user.phone.substr(7,10));
                     $("#orderNum").text("订单号码：" + order.orderNum);
-                    $("#orderCreateTime").text("订单时间：" + order.createTime);
+                    $("#orderCreateTime").text("订单时间：" + transferTime(order.createTime,"yyyy-MM-dd hh:mm:ss"));
+
+                    // order.qrcode可以
+                    // order.QRCode不行
+                    $("#order-qrcode").attr("src","../../../.." + order.qrcode);
                 },
                 error:function (){
                     alert("ajax请求错误");
@@ -517,41 +522,6 @@
                 $("#seatInfo-1").append('<div>' + SeatsInfoText[i] + '</div>');
             }
         }
-    }
-</script>
-
-<%-- 日期对象格式化 --%>
-<script>
-    function transferTime(cTime,format) {     //将json串的一串数字进行解析
-        console.log(format);
-        var jsonDate = new Date(parseInt(cTime));
-        //       alert(jsonDate);
-        //为Date对象添加一个新属性，主要是将解析到的时间数据转换为我们熟悉的“yyyy-MM-dd hh:mm:ss”样式
-        Date.prototype.format = function (format) {
-            var o = {
-                //获得解析出来数据的相应信息，可参考js官方文档里面Date对象所具备的方法
-                "y+": this.getFullYear(), //得到对应的年信息
-                "M+": this.getMonth() + 1, //得到对应的月信息，得到的数字范围是0~11，所以要加一
-                "d+": this.getDate(), //得到对应的日信息
-                "h+": this.getHours(), //得到对应的小时信息
-                "m+": this.getMinutes(), //得到对应的分钟信息
-                "s+": this.getSeconds(), //得到对应的秒信息
-            }
-            //将年转换为完整的年形式
-            if (/(y+)/.test(format)) {
-                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            }
-            //连接得到的年月日 时分秒信息
-            for (var k in o) {
-                if (new RegExp("(" + k + ")").test(format)) {
-                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-                }
-            }
-            return format;
-        }
-        var newDate = jsonDate.format(format);
-        // var newDate = jsonDate.format("yyyy-MM-dd");                     // 设置时间格式
-        return newDate;
     }
 </script>
 

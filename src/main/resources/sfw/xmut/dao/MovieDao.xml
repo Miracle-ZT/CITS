@@ -69,8 +69,8 @@
     </select>
 
     <!-- 查询电影的票房排名列表及其对应的票房值 -->
-    <select id="findMovieListWithBO" parameterType="Map" resultType="Map">
-        select m.movie_id,m.actors,m.chinese_name as movie_name,sum(o.total_price) as bo,m.img_url
+    <select id="findMovieListWithBO" parameterType="Map" resultMap="MovieListWithBO">
+        select m.*,sum(o.total_price) as bo
         from movie m,orders o,screening s
         where o.screening_id = s.screening_id
         and s.movie_id = m.movie_id
@@ -83,6 +83,25 @@
         group by m.movie_id
         order by bo DESC
     </select>
+
+    <resultMap id="MovieListWithBO" type="Map">
+        <id property="movieId" column="movie_id"/>
+        <result property="bo" column="bo"/>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+    </resultMap>
 
     <!-- 查询指定电影对应的票房值 -->
     <select id="findBOWithMovieId" parameterType="int" resultType="Long">
@@ -111,6 +130,47 @@
             co.is_order_comment = 1
           AND co.movie_id = #{movieId}
     </select>
+
+    <!-- 包含评分的有序电影列表 -->
+    <select id="findMovieListWithAvgScore" resultMap="MovieWithAvgScoreMap">
+        SELECT
+            m.*, IFNULL( AVG( co.comment_score ), 0 ) AS avg_score
+        FROM
+            COMMENT co, movie m
+        WHERE 1 = 1
+--           仅查询来自订单的评论
+          AND co.is_order_comment = 1
+          AND co.movie_id = m.movie_id
+
+--         将属于同一个电影的所有评分视作为一组 每组看作是单独的集合 并分别对其进行AVG()
+        GROUP BY co.movie_id
+--         "排名"
+        ORDER BY avg_score DESC
+    </select>
+
+    <!-- 自由度极大的写法 可以将任意一个column映射出来成为Map中的一个键值对-->
+    <!-- 甚至是使用<association>标签 将多个column映射为一个pojo 并将此实体类作为返回Map中的一个键值对 -->
+    <resultMap id="MovieWithAvgScoreMap" type="Map">
+        <!-- 这一层级的每一项 对应一个键值对-->
+        <!-- 必须得有<id> 否则虽然不会报错 但List里只会有一条记录-->
+        <id property="movieId" column="movie_id"/>
+        <result property="avgScore" column="avg_score"/>
+        <association property="movie" javaType="Movie">             <!-- 关联的Movie实体 -->
+            <id property="movieId" column="movie_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="imgUrl" column="img_url"/>
+            <result property="timeLen" column="time_len"/>
+            <result property="releaseDate" column="release_date"/>
+            <result property="introduction" column="introduction"/>
+            <result property="country" column="country"/>
+            <result property="director" column="director"/>
+            <result property="actors" column="actors"/>
+            <result property="movieStatus" column="movie_status"/>
+            <result property="addDate" column="add_date"/>
+        </association>
+    </resultMap>
+
 
     <!-- 电影添加操作 -->
     <insert id="add" useGeneratedKeys="true" keyProperty="movieId"  parameterType="Movie">
