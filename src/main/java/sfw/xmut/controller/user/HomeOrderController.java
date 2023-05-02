@@ -166,6 +166,16 @@ public class HomeOrderController {
         response.sendRedirect(request.getContextPath() + "/alipay/pay?out_trade_no=" + order.getOrderNum() + "&total_amount=" + order.getTotalPrice());
     }
 
+    // 用户在支付过程中 因特殊情况未能支付成功或中途关闭支付页面 可以继续支付订单
+    // 传递out_trade_no和total_amount至支付宝沙箱接口
+    // 由于tempMap为全局变量 若此处发起的支付成功后 success中修改的场次信息为最近一次因未支付成功而将数据存入tempMap的场次 所以当有订单未支付时应避免继续生成新订单
+    @RequestMapping(value = "/continueToPay")
+    public void continueToPay(HttpServletRequest request,HttpServletResponse response,
+                              @RequestParam(name = "out_trade_no",defaultValue = "0") String orderNum,
+                              @RequestParam(name = "total_amount",defaultValue = "0") float totalPrice
+                              ) throws IOException {
+        response.sendRedirect(request.getContextPath() + "/alipay/pay?out_trade_no=" + orderNum + "&total_amount=" + totalPrice);
+    }
 
     //支付成功回调函数
     //http://localhost:8080/alipay/pay

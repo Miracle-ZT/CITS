@@ -256,7 +256,7 @@
                         <div class="col-1"></div>
                         <div class="col-7">
                             <div class="screen align-items-center">屏幕</div>
-                            <div id="roomSeatsAdd" class="align-items-center" style="margin-left: 25px">
+                            <div id="roomSeatsAdd" class="align-items-center" style="margin-left: 100px">
 
                             </div>
                         </div>

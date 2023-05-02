@@ -17,7 +17,7 @@ public class AlipayConfig {
     /**
      * 设置内网穿透回调地址
      */
-    public static final String CALLBACK = "dztpxa.natappfree.cc";
+    public static final String CALLBACK = "mdav3x.natappfree.cc";
     /**
      * 编码
      */

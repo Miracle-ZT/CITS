@@ -220,7 +220,7 @@ public class HomeController {
 
         // 只显示七天内有场次的电影
         // 从当前日期开始
-        queryMap.put("startTime",DateFormatUtils.format(new Date(),"yyyy-MM-dd"));
+        queryMap.put("startTime",DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
         // 从七天后日期结束 借用上一步求七日文本的过程中的Date对象来获取
         queryMap.put("endTime",DateFormatUtils.format(date,"yyyy-MM-dd"));
         List<Movie> movieList = movieService.findMovieWithList(queryMap);

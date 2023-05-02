@@ -136,20 +136,43 @@
 <%--                                             <div class="selected-seats">3排6座</div>--%>
                                     </div>
                                     <div class="col-2" style="vertical-align:middle;display: flex;align-items: center">
+                                        <c:set var="currentTime" value="<%= System.currentTimeMillis()%>"></c:set>
 <%--                                        <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},${order.orderNum})"--%>
 <%--                                                data-bs-toggle="modal" data-bs-target="#commentModal">--%>
 <%--                                            评论--%>
 <%--                                        </button>--%>
-                                        <c:if test="${order.isCommented == 0}">
-                                            <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},'${order.orderNum}')"
-                                                    data-bs-toggle="modal" data-bs-target="#commentModal">
-                                                评论
-                                            </button>
+                                        <!-- 未支付 -->
+                                        <c:if test="${order.status == 0}">
+                                            <a href="/home/order/continueToPay?out_trade_no=${order.orderNum}&total_amount=${order.totalPrice}">
+                                                <button class="btn btn-success">
+                                                    支付
+                                                </button>
+                                            </a>
                                         </c:if>
-                                        <c:if test="${order.isCommented == 1}">
-                                            <button class="btn btn-outline-secondary" disabled>
-                                                已评
-                                            </button>
+                                        <!-- 已支付 -->
+                                        <c:if test="${order.status == 1}">
+                                            <!-- 未开始 -->
+                                            <c:if test="${currentTime < order.screening.startTime.time}">
+                                                <button class="btn btn-outline-info" disabled>
+                                                    评论
+                                                </button>
+                                            </c:if>
+                                            <!-- 已开始 -->
+                                            <c:if test="${currentTime >= order.screening.startTime.time}">
+                                                <!-- 未评论 -->
+                                                <c:if test="${order.isCommented == 0}">
+                                                    <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},'${order.orderNum}')"
+                                                            data-bs-toggle="modal" data-bs-target="#commentModal">
+                                                        评论
+                                                    </button>
+                                                </c:if>
+                                                <!-- 已评论 -->
+                                                <c:if test="${order.isCommented == 1}">
+                                                    <button class="btn btn-outline-secondary" disabled>
+                                                        已评
+                                                    </button>
+                                                </c:if>
+                                            </c:if>
                                         </c:if>
                                         <button class="btn btn-outline-info"
                                                 data-bs-toggle="modal" data-bs-target="#detailModal"

@@ -46,7 +46,7 @@
                         <div class="ticket-info-name">总计：</div>
                     </div>
                     <div class="col-8">
-                        <div class="ticket-info-content">${screening.movie.chineseName}</div>
+                        <div class="ticket-info-content" style="width: 165px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">${screening.movie.chineseName}</div>
                         <div class="ticket-info-content">${screening.language.lanName}</div>
                         <div class="ticket-info-content">
                             <fmt:formatDate value="${screening.startTime}" pattern="MM-dd"/>
