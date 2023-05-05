@@ -46,10 +46,10 @@
                     </div>
                     <div style="margin: 5px">${screening.language.lanName} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${SeatsNumList.size()}张</div>
                     <div class="row" style="margin-top: 30px">
-                        <div class="col-5">
-                            <div style="margin: 5px;">${screening.room.roomName}</div>
+                        <div class="col-4">
+                            <div style="margin: 5px;width: 99px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">${screening.room.roomName}</div>
                         </div>
-                        <div class="col-7" >
+                        <div class="col-8" >
                             <div class="row text-center" style="margin: 5px">
                                 <div id="seatInfo-0" class="col-6" style="border-right: 1px solid #d3d3d3">
 <%--                                    <div>2排3座</div>--%>

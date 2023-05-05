@@ -2,10 +2,15 @@ package sfw.xmut.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import sfw.xmut.dao.OrdersDao;
+import sfw.xmut.dao.ScreeningDao;
 import sfw.xmut.pojo.Orders;
 import sfw.xmut.service.OrdersService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +23,9 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private OrdersDao ordersDao;
+
+    @Autowired
+    private ScreeningDao screeningDao;
 
     @Override
     public Orders findOrderById(Integer orderId) {
@@ -59,5 +67,25 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersDao.countPrice(queryMap);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, isolation = Isolation.DEFAULT,rollbackFor = Exception.class)
+    @Override
+    public void payOrderSuccess(Map<String, Object> queryMap) {
+        if (screeningDao.updateSeats(queryMap) > 0) {
+            System.out.println("座位信息修改成功");                     // 表示该座位已被购买
+        } else {
+            System.out.println("座位信息修改失败");
+        }
 
+        // 付款成功后修改订单状态
+        if (ordersDao.updateStatus(queryMap) > 0) {
+            System.out.println("订单状态修改成功");                     // 修改订单为已支付
+        } else {
+            System.out.println("订单状态修改失败");
+        }
+        if (ordersDao.updateQRCode(queryMap) > 0) {
+            System.out.println("订单QR生成成功");                     // 更新QRCode
+        } else {
+            System.out.println("订单QR生成失败");
+        }
+    }
 }

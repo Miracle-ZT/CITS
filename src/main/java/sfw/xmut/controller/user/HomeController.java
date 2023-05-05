@@ -347,6 +347,16 @@ public class HomeController {
     public ModelAndView movie_purchase(HttpServletRequest request){
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         Movie movie = movieService.findMovieById(movieId);
+        // 累计票房数
+        Long movieBO = movieService.findBOWithMovieId(movieId);
+        // 手动改值 持久层查询结果为N/A 赋给Long(不能是long--报错)的结果为null
+        if (movieBO == null) movieBO = 0L;
+
+        // 格式化Double为一位小数的字符串
+        double movieAvgScore = movieService.findAvgScoreWithMovieId(movieId);
+        BigDecimal bd = new BigDecimal(movieAvgScore);
+        movieAvgScore = bd.setScale(1, RoundingMode.HALF_UP).doubleValue();
+
         if (movie == null){                                 // 未查询到指定movie
             ModelAndView mv = new ModelAndView();
             mv.setViewName("common/error");
@@ -402,6 +412,8 @@ public class HomeController {
         mv.addObject("dateTextMap",dateTextMap);
         mv.addObject("movie",movie);
         mv.addObject("cinemaList",cinemaList);
+        mv.addObject("movieBO",movieBO);
+        mv.addObject("movieAvgScore",movieAvgScore);
         return mv;
     }
 

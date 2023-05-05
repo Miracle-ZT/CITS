@@ -70,12 +70,29 @@
         <div class="col" style="height: 200px;width: 100%"></div>
         <div class="col">
             小蓝口碑
-            <div class="row">
-                <div class="col-2">
-                    x.x
-                </div>
-                <div class="col-3">
-                    ※※※※※
+            <%--            <svg width="20" height="20" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z" fill="none" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/><path d="M24 28.6248V24.6248C27.3137 24.6248 30 21.9385 30 18.6248C30 15.3111 27.3137 12.6248 24 12.6248C20.6863 12.6248 18 15.3111 18 18.6248" stroke="#d3d3d3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24 37.6248C25.3807 37.6248 26.5 36.5055 26.5 35.1248C26.5 33.7441 25.3807 32.6248 24 32.6248C22.6193 32.6248 21.5 33.7441 21.5 35.1248C21.5 36.5055 22.6193 37.6248 24 37.6248Z" fill="#d3d3d3"/></svg>--%>
+            <div class="row">              <%-- col: 2+3+7 --%>
+                <%-- 判断是否存在评分 --%>
+                <c:if test="${movieAvgScore != 0}">
+                    <div class="col-2" style="color:#ffc600;font-size: 30px">
+                            ${movieAvgScore}
+                    </div>
+                </c:if>
+                <c:if test="${movieAvgScore == 0}">
+                    <div class="col-2" style="font-size: 30px">
+                        <span style="font-size: 24px;color:#9c87b8;">暂无</span>
+                    </div>
+                </c:if>
+                <div class="col-3" style="display: flex;justify-content: start;align-items: center;">
+                    <%-- 总评分 --%>
+                    <c:forEach var="i" begin="1" end="5">
+                        <c:if test="${i <= movieAvgScore}">
+                            <svg width="30" height="30" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#ffc600" stroke="#ffc600" stroke-width="4" stroke-linejoin="round"/></svg>
+                        </c:if>
+                        <c:if test="${i > movieAvgScore}">
+                            <svg width="30" height="30" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.9986 5L17.8856 17.4776L4 19.4911L14.0589 29.3251L11.6544 43L23.9986 36.4192L36.3454 43L33.9586 29.3251L44 19.4911L30.1913 17.4776L23.9986 5Z" fill="#d3d3d3" stroke="#d3d3d3" stroke-width="4" stroke-linejoin="round"/></svg>
+                        </c:if>
+                    </c:forEach>
                 </div>
                 <div class="col-7"></div>
             </div>
@@ -83,8 +100,8 @@
         <div class="col">
             累计票房
             <div class="row">
-                <div class="col-3">
-                    xx.xx亿
+                <div class="col-3" style="font-size: 30px">
+                    ${movieBO}
                 </div>
                 <div class="col-7"></div>
             </div>

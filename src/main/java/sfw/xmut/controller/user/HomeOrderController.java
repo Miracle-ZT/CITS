@@ -233,27 +233,14 @@ public class HomeOrderController {
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("seats", newSeats);
         queryMap.put("screening_id", screening.getScreeningId());
-        if (screeningService.updateSeats(queryMap) > 0) {
-            System.out.println("座位信息修改成功");                     // 表示该座位已被购买
-        } else {
-            System.out.println("座位信息修改失败");
-        }
 
         // 付款成功后修改订单状态
-        queryMap.clear();
         queryMap.put("status",1);
         queryMap.put("orderNum",out_trade_no);
         queryMap.put("QRCode",uploadQRCode(request,out_trade_no));
-        if (ordersService.updateStatus(queryMap) > 0) {
-            System.out.println("订单状态修改成功");                     // 修改订单为已支付
-        } else {
-            System.out.println("订单状态修改失败");
-        }
-        if (ordersService.updateQRCode(queryMap) > 0) {
-            System.out.println("订单QR生成成功");                     // 更新QRCode
-        } else {
-            System.out.println("订单QR生成失败");
-        }
+
+        // 事务管理
+        ordersService.payOrderSuccess(queryMap);
 
 //        ModelAndView modelAndView = new ModelAndView();
 //        modelAndView.setViewName("user/home/center/index?type=1");

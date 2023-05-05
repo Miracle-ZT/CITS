@@ -20,4 +20,5 @@ public interface OrdersService {
     public int updateIsComment(Map<String, Object> queryMap);
     public Long countPerson(Map<String, Object> queryMap);
     public Long countPrice(Map<String, Object> queryMap);
+    public void payOrderSuccess(Map<String, Object> queryMap);
 }

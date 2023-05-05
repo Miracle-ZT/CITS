@@ -61,15 +61,15 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-<!--    <error-page>-->
-<!--        <error-code>404</error-code>-->
-<!--        <location>/WEB-INF/errors/404.jsp</location>-->
-<!--    </error-page>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/common/404.html</location>
+    </error-page>
 
-<!--    <error-page>-->
-<!--        <error-code>500</error-code>-->
-<!--        <location>/WEB-INF/errors/500.jsp</location>-->
-<!--    </error-page>-->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/views/common/505.html</location>
+    </error-page>
 
 <!--    项目启动后 默认跳转 -->
     <welcome-file-list>
