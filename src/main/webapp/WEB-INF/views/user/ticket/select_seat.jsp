@@ -13,6 +13,7 @@
     <title>Title</title>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <link href="../../../../resources/css/seat.css" type="text/css" rel="stylesheet"/>
+    <link href="../../../../resources/plugins/admin_assets/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 </head>
 <body>
 <div style="margin:100px auto;width: 1400px;margin-top: 0px">
@@ -84,11 +85,14 @@
 
 <%-- 渲染座位 --%>
 <script>
+    cnt = 0;            // 全局变量 已选中的cnt;
+    let price = ${screening.price};     // 这个场次的price是不变的 和下方点击事件中的price一致 无需多一个全局变量
     $(document).ready(function(){
         var row = ${row};
-        var col = ${col}
-        var seat_str = '${seat_str}'
+        var col = ${col};
+        var seat_str = '${seat_str}';
         var eachSeatText = '';
+        var oldSeatStr = '${old_seat_str}';
         for (var i = 0;i < row;i++){                        // 每一行
             eachSeatText = '<div class="seat-row" id="seat-row-' + i + '">\n';
             $("#seats").append(eachSeatText);
@@ -96,6 +100,22 @@
                 if (j == 0){                                // 标记列      渲染排的序号
                     eachSeatText = '<div id="seat-tag-' + i + '" class="seatCharts-seat tag">' + (i+1) + '</div>\n'
                     $("#seats").append(eachSeatText);
+                }
+                if (oldSeatStr != "" && oldSeatStr.charAt(((i*col)+j)) == 'o'){        // 用户已锁定的座位 直接渲染 不走下面的判断
+                    eachSeatText = '<div id="seat-col-' + i + '-' + j + '" row="' + i + '" col="' + j + '" class="seat-selected seatCharts-seat seat-cell">' + (j+1) + '</div>\n'
+                    $("#seats").append(eachSeatText);
+
+                    // 统计区的数据
+                    cnt++;
+                    $("#ticket_cnt").text(cnt+"张");         // 更新“票数”统计
+                    $("#total_price").text("￥" + (cnt*price));         // 更新“总价”统计
+                    let eachSelectedSeatText = '                <div id="selected-seats-' + i + '-' + j + '" class="selected-seats" row="' + i + '" col="' + j + '">\n' +
+                        (+i+1) + '排' + (+j+1) + '座\n' +
+                        '                </div>';
+                    $("#selected-seats").append(eachSelectedSeatText);
+                    // 走到这里 说明至少有一个位置已选中 '确认选座'按钮应可点击
+                    $("#ack-select-button").removeClass("disabled");
+                    continue;
                 }
                 switch (seat_str.charAt(((i*col)+j))){      // 单个位置
                     case 'a':
@@ -111,7 +131,6 @@
                         $("#seats").append(eachSeatText);
                         break;
                 }
-
                 // eachSeatText = '<div id="seat-col-' + i + '-' + j + '" class="seat-available seatCharts-seat seat-cell">' + (j+1) + '</div>\n'
                 // $("#seats").append(eachSeatText);
             }
@@ -125,7 +144,7 @@
 <script>
     $(document).ready(function(){
         let price = ${screening.price}
-        var cnt = 0             // 已选票数
+        // var cnt = 0             // 已选票数      -- 修改为全局变量
         var max_cnt = 5;        // 最大同时座位选择数
         var eachSelectedSeatText = '';      // 已选座位的信息
         $('body').on('mouseenter', "div[id^='seat-col-']", function() {          // 鼠标光标经过
@@ -211,14 +230,47 @@
         });
         // console.log(SeatsArray);
         let screeningId = ${screening.screeningId};
-        let allSeatsJoin = '';
-        for (let i = 0;i < SeatsArray.length;i++){                  // 拼接GET参数的文本
-            allSeatsJoin += "&seat" + i + "=" + SeatsArray[i];
-        }
-        console.log(allSeatsJoin);
-        var getParamText = '/home/order/ack_order?screeningId=' + screeningId + allSeatsJoin;
-        console.log(getParamText);
-        window.location = getParamText                      // 跳转后端
+
+        $.ajax({
+            url: "/home/order/checkSeats",
+            traditional: true,
+            data: {
+                "screeningId": screeningId,
+                "SeatsArray": SeatsArray,
+            },
+            type: "POST",
+            dataType: "json",
+            // contentType : "application/json;charset=UTF-8",
+            success: function (data) {
+                let msg = data['msg'];
+                console.log(msg);
+                // 位置暂时不冲突
+                if (msg == 'success'){
+                    let allSeatsJoin = '';
+                    for (let i = 0;i < SeatsArray.length;i++){                  // 拼接GET参数的文本
+                        allSeatsJoin += "&seat" + i + "=" + SeatsArray[i];
+                    }
+                    console.log(allSeatsJoin);
+                    // 跳转确认订单界面
+                    var getParamText = '/home/order/ack_order?screeningId=' + screeningId + allSeatsJoin;
+                    console.log(getParamText);
+                    window.location = getParamText;                      // 跳转后端
+                }
+                // 位置已冲突
+                else if (msg == 'error'){
+                    // 刷新座位页面并置提醒位为1
+                    var getParamText = '/home/order/select_seat?cinemaId=${cinema.cinemaId}&movieId=${movie.movieId}&screeningId=' + screeningId + '&isRefresh=1';
+                    console.log(getParamText);
+                    window.location = getParamText;                      // 跳转后端
+                }
+            },
+            error: function () {
+                alert("ajax请求错误");
+            }
+        });
+
+
+
 
         <%--var map = {--%>
         <%--    "SeatsArray":JSON.stringify(SeatsArray),--%>
@@ -291,5 +343,17 @@
     }
 </script>
 
+<%-- 判断是否为发生选座冲突 若是则要显示toast提示用户 --%>
+<script>
+    $(document).ready(function () {
+        let isRefresh = ${isRefresh};
+        if (isRefresh == 1){
+            toastr.warning("晚了一步！所选座位已被购买，请重新选座。");
+        }
+    });
+</script>
+
+
+<script src="../../../../resources/plugins/admin_assets/js/plugins/toastr/toastr.min.js"></script>
 </body>
 </html>

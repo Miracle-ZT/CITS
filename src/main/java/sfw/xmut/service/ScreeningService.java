@@ -19,4 +19,6 @@ public interface ScreeningService {
     public Long totalNumByCinemaId(Integer cinemaId);
     public int add(Screening screening);
     public int generateSeat(Seat seat);
+    public boolean lockSeat(Screening screening,Integer[] SeatsArray,Integer userId);
+    public String findOldSeatStrByMap(Integer seatId,Integer userId);
 }

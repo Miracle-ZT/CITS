@@ -122,5 +122,33 @@
         insert into seat(seat_id,seat_row,seat_col,seats) values(null,#{row},#{col},#{seats})
     </insert>
 
+    <!-- 检索用户是否已有锁座 -->
+    <!-- 1==true, 0==false -->
+    <select id="haveLock" parameterType="Map" resultType="Map">
+        SELECT
+            *
+        FROM
+            lock_seat ls
+        WHERE
+            ls.seat_id = #{seatId}
+          AND ls.user_id = #{userId}
+    </select>
+
+    <!-- 用户座位锁定添加操作 -->
+    <!-- user_id + seat_id 唯一标识一列 -->
+    <insert id="addLock" parameterType="Map">
+        insert into lock_seat(lock_seat_id,seat_id,user_id,seat_str,create_time) values(null,#{seatId},#{userId},#{seatStr},#{createTime})
+    </insert>
+
+    <!-- 更新用户锁座情况 -->
+    <update id="updateLock" parameterType="Map">
+        UPDATE lock_seat
+        SET seat_str = #{seatStr},create_time = #{createTime}
+        WHERE
+            seat_id = #{seatId}
+          AND user_id = #{userId}
+    </update>
+
+
 
 </mapper>

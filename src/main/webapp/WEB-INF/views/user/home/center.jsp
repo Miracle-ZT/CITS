@@ -112,82 +112,79 @@
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
-                    <div class="row" style="padding: 10px;font-size: 18px">
-                        <div>
-                            <div class="col-4"><h4>订单列表</h4></div>
-                            <div class="col-8"></div>
-
-                            <div class="divider-form"></div>
-                            <c:forEach var="order" items="${ordersList}" varStatus="status">
-                                <div class="row" style="padding: 10px;border: 1px solid #d3d3d3;border-radius: 5px">
-                                    <div class="col-2">
-                                        <a href="/home/movie_detail?movieId=${order.screening.movie.movieId}"><img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px"></a>
-                                    </div>
-                                    <div class="col-4" style="height: 90px">
-                                        <h6 style="line-height: 25px;font-size: 20px;font-weight: bold;
+                    <div style="padding: 10px;font-size: 18px">
+                        <div style="display: flex;justify-content: space-between">
+                            <span style="font-size: 1.5rem">订单列表</span>
+                            <span style="display: flex;justify-content: end;align-items: end;color:#ee1e2d;font-size: 16px;font-weight: bold">创建后需在10分钟内支付，超时将关闭订单！</span>
+                        </div>
+                        <div class="divider-form" style="margin: 8px 0"></div>
+                        <c:forEach var="order" items="${ordersList}" varStatus="status">
+                            <div class="row" style="padding: 10px;border: 1px solid #d3d3d3;border-radius: 5px">
+                                <div class="col-2">
+                                    <a href="/home/movie_detail?movieId=${order.screening.movie.movieId}"><img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px"></a>
+                                </div>
+                                <div class="col-4" style="height: 90px">
+                                    <h6 style="line-height: 25px;font-size: 20px;font-weight: bold;
                                         width: 269px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
-                                                ${order.screening.movie.chineseName}&nbsp;&nbsp;&nbsp;&nbsp;${order.totalNOP}张</h6>
-                                        <h6 style="line-height: 25px">${order.screening.cinema.name}</h6>
-                                        <small style="line-height: 25px">创建时间：<fmt:formatDate value="${order.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></small>
-                                    </div>
-                                    <div id="selected-seats-${order.orderId}" seatNums="${order.seatNums}"
-                                         row="${order.screening.seat.row}" col="${order.screening.seat.col}"
-                                         class="col-4">
-<%--                                             <div class="selected-seats">3排6座</div>--%>
-                                    </div>
-                                    <div class="col-2" style="vertical-align:middle;display: flex;align-items: center">
-                                        <c:set var="currentTime" value="<%= System.currentTimeMillis()%>"></c:set>
-<%--                                        <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},${order.orderNum})"--%>
-<%--                                                data-bs-toggle="modal" data-bs-target="#commentModal">--%>
-<%--                                            评论--%>
-<%--                                        </button>--%>
-                                        <!-- 未支付 -->
-                                        <c:if test="${order.status == 0}">
-                                            <a href="/home/order/continueToPay?out_trade_no=${order.orderNum}&total_amount=${order.totalPrice}">
-                                                <button class="btn btn-success">
-                                                    支付
-                                                </button>
-                                            </a>
+                                            ${order.screening.movie.chineseName}&nbsp;&nbsp;&nbsp;&nbsp;${order.totalNOP}张</h6>
+                                    <h6 style="line-height: 25px">${order.screening.cinema.name}</h6>
+                                    <small style="line-height: 25px">创建时间：<fmt:formatDate value="${order.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></small>
+                                </div>
+                                <div id="selected-seats-${order.orderId}" seatNums="${order.seatNums}"
+                                     row="${order.screening.seat.row}" col="${order.screening.seat.col}"
+                                     class="col-4">
+                                        <%--                                             <div class="selected-seats">3排6座</div>--%>
+                                </div>
+                                <div class="col-2" style="vertical-align:middle;display: flex;align-items: center">
+                                    <c:set var="currentTime" value="<%= System.currentTimeMillis()%>"></c:set>
+                                        <%--                                        <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},${order.orderNum})"--%>
+                                        <%--                                                data-bs-toggle="modal" data-bs-target="#commentModal">--%>
+                                        <%--                                            评论--%>
+                                        <%--                                        </button>--%>
+                                    <!-- 未支付 -->
+                                    <c:if test="${order.status == 0}">
+                                        <a href="/home/order/continueToPay?out_trade_no=${order.orderNum}&total_amount=${order.totalPrice}">
+                                            <button class="btn btn-success">
+                                                支付
+                                            </button>
+                                        </a>
+                                    </c:if>
+                                    <!-- 已支付 -->
+                                    <c:if test="${order.status == 1}">
+                                        <!-- 未开始 -->
+                                        <c:if test="${currentTime < order.screening.startTime.time}">
+                                            <button class="btn btn-outline-info" disabled>
+                                                评论
+                                            </button>
                                         </c:if>
-                                        <!-- 已支付 -->
-                                        <c:if test="${order.status == 1}">
-                                            <!-- 未开始 -->
-                                            <c:if test="${currentTime < order.screening.startTime.time}">
-                                                <button class="btn btn-outline-info" disabled>
+                                        <!-- 已开始 -->
+                                        <c:if test="${currentTime >= order.screening.startTime.time}">
+                                            <!-- 未评论 -->
+                                            <c:if test="${order.isCommented == 0}">
+                                                <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},'${order.orderNum}')"
+                                                        data-bs-toggle="modal" data-bs-target="#commentModal">
                                                     评论
                                                 </button>
                                             </c:if>
-                                            <!-- 已开始 -->
-                                            <c:if test="${currentTime >= order.screening.startTime.time}">
-                                                <!-- 未评论 -->
-                                                <c:if test="${order.isCommented == 0}">
-                                                    <button class="btn btn-outline-success" onclick="open_comment_modal(${order.screening.movieId},'${order.orderNum}')"
-                                                            data-bs-toggle="modal" data-bs-target="#commentModal">
-                                                        评论
-                                                    </button>
-                                                </c:if>
-                                                <!-- 已评论 -->
-                                                <c:if test="${order.isCommented == 1}">
-                                                    <button class="btn btn-outline-secondary" disabled>
-                                                        已评
-                                                    </button>
-                                                </c:if>
+                                            <!-- 已评论 -->
+                                            <c:if test="${order.isCommented == 1}">
+                                                <button class="btn btn-outline-secondary" disabled>
+                                                    已评
+                                                </button>
                                             </c:if>
                                         </c:if>
-                                        <button class="btn btn-outline-info"
-                                                data-bs-toggle="modal" data-bs-target="#detailModal"
-                                                id="btn-detail-${order.orderId}" orderId="${order.orderId}"
-                                        style="margin-left: 7px">
-                                            详情
-                                        </button>
-                                    </div>
+                                    </c:if>
+                                    <button class="btn btn-outline-info"
+                                            data-bs-toggle="modal" data-bs-target="#detailModal"
+                                            id="btn-detail-${order.orderId}" orderId="${order.orderId}"
+                                            style="margin-left: 7px">
+                                        详情
+                                    </button>
                                 </div>
-                            </c:forEach>
-                        </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
-
-
                 <div class="tab-pane fade" id="v-pills-collect" role="tabpanel" aria-labelledby="v-pills-collect-tab" tabindex="0">我的收藏</div>
                 <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">我的评论</div>
             </div>

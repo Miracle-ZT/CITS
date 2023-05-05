@@ -208,7 +208,7 @@
                     <div class="row" style="margin-bottom: 15px">
                         <label class="col-3" style="padding-left: 30px;font-size: 17px;margin: auto;overflow: auto">场次票价</label>
                         <div class="col-6">
-                            <input type="text" id="add-price" name="add-price" class="form-control" style="width: 220px;display: inline" placeholder="(元)" required>
+                            <input type="text" id="add-price" name="add-price" class="form-control" style="width: 220px;display: inline" placeholder="(元)" required autocomplete="off">
                         </div>
                         <div class="col-3 warning-sign" id="price-check"></div>
                     </div>

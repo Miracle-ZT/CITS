@@ -18,4 +18,7 @@ public interface ScreeningDao {
     public Long totalNumByCinemaId(Integer cinemaId);
     public int add(Screening screening);
     public int generateSeat(Seat seat);
+    public Map haveLock(Map<String, Object> queryMap);
+    public int addLock(Map<String, Object> queryMap);
+    public int updateLock(Map<String, Object> queryMap);
 }

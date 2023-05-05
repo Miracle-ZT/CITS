@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import sfw.xmut.pojo.*;
@@ -47,10 +49,15 @@ public class HomeOrderController {
 
     // 选座
     @RequestMapping(value = "/select_seat")
-    public ModelAndView select_seat(HttpServletRequest request){
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        Integer cinemaId = Integer.valueOf(request.getParameter("cinemaId"));
-        Integer screeningId = Integer.valueOf(request.getParameter("screeningId"));
+    public ModelAndView select_seat(HttpServletRequest request,
+                                    @RequestParam(name = "movieId") Integer movieId,
+                                    @RequestParam(name = "cinemaId") Integer cinemaId,
+                                    @RequestParam(name = "screeningId") Integer screeningId,
+                                    @RequestParam(name = "isRefresh",defaultValue = "0") Integer isRefresh
+                                    ){
+//        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+//        Integer cinemaId = Integer.valueOf(request.getParameter("cinemaId"));
+//        Integer screeningId = Integer.valueOf(request.getParameter("screeningId"));
         Movie movie = movieService.findMovieById(movieId);
         Cinema cinema = cinemaService.findCinemaById(cinemaId);
         Screening screening = screeningService.findScreeningById(screeningId);
@@ -67,6 +74,10 @@ public class HomeOrderController {
 //        seatMap.put("row",2);
 //        seatMap.put("col",5);
 //        seatMap.put("seat_str_arr",seat_str_arr);
+
+        User logined_user = (User) request.getSession().getAttribute("logined_user");
+        String old_seat_str = screeningService.findOldSeatStrByMap(screening.getSeatId(),logined_user.getId());
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/ticket/select_seat");
         mv.addObject("movie",movie);
@@ -75,7 +86,30 @@ public class HomeOrderController {
         mv.addObject("row",row);
         mv.addObject("col",col);
         mv.addObject("seat_str",seat_str);
+        mv.addObject("isRefresh",isRefresh);
+        mv.addObject("old_seat_str",old_seat_str);
         return mv;
+    }
+
+    // 判断并锁定用户所选座位
+    @RequestMapping(value = "/checkSeats",method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkSeats(HttpServletRequest request,Integer screeningId,Integer[] SeatsArray){
+        // 'a'--available     'o'--occupy     's'--sold     '_'--null
+        Map<String, Object> resultMap = new HashMap<>();
+
+        User logined_user = (User) request.getSession().getAttribute("logined_user");
+        Screening screening = screeningService.findScreeningById(screeningId);
+        if (screeningService.lockSeat(screening,SeatsArray,logined_user.getId())){
+            System.out.println("座位锁定成功");
+            resultMap.put("msg","success");
+        }
+        else {
+            System.out.println("座位锁定失败");
+            resultMap.put("msg","error");
+        }
+        resultMap.put("msg","success");
+        return resultMap;
     }
 
     // 确认订单
