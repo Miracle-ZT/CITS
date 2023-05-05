@@ -12,6 +12,7 @@
 <head>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <title>Title</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
 </head>
 <body>
 <div style="margin:100px auto;width: 1400px;margin-top: 0px">

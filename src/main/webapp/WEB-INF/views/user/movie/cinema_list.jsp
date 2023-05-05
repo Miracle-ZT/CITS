@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>${movie.chineseName}_XiaoLanMovie</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <script src="../../../../resources/js/jquery.seat-charts.min.js"></script>
     <style>
@@ -136,32 +137,32 @@
 </div>
 
 <!-- 折叠选项卡 -->
-<div>
-    <div class="collapse" id="collapseExample">
-        <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">
-            <ul class="nav nav-pills mb-3" role="tablist">
-                <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">更多选项：</h5>
-                <li class="nav-item" role="presentation" style="padding: 5px">
-                    <button class="nav-link active" name="spanDate" value="" data-bs-toggle="pill"
-                            data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                            aria-selected="true">全部
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation" style="padding: 5px">
-                    <button class="nav-link" name="spanDate" value="" data-bs-toggle="pill" data-bs-target="#pills-home"
-                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">选项一
-                    </button>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div>
-        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">
-            更多
-        </button>
-    </div>
-</div>
+<%--<div>--%>
+<%--    <div class="collapse" id="collapseExample">--%>
+<%--        <div class="card card-body" style="margin: 0px auto 0px auto;width: 1400px;">--%>
+<%--            <ul class="nav nav-pills mb-3" role="tablist">--%>
+<%--                <h5 class="align-self-center text-muted" style="padding: 5px;margin-top: 7px">更多选项：</h5>--%>
+<%--                <li class="nav-item" role="presentation" style="padding: 5px">--%>
+<%--                    <button class="nav-link active" name="spanDate" value="" data-bs-toggle="pill"--%>
+<%--                            data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"--%>
+<%--                            aria-selected="true">全部--%>
+<%--                    </button>--%>
+<%--                </li>--%>
+<%--                <li class="nav-item" role="presentation" style="padding: 5px">--%>
+<%--                    <button class="nav-link" name="spanDate" value="" data-bs-toggle="pill" data-bs-target="#pills-home"--%>
+<%--                            type="button" role="tab" aria-controls="pills-home" aria-selected="true">选项一--%>
+<%--                    </button>--%>
+<%--                </li>--%>
+<%--            </ul>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+<%--    <div>--%>
+<%--        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"--%>
+<%--                aria-expanded="false" aria-controls="collapseExample">--%>
+<%--            更多--%>
+<%--        </button>--%>
+<%--    </div>--%>
+<%--</div>--%>
 
 <div class="mt-5">                              <!-- 影院列表 -->
     <div class="row" style="margin: 0px auto 0px auto;width: 1400px;">

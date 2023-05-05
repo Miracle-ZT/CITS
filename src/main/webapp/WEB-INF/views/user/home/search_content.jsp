@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>搜索结果</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
 </head>
 <body>
@@ -24,7 +25,7 @@
               class="d-flex" role="search" style="margin-top: 15px">
             <input name="keyWord" class="form-control me-2" type="search" placeholder="影视剧、影人、影院"
                    aria-label="Search" value="${keyWord}"
-            style="border-radius: 50px">
+            style="border-radius: 50px" autocomplete="off">
             <button id="submit-keyword" class="btn btn-outline-primary" type="submit">
                 <?xml version="1.0" encoding="UTF-8"?>
                 <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

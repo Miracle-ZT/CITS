@@ -40,7 +40,7 @@
         </if>
         <if test="cinemaId != null">
             AND screening.cinema_id = #{cinemaId}
-            ORDER BY screening.start_time DESC
+            ORDER BY screening.start_time ASC
         </if>
     </select>
 

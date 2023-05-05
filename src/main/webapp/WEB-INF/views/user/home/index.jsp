@@ -205,7 +205,7 @@
                     <a href="/home/movie_detail?movieId=${movie.movieId}">
                         <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
                                 movieId="${movie.movieId}">
-                            立即购票
+                            查看详情
                         </button>
                     </a>
                 </div>

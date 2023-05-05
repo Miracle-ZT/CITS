@@ -9,7 +9,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-    <title>Title</title>
+    <title>XLMovie - ${cinema.name}</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <style>
         .box{
@@ -37,7 +38,7 @@
             <img src="../../../../resources/img/default_cinema_pic.png" class="mx-auto d-block border-white border border-3" style="width: 292px;height: 292px;margin-top: 50px;">
         </div>
     </div>
-    <div class="col-4" style="margin-top: 40px">
+    <div class="col-4" style="margin-top: 100px">
         <div class="text-white">                <!-- 白色文字信息部分 -->
             <h1 style="font-weight: bold;margin-top: 5px">${cinema.name}</h1>
             <h5 style="margin-top: -5px;">${cinema.address}</h5>
@@ -59,11 +60,11 @@
             <%}%>
         </div>
         <div class="row">                                   <!-- 服务介绍 -->
-            <div class="col-3 text-white">影院服务</div>
-            <div class="col-9">         <!-- 分割线 -->
-                <div style="height: 2px;background-color: grey;margin-top: 12px;margin-left: -60px">
-                </div>
-            </div>
+<%--            <div class="col-3 text-white">影院服务</div>--%>
+<%--            <div class="col-9">         <!-- 分割线 -->--%>
+<%--                <div style="height: 2px;background-color: grey;margin-top: 12px;margin-left: -60px">--%>
+<%--                </div>--%>
+<%--            </div>--%>
         </div>
 <%--        <div class="row" style="margin-top: 20px;height: 20px">--%>
 <%--            <div class="col-2 text-white">                         <!-- 影院服务名 -->--%>

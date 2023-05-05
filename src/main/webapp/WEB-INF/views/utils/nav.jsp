@@ -19,10 +19,10 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <button class="btn btn-outline-primary btn-sm" style="border-radius: 40px" data-bs-toggle="modal"
-                data-bs-target="#exampleModal">
-            福州市
-        </button>
+<%--        <button class="btn btn-outline-primary btn-sm" style="border-radius: 40px" data-bs-toggle="modal"--%>
+<%--                data-bs-target="#exampleModal">--%>
+<%--            福州市--%>
+<%--        </button>--%>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -56,9 +56,9 @@
                 <li class="nav-item" style="font-size: 20px;padding: 10px">
                     <a class="nav-link ${ac_top}" href="/home/top">榜单</a>
                 </li>
-                <li class="nav-item" style="font-size: 20px;padding: 10px">
-                    <a class="nav-link ${ac_news}" href="/home/news">资讯</a>
-                </li>
+<%--                <li class="nav-item" style="font-size: 20px;padding: 10px">--%>
+<%--                    <a class="nav-link ${ac_news}" href="/home/news">资讯</a>--%>
+<%--                </li>--%>
 
                 <%
                     if (session.getAttribute("logined_user") != null) {                // 头像下拉框
@@ -96,7 +96,7 @@
             <form action="${pageContext.request.contextPath}/home/search_content"
                   class="d-flex" role="search" style="margin-top: 15px">
                 <input name="keyWord" class="form-control me-2" type="search" placeholder="影视剧、影人、影院"
-                       aria-label="Search" value="">
+                       aria-label="Search" value="" autocomplete="off">
                 <button id="submit-keyword" class="btn btn-outline-primary" type="submit">
                     <?xml version="1.0" encoding="UTF-8"?>
                     <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

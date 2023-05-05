@@ -10,7 +10,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>影院智能购票平台</title>
+    <title>XLMovie - 影院智能购票平台</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-5.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-3.4.1/bootstrap-3.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../../../../resources/css/form.css">
@@ -30,7 +31,7 @@
             <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                 <div class="card shadow-lg">
                     <div class="card-body p-5">
-                        <h1 class="fs-2 card-title fw-bold mb-5 text-center">影院智能购票平台</h1>
+                        <h1 class="fs-2 card-title fw-bold mb-5 text-center">XLMovie - 影院智能购票平台</h1>
                         <form method="post" action="${pageContext.request.contextPath}/user/login/" class="needs-validation" autocomplete="off">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="email">邮箱：</label>

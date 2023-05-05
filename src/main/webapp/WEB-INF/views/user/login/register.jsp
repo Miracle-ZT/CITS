@@ -11,7 +11,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>影院智能购票平台</title>
+    <title>XLMovie - 影院智能购票平台</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-5.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="../../../../resources/plugins/bootstrap-3.4.1/bootstrap-3.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../../../../resources/css/form.css">

@@ -10,7 +10,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html>
 <head>
-    <title>Title</title>
+    <title>XLMovie - 核对订单</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <link href="../../../../resources/css/seat.css" type="text/css" rel="stylesheet"/>
 </head>

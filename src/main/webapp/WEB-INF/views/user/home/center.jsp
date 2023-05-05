@@ -10,7 +10,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>个人中心</title>
+    <title>XLMovie - 个人中心</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <style>
         .divider-form{
@@ -297,10 +298,10 @@
                                     人员进行处理。<br/>
                                     4.请及时关注电影开场时间,凭票有序检票入场。<br/>
                                     5.如需开具电影票发票,可联系影院工作人员凭当日票根进
-                                    行开具,若遇到特殊情况请及时联系猫眼客服人员。<br/>
+                                    行开具,若遇到特殊情况请及时联系小蓝影视客服人员。<br/>
                                     6.退票、改签服务请参考影院具体政策要求,特殊场次及部
                                     分使用卡、券场次订单可能不支持此服务。<br/>
-                                    7.客服电话: 1010-5335,也可在当前页面联系在线客服, 工作时间: 9:00-22:00,国家法定节假日延至24:00。<br/>
+                                    7.客服电话: 0591-3154,也可在当前页面联系在线客服, 工作时间: 9:00-22:00,国家法定节假日延至24:00。<br/>
                                 </div>
                             </div>
                         </div>
