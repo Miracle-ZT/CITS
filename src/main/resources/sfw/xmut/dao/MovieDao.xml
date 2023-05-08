@@ -243,4 +243,59 @@
         <id property="typeId" column="type_id"/>
         <result property="typeName" column="type_name"/>
     </resultMap>
+
+    <!-- 某个用户的收藏电影列表 -->
+    <select id="findCollectMovieListByUserId" parameterType="int" resultMap="MovieWithTypeResult">
+        SELECT
+            m.*
+        FROM
+            movie m,
+            movie_collect mc
+        WHERE
+            m.movie_id = mc.movie_id
+          AND mc.user_id = #{userId}
+    </select>
+
+    <!-- ====================================================================== 收藏部分 -->
+
+    <!-- 1==true, 0==false -->
+    <select id="isCollectExist" parameterType="Map" resultType="boolean">
+        SELECT
+            count(*)
+        FROM
+            movie_collect
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND movie_id = #{movieId}
+    </select>
+
+    <!-- 插入一条点赞记录 -->
+    <!-- 1:已收藏  2: 未收藏 -->
+    <insert id="addCollect" parameterType="Map">
+        INSERT into movie_collect(movie_collect_id,user_id,movie_id,movie_collect_status) values(null,#{userId},#{movieId},1)
+    </insert>
+
+    <!-- 返回某个用户对某条评论的点赞状态 -->
+    <select id="checkCollectStatus" parameterType="Map" resultType="Integer">
+        SELECT
+            mc.movie_collect_status
+        FROM
+            movie_collect mc
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND movie_id = #{movieId}
+    </select>
+
+    <!-- 更新点赞记录状态 -->
+    <update id="updateCollectStatus" parameterType="Map">
+        UPDATE movie_collect
+        SET movie_collect_status = #{movieCollectStatus}
+        WHERE
+            1 = 1
+          AND user_id = #{userId}
+          AND movie_id = #{movieId}
+    </update>
+
 </mapper>

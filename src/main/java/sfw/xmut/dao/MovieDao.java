@@ -18,10 +18,17 @@ public interface MovieDao {
     public int add(Movie movie);
     public int edit(Movie movie);
     public List<Map> findMovieListWithBO(Map<String, Object> queryMap);
+    public List<Movie> findCollectMovieListByUserId(Integer userId);
 
     // 平均评分(口碑) + 累计票房
     public Long findBOWithMovieId(Integer movieId);
     public Double findAvgScoreWithMovieId(Integer movieId);
 
     public List<Map> findMovieListWithAvgScore();
+
+    // 收藏模块部分
+    public boolean isCollectExist(Map<String, Object> queryMap);
+    public int addCollect(Map<String, Object> queryMap);
+    public Integer checkCollectStatus(Map<String, Object> queryMap);
+    public int updateCollectStatus(Map<String, Object> queryMap);
 }

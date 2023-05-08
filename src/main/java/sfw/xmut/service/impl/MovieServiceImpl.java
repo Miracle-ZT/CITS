@@ -75,6 +75,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> findCollectMovieListByUserId(Integer userId) {
+        return movieDao.findCollectMovieListByUserId(userId);
+    }
+
+    @Override
     public Long findBOWithMovieId(Integer movieId) {
         return movieDao.findBOWithMovieId(movieId);
     }
@@ -89,5 +94,38 @@ public class MovieServiceImpl implements MovieService {
         return movieDao.findMovieListWithAvgScore();
     }
 
+    @Override
+    public int clickCollect(Map<String, Object> queryMap) {
+        Integer userId = (Integer) queryMap.get("userId");
+        Integer movieId = (Integer) queryMap.get("movieId");
+        boolean isCollectExist = movieDao.isCollectExist(queryMap);
+        if (!isCollectExist){
+            movieDao.addCollect(queryMap);
+            return 1;
+        }
+        else{
+            int isValid = movieDao.checkCollectStatus(queryMap);
+            if (isValid == 1){
+                queryMap.put("movieCollectStatus",0);
+                movieDao.updateCollectStatus(queryMap);
+                return 0;
+            }
+            else{
+                queryMap.put("movieCollectStatus",1);
+                movieDao.updateCollectStatus(queryMap);
+                return 1;
+            }
+        }
+    }
 
+    @Override
+    public Integer checkCollect(Map<String, Object> queryMap) {
+        boolean isExist = movieDao.isCollectExist(queryMap);
+        if (!isExist){                                      // 如果不存在
+            return 0;
+        }
+        else {
+            return movieDao.checkCollectStatus(queryMap);
+        }
+    }
 }

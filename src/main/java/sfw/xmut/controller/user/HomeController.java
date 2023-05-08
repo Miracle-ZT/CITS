@@ -614,4 +614,41 @@ public class HomeController {
         return resultMap;
     }
 
+    // 前端用户单击收藏按钮后的操作
+    @RequestMapping(value = "/clickCollect",method = RequestMethod.POST)
+    @ResponseBody
+    public Map clickCollect(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Integer userId = Integer.valueOf(map.get("userId"));
+        Integer movieId = Integer.valueOf(map.get("movieId"));
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("userId",userId);
+        queryMap.put("movieId",movieId);
+
+        // 操作结束后 图标应该有的样式 交由前端据此去渲染
+        // 0 = 未收藏   1 = 已收藏
+        int actionSign = movieService.clickCollect(queryMap);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("actionSign",actionSign);
+        return resultMap;
+    }
+
+
+    // 判断用户是否对该电影进行收藏
+    @RequestMapping(value = "/checkCollect",method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkCollect(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Integer userId = Integer.valueOf(map.get("userId"));
+        Integer movieId = Integer.valueOf(map.get("movieId"));
+        Map<String, Object> queryMap = new HashMap<String, Object>();
+        queryMap.put("userId",userId);
+        queryMap.put("movieId",movieId);
+
+        Integer isCollect = movieService.checkCollect(queryMap);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isCollect",isCollect);
+        return resultMap;
+    }
+
+
 }

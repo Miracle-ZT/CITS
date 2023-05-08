@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import sfw.xmut.pojo.Comment;
-import sfw.xmut.pojo.Orders;
-import sfw.xmut.pojo.Resource;
-import sfw.xmut.pojo.User;
+import sfw.xmut.pojo.*;
 import sfw.xmut.service.CommentService;
+import sfw.xmut.service.MovieService;
 import sfw.xmut.service.OrdersService;
 import sfw.xmut.service.UserService;
 import sfw.xmut.util.JSONFileUtils;
@@ -42,6 +40,9 @@ public class HomeCenterController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    MovieService movieService;
+
     @RequestMapping(value = "/index")
     public ModelAndView index(HttpServletRequest request,
                               @RequestParam(name = "type",defaultValue = "0") Integer type
@@ -57,10 +58,13 @@ public class HomeCenterController {
         queryMap.put("userId",user.getId());
         List<Orders> ordersList = ordersService.findOrdersList(queryMap);
 
+        List<Movie> movieList = movieService.findCollectMovieListByUserId(user.getId());
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/home/center");
         mv.addObject("user",user);
         mv.addObject("ordersList",ordersList);
+        mv.addObject("movieList",movieList);
         mv.addObject("type",type);
         if ((isRefresh != null) && isRefresh.equals("true")){
             mv.addObject("isRefresh",1);

@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="row" style="padding: 12px;margin-top: 30px">                                   <!-- 按钮部分 -->
-            <button type="button" class="btn btn-outline-danger text-white" style="width: 145px">
+            <button id="btn-collect" movieId="${movie.movieId}" type="button" class="btn btn-outline-danger text-white" style="width: 145px">
                 <img src="../../../../resources/img/mark_white_0.png" style="width: 20px;height: 20px">
                 收藏
             </button>
@@ -358,6 +358,7 @@
     });
 </script>
 
+<%-- ------------------------ 点赞部分 ------------------------ --%>
 <%-- 点赞区域被点击 的事件 --%>
 <script>
     $(document).ready(function () {
@@ -480,6 +481,130 @@
                         alert("ajax请求错误");
                     }
                 });
+            });
+        }
+    });
+</script>
+
+
+<%-- ------------------------ 收藏部分 ------------------------ --%>
+<%-- 收藏区域被点击 的事件 --%>
+<script>
+    $(document).ready(function () {
+        $(document).on("click", "#btn-collect", function(){
+            let ajaxSign = 0;
+            let userId = 0;
+            let movieId = $(this).attr("movieId");
+
+            // 获取userId
+            $.ajax({
+                url: "/home/isLogin",
+                async: false,
+                data: {
+                },
+                type: "POST",
+                dataType: "json",
+                // contentType : "application/json;charset=UTF-8",
+                success: function (data) {
+                    let sign = data["isLogin"];
+                    if (sign == "true"){                        // 已登录
+                        userId = data["userId"];
+                        // 通知后续ajax请求 当前请求成功
+                        ajaxSign = 1;
+                    }
+                    else{                                       // 未登录 返回登录界面
+                        window.location = "/user/login";
+                    }
+                },
+                error: function () {
+                    alert("ajax请求错误");
+                }
+            });
+
+            if (ajaxSign == 1){
+                $.ajax({
+                    url: "/home/clickCollect",
+                    async: false,
+                    data: {
+                        "userId": userId,
+                        "movieId": movieId,
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    // contentType : "application/json;charset=UTF-8",
+                    success: function (data) {
+                        let actionSign = data["actionSign"];
+                        // 收藏图标的样式变化
+                        $("#btn-collect").empty();
+                        if (actionSign == 1){
+                            let imgText = '<img src="../../../../resources/img/mark_white_1.png" style="width: 20px;height: 20px"> 已收藏';
+                            $("#btn-collect").append(imgText);
+                        }
+                        else if (actionSign == 0){
+                            let imgText = '<img src="../../../../resources/img/mark_white_0.png" style="width: 20px;height: 20px"> 收藏';
+                            $("#btn-collect").append(imgText);
+                        }
+                    },
+                    error: function () {
+                        alert("ajax请求错误");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<%-- 获取用户登录状态 若已登录则渲染收藏btn样式 --%>
+<script>
+    $(document).ready(function () {
+        let isLogin = '';
+        let userId = 0;
+        $.ajax({
+            url: "/home/isLogin",
+            async: false,
+            data: {
+            },
+            type: "POST",
+            dataType: "json",
+            // contentType : "application/json;charset=UTF-8",
+            success: function (data) {
+                isLogin = data["isLogin"];
+                if (isLogin == "true"){
+                    userId = data["userId"];
+                }
+            },
+            error: function () {
+                alert("ajax请求错误");
+            }
+        });
+        if (isLogin == "true"){                        // 已登录 才需要渲染收藏按钮样式
+            let movieId = ${movie.movieId};
+            $.ajax({
+                url: "/home/checkCollect",
+                async: false,
+                data: {
+                    "userId": userId,
+                    "movieId": movieId,
+                },
+                type: "POST",
+                dataType: "json",
+                // contentType : "application/json;charset=UTF-8",
+                success: function (data) {
+                    let isCollect = data["isCollect"];
+                    $("#btn-collect").empty();
+                    console.log("isCollect=" + isCollect);
+                    if (isCollect == 1){               // 已收藏
+                        let imgText = '<img src="../../../../resources/img/mark_white_1.png" style="width: 20px;height: 20px"> 已收藏';
+                        $("#btn-collect").append(imgText);
+                    }
+                    else if (isCollect == 0){          // 未收藏
+                        let imgText = '<img src="../../../../resources/img/mark_white_0.png" style="width: 20px;height: 20px"> 收藏';
+                        $("#btn-collect").append(imgText);
+                    }
+                },
+                error: function () {
+                    alert("ajax请求错误");
+                }
             });
         }
     });

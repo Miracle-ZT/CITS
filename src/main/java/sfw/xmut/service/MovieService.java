@@ -21,10 +21,14 @@ public interface MovieService {
     public int edit(Movie movie);
     // (某个时间段内的)票房总榜
     public List<Map> findMovieListWithBO(Map<String, Object> queryMap);
+    public List<Movie> findCollectMovieListByUserId(Integer userId);
 
     // 票房 + 平均评分(口碑)
     public Long findBOWithMovieId(Integer movieId);
     public Double findAvgScoreWithMovieId(Integer movieId);
 
     public List<Map> findMovieListWithAvgScore();
+
+    public int clickCollect(Map<String, Object> queryMap);
+    public Integer checkCollect(Map<String, Object> queryMap);
 }

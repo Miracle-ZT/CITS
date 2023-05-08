@@ -48,6 +48,7 @@
                 <button class="nav-link" id="v-pills-comment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-comment" type="button" role="tab" aria-controls="v-pills-comment" aria-selected="false">我的评论</button>
             </div>
             <div class="tab-content" id="v-pills-tabContent" style="padding: 10px 50px 50px 50px;min-height: 700px;box-shadow: 2px 2px 20px #d3d3d3;min-width: 1000px"> <!-- 外框大小 -->
+                <%-- 基本设置 --%>
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
                     <div style="padding: 10px;font-size: 18px">
                         <h4>个人资料</h4>
@@ -111,9 +112,9 @@
                         </form>
                     </div>
                 </div>
-
+                <%-- 我的订单 --%>
                 <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
-                    <div style="padding: 10px;font-size: 18px">
+                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
                         <div style="display: flex;justify-content: space-between">
                             <span style="font-size: 1.5rem">订单列表</span>
                             <span style="display: flex;justify-content: end;align-items: end;color:#ee1e2d;font-size: 16px;font-weight: bold">创建后需在10分钟内支付，超时将关闭订单！</span>
@@ -186,7 +187,32 @@
                         </c:forEach>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="v-pills-collect" role="tabpanel" aria-labelledby="v-pills-collect-tab" tabindex="0">我的收藏</div>
+                <%-- 我的收藏 --%>
+                <div class="tab-pane fade" id="v-pills-collect" role="tabpanel" aria-labelledby="v-pills-collect-tab" tabindex="0">
+                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
+                        <h4>收藏列表</h4>
+                        <div class="divider-form"></div>
+                        <div style="padding-left: 70px;">
+                            <c:forEach var="movie" items="${movieList}" varStatus="status">
+                                <div class="text-center" style="display: inline-block;margin: 15px 47px 20px 5px">
+                                    <div>
+                                        <a href="/home/movie_detail?movieId=${movie.movieId}"><img src="../../../..${movie.imgUrl}" style="height: 193.2px;width: 139.2px"></a>
+                                    </div>
+                                    <div style="height: 35px;width: 139px;line-height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis">
+                                            ${movie.chineseName}
+                                    </div>
+                                    <a href="/home/movie_detail?movieId=${movie.movieId}">
+                                        <button class="btn btn-outline-info btn-sm text-center" style="vertical-align: middle"
+                                                movieId="${movie.movieId}">
+                                            立即购票
+                                        </button>
+                                    </a>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+                <%-- 我的评论 --%>
                 <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">我的评论</div>
             </div>
         </div>
