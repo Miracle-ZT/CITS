@@ -59,12 +59,14 @@ public class HomeCenterController {
         List<Orders> ordersList = ordersService.findOrdersList(queryMap);
 
         List<Movie> movieList = movieService.findCollectMovieListByUserId(user.getId());
+        List<Comment> commentList = commentService.findCommentListByUserId(user.getId());
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("user/home/center");
         mv.addObject("user",user);
         mv.addObject("ordersList",ordersList);
         mv.addObject("movieList",movieList);
+        mv.addObject("commentList",commentList);
         mv.addObject("type",type);
         if ((isRefresh != null) && isRefresh.equals("true")){
             mv.addObject("isRefresh",1);
@@ -193,5 +195,19 @@ public class HomeCenterController {
         return resultMap;
     }
 
+    // 返回指定订单实体
+    @RequestMapping(value = "/deleteComment",method = RequestMethod.POST)
+    @ResponseBody
+    public Map deleteComment(HttpServletRequest request, @RequestParam Map<String,String> map){
+        Integer commentId = Integer.valueOf(map.get("commentId"));
+        if (commentService.delete(commentId) > 0){
+            System.out.println("删除成功");
+        }
+        else {
+            System.out.println("删除失败");
+        }
 
+        Map<String, Object> resultMap = new HashMap<>();
+        return resultMap;
+    }
 }

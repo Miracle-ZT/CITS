@@ -30,8 +30,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> findCommentListByUserId(Integer userId) {
+        return commentDao.findCommentListByUserId(userId);
+    }
+
+    @Override
     public int add(Comment comment) {
         return commentDao.add(comment);
+    }
+
+    @Override
+    public int delete(Integer commentId) {
+        return commentDao.delete(commentId);
     }
 
     @Override

@@ -26,10 +26,34 @@
             co.comment_like_cnt DESC
     </select>
 
+    <select id="findCommentListByUserId" parameterType="int" resultMap="CommentMap">
+        SELECT
+            *
+        FROM
+            COMMENT co,
+            movie m,
+            USER u
+        WHERE
+            1 = 1
+          AND co.movie_id = m.movie_id
+          AND co.user_id = u.id
+          AND co.user_id = #{userId}
+        ORDER BY
+            co.create_time DESC
+    </select>
+
     <insert id="add" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentId">
         INSERT into comment(comment_id,movie_id,user_id,create_time,comment_score,comment_content,comment_like_cnt,is_order_comment) values(null,#{movieId},#{userId},#{createTime},#{commentScore},#{commentContent},#{commentLikeCnt},#{isOrderComment})
     </insert>
 
+    <!-- 删除评论 -->
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM
+            comment
+        WHERE
+            comment_id = ${commentId}
+    </delete>
 
     <resultMap id="CommentMap" type="Comment">
         <id property="commentId" column="comment_id"/>

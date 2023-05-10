@@ -35,6 +35,9 @@
         }
     </style>
     <link href="../../../../resources/plugins/admin_assets/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="../../../resources/plugins/admin_assets/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="../../../resources/plugins/admin_assets/css/plugins/chosen/chosen.css" rel="stylesheet">
 </head>
 <body>
 <div style="width: 1400px;margin: 0px auto 100px;">
@@ -213,7 +216,32 @@
                     </div>
                 </div>
                 <%-- 我的评论 --%>
-                <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">我的评论</div>
+                <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">
+                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
+                        <h4>评论列表</h4>
+                        <div class="divider-form"></div>
+                        <c:forEach var="comment" items="${commentList}" varStatus="status">
+                            <div class="row">
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6" style="font-size: 20px;font-weight: bold"><a href="/home/movie_detail?movieId=${comment.movie.movieId}" style="text-decoration: none">${comment.movie.chineseName}</a></div>
+                                        <div class="col-6" style="font-size: 17px">
+                                            <fmt:formatDate value="${comment.createTime}" pattern="yyyy-MM-dd HH:mm"/></div>
+                                    </div>
+                                    <div style="width: 800px;line-height: 22px;margin-top: 10px">
+                                        <div style="font-size: 15px;word-break: break-all;overflow: hidden;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;">
+                                            ${comment.commentContent}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-1" style="display: flex;align-items: center;justify-content: center;height: 106px;">
+                                    <button class="btn btn-sm btn-outline-danger" commentId="${comment.commentId}" onclick="deleteComment(${comment.commentId})">删除</button>
+                                </div>
+                            </div>
+                            <div class="divider-form"></div>
+                        </c:forEach>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -592,8 +620,43 @@
     });
 </script>
 
+<%-- 删除评论提示框 --%>
+<script>
+    function deleteComment(commentId){
+        swal({
+            title: "您确定要删除此条评论吗",
+            text: "删除后将无法恢复，请谨慎操作！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除",
+            closeOnConfirm: false,
+            cancelButtonText:"取消",
+        }, function () {                    // 选择删除
+            //后台执行删除
+            $.ajax({
+                url: "/home/center/deleteComment",
+                async: false,
+                data: {
+                    "commentId": commentId,
+                },
+                type: "POST",
+                dataType: "json",
+                // contentType : "application/json;charset=UTF-8",
+                success: function (data) {
+                    swal("删除成功！", "您已经删除此条评论。", "success");
+                    // 无论删除与否 执行完成后 再次刷新列表
+                    window.location = "/home/center/index?type=3";
+                },
+                error: function () {
+                    swal("删除失败！", "您尚未删除此条评论。", "error");
+                }
+            });
+        });
+    }
+</script>
 
 <script src="../../../../resources/plugins/admin_assets/js/plugins/toastr/toastr.min.js"></script>
-
+<script src="../../../resources/plugins/admin_assets/js/plugins/sweetalert/sweetalert.min.js"></script>
 </body>
 </html>

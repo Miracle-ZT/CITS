@@ -12,7 +12,9 @@ import java.util.Map;
 public interface CommentDao {
     public Comment findCommentById(Integer commentId);
     public List<Comment> findCommentListByMovieId(Integer movieId);
+    public List<Comment> findCommentListByUserId(Integer userId);
     public int add(Comment comment);
+    public int delete(Integer commentId);
 
     public int addLikeNumByCommentId(Integer commentId);
     public int subLikeNumByCommentId(Integer commentId);

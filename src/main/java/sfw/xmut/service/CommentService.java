@@ -14,7 +14,9 @@ import java.util.Map;
 public interface CommentService {
     public Comment findCommentById(Integer commentId);
     public List<Comment> findCommentListByMovieId(Integer movieId);
+    public List<Comment> findCommentListByUserId(Integer userId);
     public int add(Comment comment);
+    public int delete(Integer commentId);
     public int clickLike(Map<String, Object> queryMap);
     public Integer checkLike(Map<String, Object> queryMap);
 }
