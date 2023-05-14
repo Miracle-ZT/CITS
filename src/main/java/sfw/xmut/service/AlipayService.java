@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -17,4 +19,5 @@ public interface AlipayService {
     public String createPay(String out_trade_no,float total_amount,String subject) throws AlipayApiException;
     public String payNotify(@RequestParam Map<String, String> map);
 //    public ModelAndView success(@RequestParam Map<String, String> map, HttpServletResponse response);
+    public String refund(Map<String, String> map) throws IOException, AlipayApiException;
 }

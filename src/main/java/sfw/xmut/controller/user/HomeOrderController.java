@@ -252,6 +252,23 @@ public class HomeOrderController {
         response.sendRedirect(request.getContextPath() + "/home/center/index?type=1");
     }
 
+    // 退款成功后修改订单状态
+    @RequestMapping(value = "/refund")
+    public void refund(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(name = "out_trade_no",defaultValue = "0") String orderNum
+    ) throws IOException {
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("status",2);
+        queryMap.put("orderNum",orderNum);
+
+        if (ordersService.updateStatus(queryMap) > 0){
+            System.out.println("订单退款状态修改成功");
+        }else {
+            System.out.println("订单退款状态修改失败");
+        }
+        response.sendRedirect(request.getContextPath() + "/home/center/index?type=1");
+    }
+
     public String uploadQRCode(HttpServletRequest request,String out_trade_no) throws Exception {
         // 图片存储位置
         String upPath = request.getServletContext().getRealPath("/") + "/resources/upload/qrcode/";

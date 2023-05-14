@@ -53,7 +53,7 @@
             <div class="tab-content" id="v-pills-tabContent" style="padding: 10px 50px 50px 50px;min-height: 700px;box-shadow: 2px 2px 20px #d3d3d3;min-width: 1000px"> <!-- 外框大小 -->
                 <%-- 基本设置 --%>
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
-                    <div style="padding: 10px;font-size: 18px">
+                    <div style="padding: 15px;font-size: 18px">
                         <h4>个人资料</h4>
                         <form action="/home/center/update_info?userId=${user.id}" method="post" enctype="multipart/form-data">
                             <div class="divider-form"></div>
@@ -117,14 +117,14 @@
                 </div>
                 <%-- 我的订单 --%>
                 <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab" tabindex="0">
-                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
+                    <div style="padding: 15px;font-size: 18px;overflow: auto;height: 600px">
                         <div style="display: flex;justify-content: space-between">
                             <span style="font-size: 1.5rem">订单列表</span>
                             <span style="display: flex;justify-content: end;align-items: end;color:#ee1e2d;font-size: 16px;font-weight: bold">创建后需在10分钟内支付，超时将关闭订单！</span>
                         </div>
                         <div class="divider-form" style="margin: 8px 0"></div>
                         <c:forEach var="order" items="${ordersList}" varStatus="status">
-                            <div class="row" style="padding: 10px;border: 1px solid #d3d3d3;border-radius: 5px">
+                            <div class="row" style="padding: 10px 0 10px 0;border: 1px solid #d3d3d3;border-radius: 5px">
                                 <div class="col-2">
                                     <a href="/home/movie_detail?movieId=${order.screening.movie.movieId}"><img src="../../../..${order.screening.movie.imgUrl}" style="width: 64.8px;height: 90px"></a>
                                 </div>
@@ -158,8 +158,9 @@
                                     <c:if test="${order.status == 1}">
                                         <!-- 未开始 -->
                                         <c:if test="${currentTime < order.screening.startTime.time}">
-                                            <button class="btn btn-outline-info" disabled>
-                                                评论
+                                            <button class="btn btn-outline-info" onclick="open_refund_modal(${order.orderId})"
+                                                    data-bs-toggle="modal" data-bs-target="#refundModal">
+                                                退款
                                             </button>
                                         </c:if>
                                         <!-- 已开始 -->
@@ -179,6 +180,12 @@
                                             </c:if>
                                         </c:if>
                                     </c:if>
+                                    <!-- 已退款 -->
+                                    <c:if test="${order.status == 2}">
+                                        <button class="btn btn-outline-info" disabled>
+                                            已退
+                                        </button>
+                                    </c:if>
                                     <button class="btn btn-outline-info"
                                             data-bs-toggle="modal" data-bs-target="#detailModal"
                                             id="btn-detail-${order.orderId}" orderId="${order.orderId}"
@@ -192,7 +199,7 @@
                 </div>
                 <%-- 我的收藏 --%>
                 <div class="tab-pane fade" id="v-pills-collect" role="tabpanel" aria-labelledby="v-pills-collect-tab" tabindex="0">
-                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
+                    <div style="padding: 15px;font-size: 18px;overflow: auto;height: 600px">
                         <h4>收藏列表</h4>
                         <div class="divider-form"></div>
                         <div style="padding-left: 70px;">
@@ -217,7 +224,7 @@
                 </div>
                 <%-- 我的评论 --%>
                 <div class="tab-pane fade" id="v-pills-comment" role="tabpanel" aria-labelledby="v-pills-comment-tab" tabindex="0">
-                    <div style="padding: 10px;font-size: 18px;overflow: auto;height: 600px">
+                    <div style="padding: 15px;font-size: 18px;overflow: auto;height: 600px">
                         <h4>评论列表</h4>
                         <div class="divider-form"></div>
                         <c:forEach var="comment" items="${commentList}" varStatus="status">
@@ -355,7 +362,7 @@
                                     行开具,若遇到特殊情况请及时联系小蓝影视客服人员。<br/>
                                     6.退票、改签服务请参考影院具体政策要求,特殊场次及部
                                     分使用卡、券场次订单可能不支持此服务。<br/>
-                                    7.客服电话: 0591-3154,也可在当前页面联系在线客服, 工作时间: 9:00-22:00,国家法定节假日延至24:00。<br/>
+                                    7.客服电话: 0591-4236,也可在当前页面联系在线客服, 工作时间: 9:00-22:00,国家法定节假日延至24:00。<br/>
                                 </div>
                             </div>
                         </div>
@@ -369,7 +376,46 @@
     </div>
 </div>
 
-
+<%-- 退款弹窗 --%>
+<div class="modal fade" id="refundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">注意事项</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-8 text-left" style="display: inline-block;vertical-align: middle;border-right: 1px solid #d3d3d3">
+                        <h5>退款须知</h5>
+                        <div>
+                            根据消费者“退改签”时距离电影放映的时间，实行“阶梯式”退费：
+                        </div>
+                        <div style="margin-top: 10px;color: #888888">
+                            未取票开场前24小时以上，<span style="color: red">不收取</span>服务费。</br>
+                            未取票开场前6小时至24小时，收取票面实付金额的<span style="color: red">10%</span>作为服务费。</br>
+                            未取票开场前2小时至6小时，收取票面实付金额的<span style="color: red">30%</span>作为服务费。</br>
+                            未取票开场前2小时以内，收取票面实付金额的<span style="color: red">45%</span>作为服务费。</br>
+                        </div>
+                    </div>
+                    <div class="col-4" style="padding-left: 50px;display: flex;align-items: center">
+                        <div style="color: #888888">
+                            <div id="price" style="padding: 10px 0 10px 0">实付款：84元</div>
+                            <div id="fee" style="padding: 10px 0 10px 0">服务费：25.2元</div>
+                            <div id="refundPrice" style="padding: 10px 0 10px 0;color: white">共退款：58.8元</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <a id="btn-refund" href="">
+                    <button type="button" class="btn btn-danger" style="width: 100px">确定退款</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <%-- jquery --%>
@@ -511,10 +557,59 @@
 <%-- 实时修改发布评论弹窗表单的GET参数 --%>
 <script>
     function open_comment_modal(movieId,orderNum){
-        console.log('+++');
         $("#comment").attr("action","/home/center/public_comment?userId=" + ${user.id} + "&movieId=" + movieId + "&orderNum=" + orderNum);
         $("#comment-score").val("");
         $("#comment-content").val("");
+    }
+</script>
+
+<%-- 实时修改退款弹窗确认按钮的GET参数 --%>
+<script>
+    function open_refund_modal(orderId){
+        $.ajax({
+            url:"findOrderById",
+            async:false,
+            data:{
+                "orderId":orderId,
+            },
+            type:"POST",
+            dataType:"json",
+            // contentType : "application/json;charset=UTF-8",
+            success:function (data){
+                let order = data["orders"];
+                // 商户自定义订单号
+                let orderNum = order.orderNum;
+                // 退款金额
+                let refund_amount = 0;
+
+                let totalPrice = order.totalPrice;
+                let startTime = order.screening.startTime;      // just like 1684057467000
+                let nowTime = new Date().getTime();             // 当前时间
+                let spanTime = (startTime - nowTime) / 1000 / 60 / 60;      // 当前时间距离开始放映的间隔的小时数
+                if (spanTime >= 24){                    // 全额退款
+                    refund_amount = totalPrice;
+                }
+                else if (spanTime >= 6){                // 扣除10%
+                    refund_amount = totalPrice*0.9;
+                }
+                else if (spanTime >= 2){                // 扣除30%
+                    refund_amount = totalPrice*0.7;
+                }
+                else if (spanTime < 2){                 // 扣除45%
+                    refund_amount = totalPrice*0.55;
+                }
+
+                // 修改退款窗口中的信息
+                $("#price").text("实付款：" + totalPrice + "元");
+                $("#fee").text("服务费：" + (totalPrice-refund_amount) + "元");
+                $("#refundPrice").text("共退款：" + refund_amount + "元");
+                // 修改GET参数
+                $("#btn-refund").attr("href","/alipay/refund?out_trade_no=" + orderNum + "&refund_amount=" + refund_amount);
+            },
+            error:function (){
+                alert("ajax请求错误");
+            }
+        });
     }
 </script>
 
