@@ -108,7 +108,6 @@ public class HomeOrderController {
             System.out.println("座位锁定失败");
             resultMap.put("msg","error");
         }
-        resultMap.put("msg","success");
         return resultMap;
     }
 

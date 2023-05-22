@@ -12,6 +12,7 @@
 <head>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
     <title>榜单 - XLMovie</title>
+    <link rel="shortcut icon" href="../../../../resources/img/logo.png">
 </head>
 <body>
 <div style="margin:100px auto;width: 1400px;margin-top: 0px">

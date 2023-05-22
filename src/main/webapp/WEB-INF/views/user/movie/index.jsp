@@ -11,7 +11,7 @@
 <html>
 <head>
     <jsp:include page="../../utils/bootstrap5.1.1.jsp" flush="true"/>
-    <title>Title</title>
+    <title>电影 - XLMovie</title>
     <link rel="shortcut icon" href="../../../../resources/img/logo.png">       <%-- 网页标签图标 --%>
 </head>
 <body>

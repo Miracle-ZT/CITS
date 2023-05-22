@@ -202,13 +202,13 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">中文名</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="chineseName" class="form-control">
+                                            <input type="text" name="chineseName" class="form-control" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">En Name</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="englishName" class="form-control">
+                                            <input type="text" name="englishName" class="form-control" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -228,7 +228,7 @@
                                         <label class="col-sm-2 control-label">时长</label>
                                         <div class="col-sm-10">
                                             <div class="input-group m-b">
-                                                <input type="text" class="form-control" name="timeLen">
+                                                <input type="text" class="form-control" name="timeLen" autocomplete="off">
                                                 <span class="input-group-addon">分钟</span>
                                             </div>
                                         </div>
@@ -237,13 +237,13 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">导演</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="director" class="form-control"> <span class="help-block m-b-none">多名导演以空格"  "分开</span>
+                                            <input type="text" name="director" class="form-control" autocomplete="off"> <span class="help-block m-b-none">多名导演以空格"  "分开</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">主演</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="actors" class="form-control"> <span class="help-block m-b-none">多名主演以空格"  "分开</span>
+                                            <input type="text" name="actors" class="form-control" autocomplete="off"> <span class="help-block m-b-none">多名主演以空格"  "分开</span>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>

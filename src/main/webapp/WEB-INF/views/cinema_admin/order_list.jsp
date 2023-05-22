@@ -39,8 +39,8 @@
                 <option value="-1"> -- --</option>
                 <option value="0"> 未支付</option>
                 <option value="1"> 已支付</option>
-                <option value="2"> 已完成</option>
-                <option value="3"> 已退款</option>
+<%--                <option value="2"> 已完成</option>--%>
+                <option value="2"> 已退款</option>
             </select>
         </div>
     </div>
@@ -94,10 +94,10 @@
                             <c:if test="${orders.status == 1}">
                                 <span class="custom-badge status-green">已支付</span>
                             </c:if>
+<%--                            <c:if test="${orders.status == 2}">--%>
+<%--                                <span class="custom-badge status-orange">已完成</span>--%>
+<%--                            </c:if>--%>
                             <c:if test="${orders.status == 2}">
-                                <span class="custom-badge status-orange">已完成</span>
-                            </c:if>
-                            <c:if test="${orders.status == 3}">
                                 <span class="custom-badge status-red">已退款</span>
                             </c:if>
                         </td>
@@ -185,10 +185,10 @@
                             else if (ordersList[i].status == "1"){
                                 statusText = '                                <span class="custom-badge status-green">已支付</span>\n';
                             }
+                            // else if (ordersList[i].status == "2"){
+                            //     statusText = '                                <span class="custom-badge status-orange">已完成</span>\n';
+                            // }
                             else if (ordersList[i].status == "2"){
-                                statusText = '                                <span class="custom-badge status-orange">已完成</span>\n';
-                            }
-                            else if (ordersList[i].status == "3"){
                                 statusText = '                                <span class="custom-badge status-red">已退款</span>\n';
                             }
                             let eachText =

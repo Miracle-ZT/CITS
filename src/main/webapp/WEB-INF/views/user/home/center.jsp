@@ -402,7 +402,7 @@
                         <div style="color: #888888">
                             <div id="price" style="padding: 10px 0 10px 0">实付款：84元</div>
                             <div id="fee" style="padding: 10px 0 10px 0">服务费：25.2元</div>
-                            <div id="refundPrice" style="padding: 10px 0 10px 0;color: white">共退款：58.8元</div>
+                            <div id="refundPrice" style="padding: 10px 0 10px 0;color: red">共退款：58.8元</div>
                         </div>
                     </div>
                 </div>
@@ -601,8 +601,8 @@
 
                 // 修改退款窗口中的信息
                 $("#price").text("实付款：" + totalPrice + "元");
-                $("#fee").text("服务费：" + (totalPrice-refund_amount) + "元");
-                $("#refundPrice").text("共退款：" + refund_amount + "元");
+                $("#fee").text("服务费：" + (Math.round((totalPrice-refund_amount)*100)/100) + "元");
+                $("#refundPrice").text("共退款：" + (Math.round(refund_amount*100)/100) + "元");
                 // 修改GET参数
                 $("#btn-refund").attr("href","/alipay/refund?out_trade_no=" + orderNum + "&refund_amount=" + refund_amount);
             },
